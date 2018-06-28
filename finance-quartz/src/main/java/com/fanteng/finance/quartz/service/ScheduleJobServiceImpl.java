@@ -29,6 +29,7 @@ import com.fanteng.core.base.BaseServiceImpl;
 import com.fanteng.finance.dao.ScheduleJobDao;
 import com.fanteng.finance.entity.ScheduleJob;
 import com.fanteng.finance.quartz.util.QuartzJobFactory;
+import com.fanteng.finance.service.ScheduleJobService;
 import com.fanteng.util.StringUtil;
 
 @Service

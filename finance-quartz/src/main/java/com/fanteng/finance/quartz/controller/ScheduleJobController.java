@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
 import com.fanteng.finance.entity.ScheduleJob;
-import com.fanteng.finance.quartz.service.ScheduleJobService;
+import com.fanteng.finance.service.ScheduleJobService;
 
 @RestController
 public class ScheduleJobController {
