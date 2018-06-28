@@ -55,6 +55,13 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	public boolean delete(T entity) {
 		return baseDao.delete(entity);
 	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean delete(Serializable id) {
+		T t = get(id);
+		return baseDao.delete(t);
+	}
 
 	@Override
 	public List<T> findAll() {

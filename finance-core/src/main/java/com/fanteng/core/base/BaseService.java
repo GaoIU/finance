@@ -24,6 +24,8 @@ public interface BaseService<T> {
 	boolean checkUpdate(Serializable id, Timestamp updateTime);
 
 	boolean delete(T entity);
+	
+	boolean delete(Serializable id);
 
 	List<T> findAll();
 
