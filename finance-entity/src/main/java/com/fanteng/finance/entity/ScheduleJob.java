@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 /**
  * The persistent class for the schedule_job database table.
@@ -19,30 +20,41 @@ import javax.persistence.Table;
 public class ScheduleJob implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/** 定时任务配置状态：0-正常 */
+	public final static short status_normal = 0;
+
+	/** 定时任务配置状态：1-暂停 */
+	public final static short status_pause = 1;
+
 	@Id
 	private String id;
 
+	@NotBlank(message = "定时任务所在的类路径不能为空")
 	@Column(name = "bean_class")
 	private String beanClass;
 
 	@Column(name = "create_time")
 	private Timestamp createTime;
 
+	@NotBlank(message = "时间表达式不能为空")
 	@Column(name = "cron_expression")
 	private String cronExpression;
 
+	@NotBlank(message = "任务组不能为空")
 	@Column(name = "job_group")
 	private String jobGroup;
 
+	@NotBlank(message = "任务名不能为空")
 	@Column(name = "job_name")
 	private String jobName;
 
+	@NotBlank(message = "要执行的方法名不能为空")
 	@Column(name = "method_name")
 	private String methodName;
 
 	private String remark;
 
-	private short status;
+	private short status = status_normal;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
