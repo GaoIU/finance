@@ -50,18 +50,29 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public Session getOpenSession() {
+		return sessionFactory.openSession();
+	}
+
+	@Override
 	public HibernateTemplate getTemplate() {
 		return new HibernateTemplate(sessionFactory);
 	}
 
 	@Override
 	public T get(Serializable id) {
-		return getSession().get(clazz, id);
+		Session session = getOpenSession();
+		T t = session.get(clazz, id);
+		session.close();
+		return t;
 	}
 
 	@Override
 	public T load(Serializable id) {
-		return getSession().load(clazz, id);
+		Session session = getOpenSession();
+		T t = session.load(clazz, id);
+		session.close();
+		return t;
 	}
 
 	@Override
@@ -284,7 +295,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		Object object = criteria.getExecutableCriteria(getOpenSession()).uniqueResult();
 		int totle = 0;
 		if (object != null) {
 			totle = ((Number) object).intValue();
@@ -310,7 +321,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		Object object = criteria.getExecutableCriteria(getOpenSession()).uniqueResult();
 		int totle = 0;
 		if (object != null) {
 			totle = ((Number) object).intValue();
@@ -324,7 +335,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	public int getCount() {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
 		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		Object object = criteria.getExecutableCriteria(getOpenSession()).uniqueResult();
 		if (object != null) {
 			return ((Number) object).intValue();
 		}
@@ -340,7 +351,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 
 		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		Object object = criteria.getExecutableCriteria(getOpenSession()).uniqueResult();
 		if (object != null) {
 			return ((Number) object).intValue();
 		}
@@ -352,7 +363,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	public int getCount(Class<T> entityClass) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
 		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		Object object = criteria.getExecutableCriteria(getOpenSession()).uniqueResult();
 		if (object != null) {
 			return ((Number) object).intValue();
 		}
@@ -368,7 +379,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 
 		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		Object object = criteria.getExecutableCriteria(getOpenSession()).uniqueResult();
 		if (object != null) {
 			return ((Number) object).intValue();
 		}
@@ -412,26 +423,29 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@Override
 	public List<T> queryAll(String sql, Map<String, Object> param) {
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		Session session = getOpenSession();
+		NativeQuery<?> nativeQuery = session.createNativeQuery(sql);
 		nativeQuery.addEntity(clazz);
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
 
 		List<T> list = (List<T>) nativeQuery.getResultList();
+		session.close();
 		return list;
 	}
 
 	@Override
 	public List<Map<String, Object>> queryAllToMap(String sql, Map<String, Object> param) {
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		Session session = getOpenSession();
+		NativeQuery<?> nativeQuery = session.createNativeQuery(sql);
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
 		nativeQuery.addEntity(Map.class);
 
 		List<Map<String, Object>> list = (List<Map<String, Object>>) nativeQuery.getResultList();
-
+		session.close();
 		return list;
 	}
 
@@ -444,7 +458,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			size = 15;
 		}
 
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		Session session = getOpenSession();
+		NativeQuery<?> nativeQuery = session.createNativeQuery(sql);
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
@@ -456,7 +471,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		StringBuffer sb = new StringBuffer(sql);
 		sb.insert(6, " COUNT(1) gemini_page_count, ");
-		NativeQuery<?> sqlQuery = getSession().createNativeQuery(sb.toString());
+		NativeQuery<?> sqlQuery = session.createNativeQuery(sb.toString());
 		param.forEach((k, v) -> {
 			sqlQuery.setParameter(k, v);
 		});
@@ -470,6 +485,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 
 		Page page = new Page(current, size, totle, list);
+		session.close();
 		return page;
 	}
 
@@ -482,7 +498,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			size = 15;
 		}
 
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		Session session = getOpenSession();
+		NativeQuery<?> nativeQuery = session.createNativeQuery(sql);
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
@@ -494,7 +511,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		StringBuffer sb = new StringBuffer(sql);
 		sb.insert(6, " COUNT(1) gemini_page_count, ");
-		NativeQuery<?> sqlQuery = getSession().createNativeQuery(sb.toString());
+		NativeQuery<?> sqlQuery = session.createNativeQuery(sb.toString());
 		param.forEach((k, v) -> {
 			sqlQuery.setParameter(k, v);
 		});
@@ -508,6 +525,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 
 		Page page = new Page(current, size, totle, list);
+		session.close();
 		return page;
 	}
 
@@ -520,7 +538,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			size = 15;
 		}
 
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		Session session = getOpenSession();
+		NativeQuery<?> nativeQuery = session.createNativeQuery(sql);
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
@@ -532,7 +551,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		StringBuffer sb = new StringBuffer(sql);
 		sb.insert(6, " COUNT(1) gemini_page_count, ");
-		NativeQuery<?> sqlQuery = getSession().createNativeQuery(sb.toString());
+		NativeQuery<?> sqlQuery = session.createNativeQuery(sb.toString());
 		param.forEach((k, v) -> {
 			sqlQuery.setParameter(k, v);
 		});
@@ -546,6 +565,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 
 		Page page = new Page(current, size, totle, list);
+		session.close();
 		return page;
 	}
 

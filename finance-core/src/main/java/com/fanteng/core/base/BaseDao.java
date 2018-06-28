@@ -15,6 +15,8 @@ import com.fanteng.core.Page;
 public interface BaseDao<T> {
 
 	Session getSession();
+	
+	Session getOpenSession();
 
 	HibernateTemplate getTemplate();
 
