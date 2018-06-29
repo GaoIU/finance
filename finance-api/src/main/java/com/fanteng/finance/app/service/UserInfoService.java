@@ -1,4 +1,4 @@
-package com.fanteng.finance.service;
+package com.fanteng.finance.app.service;
 
 import com.fanteng.core.base.BaseService;
 import com.fanteng.finance.entity.UserInfo;

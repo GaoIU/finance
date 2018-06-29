@@ -1,4 +1,4 @@
-package com.fanteng.finance.dao;
+package com.fanteng.finance.app.dao;
 
 import com.fanteng.core.base.BaseDao;
 import com.fanteng.finance.entity.UserInfo;
