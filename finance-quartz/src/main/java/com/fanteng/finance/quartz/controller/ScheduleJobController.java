@@ -8,15 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
 import com.fanteng.finance.entity.ScheduleJob;
-import com.fanteng.finance.service.ScheduleJobService;
+import com.fanteng.finance.quartz.service.ScheduleJobService;
 
 @RestController
+@RequestMapping("/scheduleJob")
 public class ScheduleJobController {
 
 	@Autowired

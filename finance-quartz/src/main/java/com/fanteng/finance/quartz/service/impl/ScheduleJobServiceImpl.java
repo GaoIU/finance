@@ -1,4 +1,4 @@
-package com.fanteng.finance.quartz.service;
+package com.fanteng.finance.quartz.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fanteng.core.Condition;
 import com.fanteng.core.HttpStatus;
@@ -26,10 +27,10 @@ import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
 import com.fanteng.core.Page;
 import com.fanteng.core.base.BaseServiceImpl;
-import com.fanteng.finance.dao.ScheduleJobDao;
 import com.fanteng.finance.entity.ScheduleJob;
+import com.fanteng.finance.quartz.dao.ScheduleJobDao;
+import com.fanteng.finance.quartz.service.ScheduleJobService;
 import com.fanteng.finance.quartz.util.QuartzJobFactory;
-import com.fanteng.finance.service.ScheduleJobService;
 import com.fanteng.util.StringUtil;
 
 @Service
@@ -206,6 +207,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	 * @return
 	 * @throws Exception
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Serializable saveJob(ScheduleJob scheduleJob) throws Exception {
 		Serializable id = save(scheduleJob);
@@ -213,6 +215,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 		return id;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean updateJob(ScheduleJob scheduleJob) throws Exception {
 		boolean b = update(scheduleJob);
@@ -220,6 +223,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 		return b;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean delJob(String id) throws Exception {
 		removeJob(id);
