@@ -215,6 +215,13 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 		return id;
 	}
 
+	/**
+	 * 修改一个定时任务
+	 * 
+	 * @param scheduleJob
+	 * @return
+	 * @throws Exception
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean updateJob(ScheduleJob scheduleJob) throws Exception {
@@ -223,6 +230,13 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 		return b;
 	}
 
+	/**
+	 * 删除一个定时任务
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean delJob(String id) throws Exception {
