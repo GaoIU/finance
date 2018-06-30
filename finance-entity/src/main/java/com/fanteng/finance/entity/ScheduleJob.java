@@ -26,6 +26,12 @@ public class ScheduleJob implements Serializable {
 
 	/** 定时任务配置状态：1-暂停 */
 	public final static short status_pause = 1;
+	
+	/** 定时任务是否并发状态：0-是 */
+	public final static short concurrent_is = 0;
+	
+	/** 定时任务是否并发状态：1-否 */
+	public final static short concurrent_not = 1;
 
 	@Id
 	private String id;
@@ -33,6 +39,8 @@ public class ScheduleJob implements Serializable {
 	@NotBlank(message = "定时任务所在的类路径不能为空")
 	@Column(name = "bean_class")
 	private String beanClass;
+	
+	private short concurrent = concurrent_not;
 
 	@Column(name = "create_time")
 	private Timestamp createTime;
@@ -77,6 +85,14 @@ public class ScheduleJob implements Serializable {
 
 	public void setBeanClass(String beanClass) {
 		this.beanClass = beanClass;
+	}
+
+	public short getConcurrent() {
+		return concurrent;
+	}
+
+	public void setConcurrent(short concurrent) {
+		this.concurrent = concurrent;
 	}
 
 	public Timestamp getCreateTime() {
