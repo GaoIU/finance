@@ -18,7 +18,9 @@
 
 	<mvc:annotation-driven />
 	
-	<context:component-scan base-package="com.fanteng" use-default-filters="false">
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<context:component-scan base-package="com.fanteng">
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
