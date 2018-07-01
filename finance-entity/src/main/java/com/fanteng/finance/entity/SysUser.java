@@ -8,6 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the sys_user database table.
@@ -27,11 +33,17 @@ public class SysUser implements Serializable {
 	@Column(name = "create_time")
 	private Timestamp createTime;
 
+	@NotBlank(message = "手机号码不能为空")
+	@Pattern(regexp = "0?(13|14|15|17|18|19)[0-9]{9}", message = "手机号码不合法")
 	private String mobile;
 
+	@NotBlank(message = "用户昵称不能为空")
+	@Length(min = 1, max = 8, message = "用户昵称长度不能大于8位")
 	@Column(name = "nick_name")
 	private String nickName;
 
+	@NotBlank(message = "用户密码不能为空")
+	@Length(min = 6, max = 16, message = "用户密码长度只能在6-16之间")
 	private String password;
 
 	@Column(name = "real_name")
@@ -42,6 +54,8 @@ public class SysUser implements Serializable {
 	@Column(name = "update_time")
 	private Timestamp updateTime;
 
+	@NotBlank(message = "用户账号不能为空")
+	@Length(min = 1, max = 8, message = "用户账号长度不能大于8位")
 	@Column(name = "user_name")
 	private String userName;
 
@@ -88,6 +102,7 @@ public class SysUser implements Serializable {
 		this.nickName = nickName;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return this.password;
 	}

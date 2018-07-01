@@ -66,4 +66,10 @@ public class SysUserRole implements Serializable {
 		this.sysUserId = sysUserId;
 	}
 
+	public SysUserRole(String sysRoleId, String sysUserId) {
+		super();
+		this.sysRoleId = sysRoleId;
+		this.sysUserId = sysUserId;
+	}
+
 }
