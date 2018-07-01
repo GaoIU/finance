@@ -106,6 +106,25 @@ public class ScheduleJobController {
 	}
 
 	/**
+	 * 是否并发
+	 * 
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("/concurrentJob")
+	public JsonResult concurrentJob(@RequestBody Map<String, Object> param) throws Exception {
+		String id = MapUtils.getString(param, "id");
+		Short concurrent = MapUtils.getShort(param, "concurrent");
+		if (StringUtil.isBlank(id) || concurrent == null) {
+			throw new ParamErrorException("非法参数");
+		}
+
+		scheduleJobService.concurrent(id, concurrent);
+		return new JsonResult(HttpStatus.OK, "操作成功");
+	}
+
+	/**
 	 * 关闭所有定时任务
 	 * 
 	 * @return

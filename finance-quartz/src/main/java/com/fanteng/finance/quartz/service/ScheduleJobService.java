@@ -26,6 +26,15 @@ public interface ScheduleJobService extends BaseService<ScheduleJob> {
 	void resumeJob(String id) throws Exception;
 
 	/**
+	 * 是否并发
+	 * 
+	 * @param id
+	 * @param concurrent
+	 * @throws Exception
+	 */
+	void concurrent(String id, Short concurrent) throws Exception;
+
+	/**
 	 * 立即执行一个定时任务
 	 * 
 	 * @param id
@@ -91,5 +100,5 @@ public interface ScheduleJobService extends BaseService<ScheduleJob> {
 	 * @throws Exception
 	 */
 	boolean delJob(String id) throws Exception;
-	
+
 }

@@ -31,6 +31,7 @@ import com.fanteng.finance.entity.ScheduleJob;
 import com.fanteng.finance.quartz.dao.ScheduleJobDao;
 import com.fanteng.finance.quartz.service.ScheduleJobService;
 import com.fanteng.finance.quartz.util.QuartzJobFactory;
+import com.fanteng.finance.quartz.util.QuartzJobFactoryDisallowConcurrentExecution;
 import com.fanteng.util.StringUtil;
 
 @Service
@@ -70,8 +71,16 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 		CronScheduleBuilder schedBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCronExpression());
 
 		if (trigger == null) {
-			Class<QuartzJobFactory> clazz = QuartzJobFactory.class;
-			JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(jobName, jobGroup).build();
+			JobDetail jobDetail = null;
+			if (scheduleJob.getConcurrent() == ScheduleJob.concurrent_is) {
+				Class<QuartzJobFactory> clazz = QuartzJobFactory.class;
+				jobDetail = JobBuilder.newJob(clazz).withIdentity(jobName, jobGroup).build();
+			}
+			if (scheduleJob.getConcurrent() == ScheduleJob.concurrent_not) {
+				Class<QuartzJobFactoryDisallowConcurrentExecution> clazz = QuartzJobFactoryDisallowConcurrentExecution.class;
+				jobDetail = JobBuilder.newJob(clazz).withIdentity(jobName, jobGroup).build();
+			}
+
 			jobDetail.getJobDataMap().put("scheduleJob", scheduleJob);
 
 			trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroup).withSchedule(schedBuilder).build();
@@ -115,6 +124,24 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 
 		JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
 		scheduler.resumeJob(jobKey);
+	}
+
+	/**
+	 * 是否并发
+	 * 
+	 * @param id
+	 * @param concurrent
+	 * @throws Exception
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void concurrent(String id, Short concurrent) throws Exception {
+		ScheduleJob scheduleJob = get(id);
+		scheduleJob.setConcurrent(concurrent);
+		update(scheduleJob);
+
+		removeJob(id);
+		addJob(scheduleJob);
 	}
 
 	/**
