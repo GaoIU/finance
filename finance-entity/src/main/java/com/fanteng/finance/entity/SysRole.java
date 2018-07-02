@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * The persistent class for the sys_role database table.
@@ -22,12 +26,19 @@ public class SysRole implements Serializable {
 	@Id
 	private String id;
 
+	@NotBlank(message = "角色编码不能为空")
+	@Length(min = 1, max = 32, message = "角色编码长度不能超过32位")
 	private String code;
 
 	@Column(name = "create_time")
 	private Timestamp createTime;
 
+	@NotBlank(message = "角色名称不能为空")
+	@Length(min = 1, max = 16, message = "角色名称长度不能超过16位")
 	private String name;
+
+	@Transient
+	private String sysResourceIds;
 
 	private short status;
 
@@ -67,6 +78,14 @@ public class SysRole implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSysResourceIds() {
+		return sysResourceIds;
+	}
+
+	public void setSysResourceIds(String sysResourceIds) {
+		this.sysResourceIds = sysResourceIds;
 	}
 
 	public short getStatus() {

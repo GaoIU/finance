@@ -8,12 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the sys_user database table.
@@ -24,6 +23,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NamedQuery(name = "SysUser.findAll", query = "SELECT s FROM SysUser s")
 public class SysUser implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	/** 后台用户状态：0-正常 */
+	public static final short status_normal = 0;
+
+	/** 后台用户状态：1-禁用 */
+	public static final short status_disable = 1;
 
 	@Id
 	private String id;
@@ -42,14 +47,15 @@ public class SysUser implements Serializable {
 	@Column(name = "nick_name")
 	private String nickName;
 
-	@NotBlank(message = "用户密码不能为空")
-	@Length(min = 6, max = 16, message = "用户密码长度只能在6-16之间")
 	private String password;
 
 	@Column(name = "real_name")
 	private String realName;
 
-	private short status;
+	@Transient
+	private String sysRoleIds;
+
+	private short status = status_normal;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
@@ -102,7 +108,6 @@ public class SysUser implements Serializable {
 		this.nickName = nickName;
 	}
 
-	@JsonIgnore
 	public String getPassword() {
 		return this.password;
 	}
@@ -117,6 +122,14 @@ public class SysUser implements Serializable {
 
 	public void setRealName(String realName) {
 		this.realName = realName;
+	}
+
+	public String getSysRoleIds() {
+		return sysRoleIds;
+	}
+
+	public void setSysRoleIds(String sysRoleIds) {
+		this.sysRoleIds = sysRoleIds;
 	}
 
 	public short getStatus() {
