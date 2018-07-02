@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.Id;
 
@@ -30,7 +31,6 @@ import com.fanteng.core.Page;
 import com.fanteng.util.BeanUtil;
 import com.fanteng.util.ReflectionKit;
 import com.fanteng.util.StringUtil;
-import com.fanteng.util.UUIDUtil;
 
 @SuppressWarnings("unchecked")
 public class BaseDaoImpl<T> implements BaseDao<T> {
@@ -67,7 +67,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	@Override
 	public Serializable save(T entity) {
 		String id = getIdProperty(entity);
-		String uuid = UUIDUtil.getSimpleUUID();
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		ReflectionKit.setMethodValue(entity, id, uuid);
 		ReflectionKit.setMethodValue(entity, "createTime", new Timestamp(System.currentTimeMillis()));
 		try {
