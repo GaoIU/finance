@@ -1,5 +1,8 @@
 package com.fanteng.finance.cms.service.impl;
 
+import java.util.Map;
+
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
+import com.fanteng.core.Operation;
 import com.fanteng.core.base.BaseServiceImpl;
 import com.fanteng.finance.cms.dao.SysUserDao;
 import com.fanteng.finance.cms.service.SysUserRoleService;
@@ -65,6 +69,37 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		}
 
 		return new JsonResult(HttpStatus.INTERNAL_SERVER_ERROR, "操作失败");
+	}
+
+	/**
+	 * 后台用户登录
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public JsonResult signIn(Map<String, Object> param) {
+		String userName = MapUtils.getString(param, "userName");
+		String password = MapUtils.getString(param, "password");
+
+		if (StringUtil.isBlank(userName)) {
+			return new JsonResult(HttpStatus.BAD_REQUEST, "请输入用户名");
+		}
+
+		if (StringUtil.isEmpty(password)) {
+			return new JsonResult(HttpStatus.BAD_REQUEST, "请输入密码");
+		}
+
+		SysUser sysUser = findOne("userName", Operation.EQ, userName);
+		if (sysUser != null) {
+			if (EncryptUtil.matchesByBC(password, sysUser.getPassword())) {
+				if (sysUser.getStatus() == SysUser.status_normal) {
+					return new JsonResult(HttpStatus.OK, "登录成功，正在跳转...", sysUser);
+				}
+				return new JsonResult(HttpStatus.FORBIDDEN, "该用户已被禁用，请联系管理员");
+			}
+		}
+		return new JsonResult(HttpStatus.METHOD_NOT_ALLOWED, "用户名或密码错误");
 	}
 
 }
