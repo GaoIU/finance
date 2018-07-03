@@ -43,4 +43,14 @@ public class ExceptionHandlerController {
 		return map;
 	}
 
+	@ExceptionHandler(value = ResourceErrorException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public Map<String, Object> handlerResourceErrorException(ResourceErrorException ree) {
+		Map<String, Object> map = new HashMap<String, Object>(0);
+		map.put("code", ree.getCode());
+		map.put("msg", ree.getMsg());
+
+		return map;
+	}
+
 }

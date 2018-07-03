@@ -250,16 +250,16 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			break;
 
 		case ASC:
-			String[] propertysByAsc = (String[]) value;
+			String[] propertysByAsc = value.toString().split(",");
 			for (String name : propertysByAsc) {
-				criteria.addOrder(Order.asc(name));
+				criteria.addOrder(Order.asc(name.trim()));
 			}
 			break;
 
 		case DESC:
-			String[] propertys = (String[]) value;
+			String[] propertys = value.toString().split(",");
 			for (String name : propertys) {
-				criteria.addOrder(Order.desc(name));
+				criteria.addOrder(Order.desc(name.trim()));
 			}
 			break;
 
