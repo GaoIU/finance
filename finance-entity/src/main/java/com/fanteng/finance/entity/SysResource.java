@@ -19,6 +19,12 @@ import javax.persistence.Table;
 public class SysResource implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/** 后台资源状态：0-正常 */
+	public static final short status_normal = 0;
+
+	/** 后台资源状态：1-禁用 */
+	public static final short status_disable = 1;
+
 	@Id
 	private String id;
 
@@ -38,9 +44,9 @@ public class SysResource implements Serializable {
 	@Column(name = "parent_id")
 	private String parentId;
 
-	private short sort;
+	private short sort = 0;
 
-	private short status;
+	private short status = status_normal;
 
 	private short type;
 

@@ -23,6 +23,12 @@ import org.hibernate.validator.constraints.NotBlank;
 public class SysRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/** 后台角色状态：0-正常 */
+	public static final short status_normal = 0;
+
+	/** 后台角色状态：1-禁用 */
+	public static final short status_disable = 1;
+
 	@Id
 	private String id;
 
