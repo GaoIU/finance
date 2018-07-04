@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 27/06/2018 22:50:22
+ Date: 04/07/2018 21:24:51
 */
 
 SET NAMES utf8mb4;
@@ -66,7 +66,12 @@ CREATE TABLE `cash_order`  (
   `fee` double(10, 2) NULL DEFAULT 0.00 COMMENT '手续费',
   `operate_mode_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '操作方式ID',
   `operate_mode_type` smallint(6) NULL DEFAULT NULL COMMENT '操作方式类型：1-支付宝，2-微信，3-银行卡',
+  `cash_account` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '提现账号',
   `status` smallint(6) NULL DEFAULT 0 COMMENT '订单状态：0-审核中，1-审核通过，2-审核拒绝',
+  `review_time` timestamp(0) NULL DEFAULT NULL COMMENT '审核时间',
+  `sys_user_id` varchar(0) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人ID',
+  `sys_user_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人名称',
+  `review_desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核备注',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -179,6 +184,10 @@ CREATE TABLE `pay_order`  (
   `operate_mode_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '操作方式ID',
   `operate_mode_type` smallint(6) NULL DEFAULT NULL COMMENT '操作方式类型：1-支付宝，2-微信，3-银行卡',
   `status` smallint(6) NULL DEFAULT 0 COMMENT '订单状态：0-审核中，1-审核通过，2-审核拒绝',
+  `review_time` timestamp(0) NULL DEFAULT NULL COMMENT '审核时间',
+  `sys_user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人ID',
+  `sys_user_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人名称',
+  `review_desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核备注',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -328,12 +337,18 @@ CREATE TABLE `schedule_job`  (
   `method_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '要执行的方法',
   `bean_class` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '定时任务所在的类路径',
   `cron_expression` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '时间表达式',
+  `concurrent` smallint(6) NULL DEFAULT 1 COMMENT '是否并发：0-是，1-否',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   `status` smallint(6) NULL DEFAULT NULL COMMENT '状态：0-正常，1-暂停',
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of schedule_job
+-- ----------------------------
+INSERT INTO `schedule_job` VALUES ('015c939a44214243af0b1084ba75fcd8', 'test', 'testGroup', 'excute', 'com.fanteng.finance.quartz.task.TestTask', '0/10 * * * * ?', 1, '测试', 0, '2018-06-30 02:16:12', NULL);
 
 -- ----------------------------
 -- Table structure for sys_resource
@@ -371,6 +386,11 @@ CREATE TABLE `sys_role`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '后台角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of sys_role
+-- ----------------------------
+INSERT INTO `sys_role` VALUES ('d1a9814e21e94c7684dd0703b0c74fe3', '超级管理员', 'ADMINISTRATOR', 0, '2018-07-02 23:22:45', NULL);
+
+-- ----------------------------
 -- Table structure for sys_role_resource
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_resource`;
@@ -401,6 +421,11 @@ CREATE TABLE `sys_user`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '后台用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '이지은', 'Gemini', 'admin', '$2a$10$f2nmNBAXgJXMf1Q7GKD7ZuUjTSaJpC89WGeCl1BaDFW.fk7Isxiz2', '18779141750', '192.168.1.6/group1/M00/00/00/wKgBBlsbUPSAL3d5ABQwVQyTXJU000.gif', 0, '2018-07-02 23:24:42', NULL);
+
+-- ----------------------------
 -- Table structure for sys_user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_role`;
@@ -411,6 +436,11 @@ CREATE TABLE `sys_user_role`  (
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '后台用户 - 后台角色 关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_user_role
+-- ----------------------------
+INSERT INTO `sys_user_role` VALUES ('3d2c0d89064a4afab13058529f4f32f0', '5c7a8200248b4adaa382da7602857b9f', 'd1a9814e21e94c7684dd0703b0c74fe3', '2018-07-02 23:24:42');
 
 -- ----------------------------
 -- Table structure for system_config
