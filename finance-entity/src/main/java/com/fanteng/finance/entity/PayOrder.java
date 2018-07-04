@@ -42,7 +42,19 @@ public class PayOrder implements Serializable {
 	@Column(name = "product_id")
 	private String productId;
 
+	@Column(name = "review_desc")
+	private String reviewDesc;
+
+	@Column(name = "review_time")
+	private Timestamp reviewTime;
+
 	private short status;
+
+	@Column(name = "sys_user_id")
+	private String sysUserId;
+
+	@Column(name = "sys_user_name")
+	private String sysUserName;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
@@ -117,12 +129,44 @@ public class PayOrder implements Serializable {
 		this.productId = productId;
 	}
 
+	public String getReviewDesc() {
+		return this.reviewDesc;
+	}
+
+	public void setReviewDesc(String reviewDesc) {
+		this.reviewDesc = reviewDesc;
+	}
+
+	public Timestamp getReviewTime() {
+		return this.reviewTime;
+	}
+
+	public void setReviewTime(Timestamp reviewTime) {
+		this.reviewTime = reviewTime;
+	}
+
 	public short getStatus() {
 		return this.status;
 	}
 
 	public void setStatus(short status) {
 		this.status = status;
+	}
+
+	public String getSysUserId() {
+		return this.sysUserId;
+	}
+
+	public void setSysUserId(String sysUserId) {
+		this.sysUserId = sysUserId;
+	}
+
+	public String getSysUserName() {
+		return this.sysUserName;
+	}
+
+	public void setSysUserName(String sysUserName) {
+		this.sysUserName = sysUserName;
 	}
 
 	public Timestamp getUpdateTime() {

@@ -24,6 +24,9 @@ public class CashOrder implements Serializable {
 
 	private double amount;
 
+	@Column(name = "cash_account")
+	private String cashAccount;
+
 	@Column(name = "create_time")
 	private Timestamp createTime;
 
@@ -38,7 +41,19 @@ public class CashOrder implements Serializable {
 	@Column(name = "order_no")
 	private String orderNo;
 
+	@Column(name = "review_desc")
+	private String reviewDesc;
+
+	@Column(name = "review_time")
+	private Timestamp reviewTime;
+
 	private short status;
+
+	@Column(name = "sys_user_id")
+	private String sysUserId;
+
+	@Column(name = "sys_user_name")
+	private String sysUserName;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
@@ -63,6 +78,14 @@ public class CashOrder implements Serializable {
 
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+
+	public String getCashAccount() {
+		return this.cashAccount;
+	}
+
+	public void setCashAccount(String cashAccount) {
+		this.cashAccount = cashAccount;
 	}
 
 	public Timestamp getCreateTime() {
@@ -105,12 +128,44 @@ public class CashOrder implements Serializable {
 		this.orderNo = orderNo;
 	}
 
+	public String getReviewDesc() {
+		return this.reviewDesc;
+	}
+
+	public void setReviewDesc(String reviewDesc) {
+		this.reviewDesc = reviewDesc;
+	}
+
+	public Timestamp getReviewTime() {
+		return this.reviewTime;
+	}
+
+	public void setReviewTime(Timestamp reviewTime) {
+		this.reviewTime = reviewTime;
+	}
+
 	public short getStatus() {
 		return this.status;
 	}
 
 	public void setStatus(short status) {
 		this.status = status;
+	}
+
+	public String getSysUserId() {
+		return this.sysUserId;
+	}
+
+	public void setSysUserId(String sysUserId) {
+		this.sysUserId = sysUserId;
+	}
+
+	public String getSysUserName() {
+		return this.sysUserName;
+	}
+
+	public void setSysUserName(String sysUserName) {
+		this.sysUserName = sysUserName;
 	}
 
 	public Timestamp getUpdateTime() {
