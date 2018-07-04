@@ -25,13 +25,26 @@ public class EncryptUtil {
 	 * @throws NoSuchAlgorithmException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String encoderByMD5(CharSequence str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public static String encoderByMD5(CharSequence str) throws Exception {
 		if (str == null || str.length() == 0) {
 			return null;
 		}
-		MessageDigest md5 = MessageDigest.getInstance("MD5");
-		byte[] digest = md5.digest(str.toString().getBytes());
-		return new String(digest);
+
+		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+		byte[] btInput = str.toString().getBytes();
+		MessageDigest mdInst = MessageDigest.getInstance("MD5");
+		mdInst.update(btInput);
+		byte[] md = mdInst.digest();
+		int j = md.length;
+		char strs[] = new char[j * 2];
+		int k = 0;
+		for (int i = 0; i < j; i++) {
+			byte byte0 = md[i];
+			strs[k++] = hexDigits[byte0 >>> 4 & 0xf];
+			strs[k++] = hexDigits[byte0 & 0xf];
+		}
+
+		return new String(strs);
 	}
 
 	/**
