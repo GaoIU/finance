@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 
 import com.fanteng.core.Condition;
@@ -17,6 +18,8 @@ public interface BaseDao<T> {
 	Session getSession();
 
 	HibernateTemplate getTemplate();
+
+	NativeQuery<?> createNativeQuery(String sql);
 
 	T get(Serializable id);
 
@@ -58,10 +61,38 @@ public interface BaseDao<T> {
 
 	List<Map<String, Object>> queryAllToMap(String sql, Map<String, Object> param);
 
+	/**
+	 * 此方法不适用于带Group By的SQL与语句
+	 * 
+	 * @param sql
+	 * @param current
+	 * @param size
+	 * @param param
+	 * @return
+	 */
 	Page queryPage(String sql, Integer current, Integer size, Map<String, Object> param);
 
+	/**
+	 * 此方法不适用于带Group By的SQL与语句
+	 * 
+	 * @param sql
+	 * @param current
+	 * @param size
+	 * @param param
+	 * @param entityClass
+	 * @return
+	 */
 	Page queryPage(String sql, Integer current, Integer size, Map<String, Object> param, Class<T> entityClass);
 
+	/**
+	 * 此方法不适用于带Group By的SQL与语句
+	 * 
+	 * @param sql
+	 * @param current
+	 * @param size
+	 * @param param
+	 * @return
+	 */
 	Page queryPageToMap(String sql, Integer current, Integer size, Map<String, Object> param);
 
 }

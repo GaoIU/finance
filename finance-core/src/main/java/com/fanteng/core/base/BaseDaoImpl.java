@@ -55,6 +55,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public NativeQuery<?> createNativeQuery(String sql) {
+		return getSession().createNativeQuery(sql);
+	}
+
+	@Override
 	public T get(Serializable id) {
 		return getSession().get(clazz, id);
 	}
