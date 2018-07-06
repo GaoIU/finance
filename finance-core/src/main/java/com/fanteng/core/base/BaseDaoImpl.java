@@ -11,7 +11,6 @@ import java.util.UUID;
 import javax.persistence.Id;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -448,7 +447,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			size = 15;
 		}
 
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		StringBuffer sb = new StringBuffer(sql);
+		sb.insert(6, " SQL_CALC_FOUND_ROWS ");
+
+		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sb.toString());
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
@@ -458,19 +460,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		List<T> list = (List<T>) nativeQuery.getResultList();
 
-		StringBuffer sb = new StringBuffer(sql);
-		sb.insert(6, " COUNT(1) gemini_page_count, ");
-		NativeQuery<?> sqlQuery = getSession().createNativeQuery(sb.toString());
-		param.forEach((k, v) -> {
-			sqlQuery.setParameter(k, v);
-		});
-		sqlQuery.addEntity(Map.class);
+		String countSql = "SELECT FOUND_ROWS() gemini_page_count";
+		NativeQuery<?> sqlQuery = getSession().createNativeQuery(countSql);
 		Object object = sqlQuery.uniqueResult();
 
 		int totle = 0;
 		if (object != null) {
-			Map<String, Object> map = (Map<String, Object>) object;
-			totle = MapUtils.getInteger(map, "gemini_page_count");
+			totle = ((Number) object).intValue();
 		}
 
 		Page page = new Page(current, size, totle, list);
@@ -486,7 +482,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			size = 15;
 		}
 
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		StringBuffer sb = new StringBuffer(sql);
+		sb.insert(6, " SQL_CALC_FOUND_ROWS ");
+
+		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sb.toString());
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
@@ -496,19 +495,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		List<?> list = nativeQuery.getResultList();
 
-		StringBuffer sb = new StringBuffer(sql);
-		sb.insert(6, " COUNT(1) gemini_page_count, ");
-		NativeQuery<?> sqlQuery = getSession().createNativeQuery(sb.toString());
-		param.forEach((k, v) -> {
-			sqlQuery.setParameter(k, v);
-		});
-		sqlQuery.addEntity(Map.class);
+		String countSql = "SELECT FOUND_ROWS() gemini_page_count";
+		NativeQuery<?> sqlQuery = getSession().createNativeQuery(countSql);
 		Object object = sqlQuery.uniqueResult();
 
 		int totle = 0;
 		if (object != null) {
-			Map<String, Object> map = (Map<String, Object>) object;
-			totle = MapUtils.getInteger(map, "gemini_page_count");
+			totle = ((Number) object).intValue();
 		}
 
 		Page page = new Page(current, size, totle, list);
@@ -524,7 +517,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			size = 15;
 		}
 
-		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		StringBuffer sb = new StringBuffer(sql);
+		sb.insert(6, " SQL_CALC_FOUND_ROWS ");
+
+		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sb.toString());
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
@@ -534,19 +530,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		List<Map<String, Object>> list = (List<Map<String, Object>>) nativeQuery.getResultList();
 
-		StringBuffer sb = new StringBuffer(sql);
-		sb.insert(6, " COUNT(1) gemini_page_count, ");
-		NativeQuery<?> sqlQuery = getSession().createNativeQuery(sb.toString());
-		param.forEach((k, v) -> {
-			sqlQuery.setParameter(k, v);
-		});
-		sqlQuery.addEntity(Map.class);
+		String countSql = "SELECT FOUND_ROWS() gemini_page_count";
+		NativeQuery<?> sqlQuery = getSession().createNativeQuery(countSql);
 		Object object = sqlQuery.uniqueResult();
 
 		int totle = 0;
 		if (object != null) {
-			Map<String, Object> map = (Map<String, Object>) object;
-			totle = MapUtils.getInteger(map, "gemini_page_count");
+			totle = ((Number) object).intValue();
 		}
 
 		Page page = new Page(current, size, totle, list);
