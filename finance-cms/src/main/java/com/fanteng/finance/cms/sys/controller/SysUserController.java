@@ -1,7 +1,5 @@
 package com.fanteng.finance.cms.sys.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +22,7 @@ public class SysUserController {
 
 	@GetMapping
 	public JsonResult queryList() {
-		List<SysUser> list = sysUserService.findAll();
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", list);
+		return sysUserService.queryList();
 	}
 
 	/**

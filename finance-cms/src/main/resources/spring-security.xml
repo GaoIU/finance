@@ -26,12 +26,16 @@
 		<constructor-arg name="loginFormUrl" value="/" />
 	</bean>
 	
-	<security:http use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
+	<security:http use-expressions="true" auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
 		<security:intercept-url pattern="/" method="GET" requires-channel="any" access="permitAll" />
+		
+		<security:intercept-url pattern="/signIn" method="POST" requires-channel="any" access="permitAll" />
 		
 		<security:intercept-url pattern="/**/" requires-channel="any" access="@myUserDetailsService.hasPermission(request, authentication)" />
 		
 		<security:form-login login-page="/" username-parameter="userName" password-parameter="password" />
+		
+		<security:csrf disabled="true"/>
 		
 		<security:logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/logout" logout-success-url="/" />
 	</security:http>

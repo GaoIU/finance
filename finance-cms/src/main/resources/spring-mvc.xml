@@ -17,11 +17,19 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
 	<mvc:annotation-driven />
-
+	
 	<context:component-scan base-package="com.fanteng" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:resource.properties</value>
+			</list>
+		</property>
+	</bean>
 	
 	<mvc:resources location="/WEB-INF/static/" mapping="/static/**/" />
 	

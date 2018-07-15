@@ -64,7 +64,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	}
 
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-		List<SysUser> resources = sysUserService.findOnes("url", Operation.EQ, request.getRequestURI());
+		List<SysResource> resources = sysResourceService.findOnes("url", Operation.EQ, request.getRequestURI());
 		if (CollectionUtils.isEmpty(resources)) {
 			throw new ResourceErrorException("无效的访问");
 		}
