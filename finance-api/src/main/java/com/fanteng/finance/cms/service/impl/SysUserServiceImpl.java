@@ -1,7 +1,10 @@
 package com.fanteng.finance.cms.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import com.fanteng.finance.cms.service.SysUserRoleService;
 import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysUser;
 import com.fanteng.finance.entity.SysUserRole;
+import com.fanteng.util.BeanUtil;
 import com.fanteng.util.EncryptUtil;
 import com.fanteng.util.StringUtil;
 
@@ -100,6 +104,23 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			}
 		}
 		return new JsonResult(HttpStatus.METHOD_NOT_ALLOWED, "用户名或密码错误");
+	}
+
+	@Override
+	public JsonResult queryList() {
+		List<SysUser> list = findAll();
+
+		if (CollectionUtils.isNotEmpty(list)) {
+			List<Map<String, Object>> maps = new ArrayList<>(0);
+			for (SysUser sysUser : list) {
+				Map<String, Object> map = BeanUtil.toMap(sysUser, "password, sysRoleIds");
+				maps.add(map);
+			}
+
+			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", maps);
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", list);
 	}
 
 }

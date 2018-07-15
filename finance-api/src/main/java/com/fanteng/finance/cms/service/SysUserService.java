@@ -25,4 +25,11 @@ public interface SysUserService extends BaseService<SysUser> {
 	 */
 	JsonResult signIn(Map<String, Object> param);
 
+	/**
+	 * 获取用户列表
+	 * 
+	 * @return
+	 */
+	JsonResult queryList();
+
 }
