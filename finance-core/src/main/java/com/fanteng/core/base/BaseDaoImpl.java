@@ -383,7 +383,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	@Override
 	public T findOne(String propertyName, Operation operation, Object value) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
-		criteria.add(Restrictions.eq(propertyName, value));
+		Condition condition = new Condition(propertyName, operation, value);
+		addCondition(criteria, condition);
 		List<?> list = getTemplate().findByCriteria(criteria);
 		if (CollectionUtils.isNotEmpty(list)) {
 			return (T) list.get(0);
@@ -409,7 +410,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	@Override
 	public List<T> findOnes(String propertyName, Operation operation, Object value) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
-		criteria.add(Restrictions.eq(propertyName, value));
+		Condition condition = new Condition(propertyName, operation, value);
+		addCondition(criteria, condition);
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
 	}

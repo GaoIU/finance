@@ -28,6 +28,33 @@ public class BeanUtil extends BeanUtils {
 	}
 
 	/**
+	 * bean转map
+	 * 
+	 * @param obj
+	 *            要转换的bean
+	 * @param propertys
+	 *            要忽略的属性
+	 * @return
+	 */
+	public static Map<String, Object> toMap(Object obj, String propertys) {
+		if (null == obj) {
+			return null;
+		}
+		BeanMap beanMap = new BeanMap(obj);
+		Map<String, Object> map = new HashMap<String, Object>(0);
+		beanMap.forEach((key, value) -> map.put(key.toString(), value));
+		map.remove("class");
+
+		if (StringUtil.isNotBlank(propertys)) {
+			String[] keys = propertys.split(",");
+			for (String key : keys) {
+				map.remove(key.trim());
+			}
+		}
+		return map;
+	}
+
+	/**
 	 * map转bean
 	 * 
 	 * @param map
