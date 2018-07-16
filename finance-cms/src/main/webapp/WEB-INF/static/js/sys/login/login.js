@@ -42,15 +42,16 @@ layui.use("layer", function() {
 				layer.load();
 			},
 			success: function(data) {
+				console.log(data);
 				layer.closeAll('loading');
-				if(data.success) {
+				if(data.code == 200) {
 					layer.msg(data.msg, {
 						time: 1500,
 						icon: 1,
 						skin: 'msg'
 					});
 					setTimeout(function() {
-						location.href = data.obj;
+						location.href = data.data;
 					}, 2000);
 				} else {
 					layer.msg(data.msg, {

@@ -31,7 +31,11 @@
 		
 		<security:intercept-url pattern="/signIn" method="POST" requires-channel="any" access="permitAll" />
 		
+		<security:intercept-url pattern="/index" method="GET" requires-channel="any" access="permitAll" />
+		
 		<security:intercept-url pattern="/**/" requires-channel="any" access="@myUserDetailsService.hasPermission(request, authentication)" />
+		
+		<security:access-denied-handler error-page="/403"/>
 		
 		<security:form-login login-page="/" username-parameter="userName" password-parameter="password" />
 		
@@ -42,7 +46,7 @@
 	
 	<bean id="myUserDetailsService" class="com.fanteng.finance.cms.security.MyUserDetailsService" />
 	
-	<security:authentication-manager id="authenticationManager">
+	<security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider user-service-ref="myUserDetailsService">
 			<security:password-encoder hash="bcrypt" />
 		</security:authentication-provider>
