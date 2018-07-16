@@ -32,11 +32,11 @@ public class BeanUtil extends BeanUtils {
 	 * 
 	 * @param obj
 	 *            要转换的bean
-	 * @param propertys
+	 * @param fiters
 	 *            要忽略的属性
 	 * @return
 	 */
-	public static Map<String, Object> toMap(Object obj, String propertys) {
+	public static Map<String, Object> toMapFiters(Object obj, String fiters) {
 		if (null == obj) {
 			return null;
 		}
@@ -45,12 +45,43 @@ public class BeanUtil extends BeanUtils {
 		beanMap.forEach((key, value) -> map.put(key.toString(), value));
 		map.remove("class");
 
-		if (StringUtil.isNotBlank(propertys)) {
-			String[] keys = propertys.split(",");
+		if (StringUtil.isNotBlank(fiters)) {
+			String[] keys = fiters.split(",");
 			for (String key : keys) {
 				map.remove(key.trim());
 			}
 		}
+		return map;
+	}
+
+	/**
+	 * bean转map
+	 * 
+	 * @param obj
+	 *            要转换的bean
+	 * @param includes
+	 *            要保留的属性
+	 * @return
+	 */
+	public static Map<String, Object> toMapIncludes(Object obj, String includes) {
+		if (null == obj) {
+			return null;
+		}
+		BeanMap beanMap = new BeanMap(obj);
+		Map<String, Object> map = new HashMap<String, Object>(0);
+		beanMap.forEach((k, v) -> {
+			if (StringUtil.isNotBlank(includes)) {
+				String[] keys = includes.split(",");
+				for (String key : keys) {
+					if (StringUtil.equals(k.toString(), key.trim())) {
+						map.put(k.toString(), v);
+					}
+				}
+			} else {
+				map.put(k.toString(), v);
+			}
+		});
+		map.remove("class");
 		return map;
 	}
 

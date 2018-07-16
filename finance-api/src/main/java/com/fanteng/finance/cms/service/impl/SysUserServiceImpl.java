@@ -113,7 +113,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		if (CollectionUtils.isNotEmpty(list)) {
 			List<Map<String, Object>> maps = new ArrayList<>(0);
 			for (SysUser sysUser : list) {
-				Map<String, Object> map = BeanUtil.toMap(sysUser, "password, sysRoleIds");
+				Map<String, Object> map = BeanUtil.toMapFiters(sysUser, "password, sysRoleIds");
 				maps.add(map);
 			}
 
