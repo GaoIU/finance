@@ -33,6 +33,12 @@
 		
 		<security:intercept-url pattern="/index" method="GET" requires-channel="any" access="permitAll" />
 		
+		<security:intercept-url pattern="/403" method="GET" requires-channel="any" access="permitAll" />
+		
+		<security:intercept-url pattern="/404" method="GET" requires-channel="any" access="permitAll" />
+		
+		<security:intercept-url pattern="/500" method="GET" requires-channel="any" access="permitAll" />
+		
 		<security:intercept-url pattern="/**/" requires-channel="any" access="@myUserDetailsService.hasPermission(request, authentication)" />
 		
 		<security:access-denied-handler error-page="/403"/>

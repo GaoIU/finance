@@ -18,4 +18,22 @@ public class HomeController {
 		return mav;
 	}
 
+	@GetMapping("/403")
+	public ModelAndView forbidden() {
+		ModelAndView mav = new ModelAndView("/common/403");
+		return mav;
+	}
+
+	@GetMapping("/404")
+	public ModelAndView notFound() {
+		ModelAndView mav = new ModelAndView("/common/404");
+		return mav;
+	}
+
+	@GetMapping("/500")
+	public ModelAndView internalServerError() {
+		ModelAndView mav = new ModelAndView("/common/500");
+		return mav;
+	}
+
 }
