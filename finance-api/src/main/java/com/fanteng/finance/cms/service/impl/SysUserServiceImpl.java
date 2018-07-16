@@ -117,10 +117,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 				maps.add(map);
 			}
 
-			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", maps);
+			return new JsonResult(HttpStatus.OK, "操作成功", maps);
 		}
 
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", list);
+		return new JsonResult(HttpStatus.OK, "操作成功", list);
 	}
 
 }

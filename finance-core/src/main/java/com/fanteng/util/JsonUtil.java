@@ -1,6 +1,14 @@
 package com.fanteng.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 public class JsonUtil {
 
@@ -31,6 +39,31 @@ public class JsonUtil {
 			return null;
 		}
 		return gson.fromJson(json, cla);
+	}
+
+	/**
+	 * 解析JSON数组
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public static List<Map<String, Object>> fromJsonArray(String json) {
+		List<Map<String, Object>> list = new ArrayList<>(0);
+
+		JsonParser parsers = new JsonParser();
+		JsonArray jsonArrays = parsers.parse(json).getAsJsonArray();
+		for (JsonElement jsonElement : jsonArrays) {
+			Map<?, ?> fromJson = gson.fromJson(jsonElement, Map.class);
+
+			Map<String, Object> map = new HashMap<>(0);
+			fromJson.forEach((k, v) -> {
+				map.put(k.toString(), v);
+			});
+
+			list.add(map);
+		}
+
+		return list;
 	}
 
 }
