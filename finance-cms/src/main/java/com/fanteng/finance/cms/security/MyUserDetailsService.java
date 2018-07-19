@@ -21,12 +21,9 @@ import org.springframework.util.AntPathMatcher;
 import com.fanteng.core.Operation;
 import com.fanteng.exception.ResourceErrorException;
 import com.fanteng.finance.cms.service.SysResourceService;
-import com.fanteng.finance.cms.service.SysRoleService;
 import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysResource;
-import com.fanteng.finance.entity.SysRole;
 import com.fanteng.finance.entity.SysUser;
-import com.fanteng.util.StringUtil;
 
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -34,15 +31,12 @@ public class MyUserDetailsService implements UserDetailsService {
 	private SysUserService sysUserService;
 
 	@Autowired
-	private SysRoleService sysRoleService;
-
-	@Autowired
 	private SysResourceService sysResourceService;
 
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-	@Value("${sys.role.admin.code}")
-	private String ADMINISTRATOR;
+	@Value("${sys.role.guest.code}")
+	private String GUEST;
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -56,7 +50,12 @@ public class MyUserDetailsService implements UserDetailsService {
 		List<SysResource> list = sysResourceService.getResourcesBySysUserId(sysUserId);
 		for (SysResource sysResource : list) {
 			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(
-					sysResource.getCode() + "@" + sysResource.getMethod());
+					sysResource.getCode() + "." + sysResource.getMethod());
+			authorities.add(grantedAuthority);
+		}
+
+		if (CollectionUtils.isEmpty(authorities)) {
+			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(GUEST);
 			authorities.add(grantedAuthority);
 		}
 
@@ -79,14 +78,6 @@ public class MyUserDetailsService implements UserDetailsService {
 			List<SysResource> list = sysResourceService.getResourcesBySysUserId(sysUser.getId());
 			for (SysResource sysResource : list) {
 				if (antPathMatcher.match(request.getRequestURI(), sysResource.getUrl())) {
-					hasPermission = true;
-					break;
-				}
-			}
-
-			List<SysRole> sysRoles = sysRoleService.getSysRolesBySysUserId(sysUser.getId());
-			for (SysRole sysRole : sysRoles) {
-				if (StringUtil.equals(ADMINISTRATOR, sysRole.getCode())) {
 					hasPermission = true;
 					break;
 				}
