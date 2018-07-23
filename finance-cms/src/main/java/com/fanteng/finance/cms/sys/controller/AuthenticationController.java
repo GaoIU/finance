@@ -13,9 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fanteng.core.JsonResult;
+import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysUser;
 
@@ -24,6 +26,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private SysUserService sysUserService;
+
+	@Autowired
+	private SysResourceService sysResourceService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -58,6 +63,54 @@ public class AuthenticationController {
 
 		jsonResult.setData("/index");
 		return jsonResult;
+	}
+
+	/**
+	 * 验证手机是否存在
+	 * 
+	 * @param mobile
+	 * @return
+	 */
+	@PostMapping("/checkMobile")
+	public JsonResult checkMobile(@RequestParam(required = false) String mobile) {
+		boolean checkMobile = sysUserService.checkPropertyName("mobile", mobile);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkMobile);
+	}
+
+	/**
+	 * 验证昵称是否存在
+	 * 
+	 * @param nickName
+	 * @return
+	 */
+	@PostMapping("/checkNickName")
+	public JsonResult checkNickName(@RequestParam(required = false) String nickName) {
+		boolean checkNickName = sysUserService.checkPropertyName("nickName", nickName);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkNickName);
+	}
+
+	/**
+	 * 验证账号是否存在
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	@PostMapping("/checkUserName")
+	public JsonResult checkUserName(@RequestParam(required = false) String userName) {
+		boolean checkUserName = sysUserService.checkPropertyName("userName", userName);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkUserName);
+	}
+
+	/**
+	 * 验证后台资源编码是否存在
+	 * 
+	 * @param code
+	 * @return
+	 */
+	@PostMapping("/checkCode")
+	public JsonResult checkCode(@RequestParam(required = false) String code) {
+		boolean checkCode = sysResourceService.checkPropertyName("code", code);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkCode);
 	}
 
 }

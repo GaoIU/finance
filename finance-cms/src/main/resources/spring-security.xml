@@ -31,6 +31,8 @@
 		
 		<security:intercept-url pattern="/signIn" method="POST" requires-channel="any" access="permitAll" />
 		
+		<security:intercept-url pattern="/signOut" method="GET" requires-channel="any" access="permitAll" />
+		
 		<security:intercept-url pattern="/index" method="GET" requires-channel="any" access="permitAll" />
 		
 		<security:intercept-url pattern="/403" method="GET" requires-channel="any" access="permitAll" />
@@ -47,8 +49,14 @@
 		
 		<security:csrf disabled="true"/>
 		
+		<security:session-management invalid-session-url="/signOut">
+			<security:concurrency-control max-sessions="1" expired-session-strategy-ref="myExpiredSessionStrategy"/>
+		</security:session-management>
+		
 		<security:logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/logout" logout-success-url="/" />
 	</security:http>
+	
+	<bean id="myExpiredSessionStrategy" class="com.fanteng.finance.cms.security.MyExpiredSessionStrategy" />
 	
 	<bean id="myUserDetailsService" class="com.fanteng.finance.cms.security.MyUserDetailsService" />
 	
