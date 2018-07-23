@@ -17,7 +17,7 @@ public class ExceptionHandlerController {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@ExceptionHandler(value = Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	public Map<String, Object> handlerException(Exception e) {
 		logger.info(e.getMessage());
 
@@ -29,7 +29,7 @@ public class ExceptionHandlerController {
 	}
 
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public Map<String, Object> handlerBindException(MethodArgumentNotValidException be) {
 		Map<String, Object> map = new HashMap<String, Object>(0);
 		String message = be.getBindingResult().getFieldError().getDefaultMessage();
@@ -40,7 +40,7 @@ public class ExceptionHandlerController {
 	}
 
 	@ExceptionHandler(value = ParamErrorException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public Map<String, Object> handlerParamErrorException(ParamErrorException pee) {
 		Map<String, Object> map = new HashMap<String, Object>(0);
 		map.put("code", pee.getCode());
@@ -50,7 +50,7 @@ public class ExceptionHandlerController {
 	}
 
 	@ExceptionHandler(value = ResourceErrorException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	public Map<String, Object> handlerResourceErrorException(ResourceErrorException ree) {
 		Map<String, Object> map = new HashMap<String, Object>(0);
 		map.put("code", ree.getCode());
