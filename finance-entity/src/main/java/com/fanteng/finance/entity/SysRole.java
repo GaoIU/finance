@@ -46,7 +46,7 @@ public class SysRole implements Serializable {
 	@Transient
 	private String sysResourceIds;
 
-	private short status;
+	private Short status;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
@@ -94,11 +94,11 @@ public class SysRole implements Serializable {
 		this.sysResourceIds = sysResourceIds;
 	}
 
-	public short getStatus() {
+	public Short getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(short status) {
+	public void setStatus(Short status) {
 		this.status = status;
 	}
 

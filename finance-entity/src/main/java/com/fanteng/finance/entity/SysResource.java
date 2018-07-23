@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * The persistent class for the sys_resource database table.
@@ -25,9 +29,20 @@ public class SysResource implements Serializable {
 	/** 后台资源状态：1-禁用 */
 	public static final short status_disable = 1;
 
+	/** 后台资源类型：0-菜单 */
+	public static final short type_menu = 0;
+
+	/** 后台资源类型：1-按钮 */
+	public static final short type_button = 1;
+
+	/** 后台资源类型：2-功能 */
+	public static final short type_function = 2;
+
 	@Id
 	private String id;
 
+	@NotBlank(message = "资源编码不能为空")
+	@Length(max = 32, message = "资源编码不能超过32位长度")
 	private String code;
 
 	@Column(name = "create_time")
@@ -35,20 +50,25 @@ public class SysResource implements Serializable {
 
 	private String description;
 
+	@NotBlank(message = "请选择资源图标")
 	private String icon;
 
+	@NotBlank(message = "访问方式不能为空")
 	private String method;
 
+	@NotBlank(message = "资源名称不能为空")
+	@Length(max = 16, message = "资源名称不能超过16位长度")
 	private String name;
 
 	@Column(name = "parent_id")
 	private String parentId;
 
-	private short sort = 0;
+	private Short sort = 0;
 
-	private short status = status_normal;
+	private Short status = status_normal;
 
-	private short type;
+	@NotNull(message = "请选择资源类型")
+	private Short type;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
@@ -122,27 +142,27 @@ public class SysResource implements Serializable {
 		this.parentId = parentId;
 	}
 
-	public short getSort() {
+	public Short getSort() {
 		return this.sort;
 	}
 
-	public void setSort(short sort) {
+	public void setSort(Short sort) {
 		this.sort = sort;
 	}
 
-	public short getStatus() {
+	public Short getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(short status) {
+	public void setStatus(Short status) {
 		this.status = status;
 	}
 
-	public short getType() {
+	public Short getType() {
 		return this.type;
 	}
 
-	public void setType(short type) {
+	public void setType(Short type) {
 		this.type = type;
 	}
 
