@@ -26,10 +26,19 @@ public interface SysUserService extends BaseService<SysUser> {
 	JsonResult signIn(Map<String, Object> param);
 
 	/**
-	 * 获取用户列表
+	 * 获取后台用户列表
 	 * 
 	 * @return
 	 */
 	JsonResult queryList();
+
+	/**
+	 * 验证属性字段是否存在
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	boolean checkPropertyName(String propertyName, Object value);
 
 }

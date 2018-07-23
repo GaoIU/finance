@@ -53,6 +53,21 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			return new JsonResult(HttpStatus.BAD_REQUEST, "用户密码的长度只能在6-16位之间");
 		}
 
+		boolean checkMobile = checkPropertyName("mobile", sysUser.getMobile());
+		if (checkMobile) {
+			return new JsonResult(HttpStatus.BAD_REQUEST, "该手机号已存在");
+		}
+
+		boolean checkNickName = checkPropertyName("nickName", sysUser.getNickName());
+		if (checkNickName) {
+			return new JsonResult(HttpStatus.BAD_REQUEST, "该昵称已被使用");
+		}
+
+		boolean checkUserName = checkPropertyName("userName", sysUser.getUserName());
+		if (checkUserName) {
+			return new JsonResult(HttpStatus.BAD_REQUEST, "该账号已被使用");
+		}
+
 		password = EncryptUtil.encodeByBC(password);
 		sysUser.setPassword(password);
 		sysUser.setAvatar(default_avatar);
@@ -106,6 +121,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		return new JsonResult(HttpStatus.METHOD_NOT_ALLOWED, "用户名或密码错误");
 	}
 
+	/**
+	 * 获取后台用户列表
+	 * 
+	 * @return
+	 */
 	@Override
 	public JsonResult queryList() {
 		List<SysUser> list = findAll();
@@ -121,6 +141,24 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		}
 
 		return new JsonResult(HttpStatus.OK, "操作成功", list);
+	}
+
+	/**
+	 * 验证属性字段是否存在
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	@Override
+	public boolean checkPropertyName(String propertyName, Object value) {
+		SysUser sysUser = findOne(propertyName, Operation.EQ, value);
+
+		if (sysUser != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 }
