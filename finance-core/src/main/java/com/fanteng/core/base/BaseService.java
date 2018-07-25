@@ -24,26 +24,40 @@ public interface BaseService<T> {
 	boolean checkUpdate(Serializable id, Timestamp updateTime);
 
 	boolean delete(T entity);
-	
+
 	boolean delete(Serializable id);
 
 	List<T> findAll();
+
+	List<T> findAll(String properties);
+
+	List<T> findAll(String properties, List<Condition> conditions);
 
 	List<T> findAll(List<Condition> conditions);
 
 	Page findPage(Integer current, Integer size, List<Condition> conditions);
 
+	Page findPage(Integer current, Integer size, List<Condition> conditions, String properties);
+
 	Page findPage(Integer current, Integer size, List<Condition> conditions, Class<T> entityClass);
+
+	Page findPage(Integer current, Integer size, List<Condition> conditions, Class<T> entityClass, String properties);
 
 	int getCount();
 
 	int getCount(Class<T> entityClass);
 
 	T findOne(String propertyName, Operation operation, Object value);
+	
+	T findOne(String propertyName, Operation operation, Object value, String properties);
 
 	T findOne(List<Condition> conditions);
+	
+	T findOne(List<Condition> conditions, String properties);
 
 	List<T> findOnes(String propertyName, Operation operation, Object value);
+	
+	List<T> findOnes(String propertyName, Operation operation, Object value, String properties);
 
 	List<T> queryAll(String sql, Map<String, Object> param);
 

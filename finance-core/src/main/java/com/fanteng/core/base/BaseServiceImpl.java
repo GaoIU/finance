@@ -55,7 +55,7 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	public boolean delete(T entity) {
 		return baseDao.delete(entity);
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean delete(Serializable id) {
@@ -69,6 +69,16 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	}
 
 	@Override
+	public List<T> findAll(String properties) {
+		return baseDao.findAll(properties);
+	}
+
+	@Override
+	public List<T> findAll(String properties, List<Condition> conditions) {
+		return baseDao.findAll(properties, conditions);
+	}
+
+	@Override
 	public List<T> findAll(List<Condition> conditions) {
 		return baseDao.findAll(conditions);
 	}
@@ -79,8 +89,19 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	}
 
 	@Override
+	public Page findPage(Integer current, Integer size, List<Condition> conditions, String properties) {
+		return baseDao.findPage(current, size, conditions, properties);
+	}
+
+	@Override
 	public Page findPage(Integer current, Integer size, List<Condition> conditions, Class<T> entityClass) {
 		return baseDao.findPage(current, size, conditions, entityClass);
+	}
+
+	@Override
+	public Page findPage(Integer current, Integer size, List<Condition> conditions, Class<T> entityClass,
+			String properties) {
+		return baseDao.findPage(current, size, conditions, entityClass, properties);
 	}
 
 	@Override
@@ -99,13 +120,28 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	}
 
 	@Override
+	public T findOne(String propertyName, Operation operation, Object value, String properties) {
+		return baseDao.findOne(propertyName, operation, value, properties);
+	}
+
+	@Override
 	public T findOne(List<Condition> conditions) {
 		return baseDao.findOne(conditions);
 	}
 
 	@Override
+	public T findOne(List<Condition> conditions, String properties) {
+		return baseDao.findOne(conditions, properties);
+	}
+
+	@Override
 	public List<T> findOnes(String propertyName, Operation operation, Object value) {
 		return baseDao.findOnes(propertyName, operation, value);
+	}
+
+	@Override
+	public List<T> findOnes(String propertyName, Operation operation, Object value, String properties) {
+		return baseDao.findOnes(propertyName, operation, value, properties);
 	}
 
 	@Override

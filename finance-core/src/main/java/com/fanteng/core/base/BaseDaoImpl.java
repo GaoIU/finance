@@ -17,6 +17,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.NativeQuery;
@@ -177,6 +178,43 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public List<T> findAll(String properties) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String propertyName : propertyNames) {
+				projectionList.add(Projections.property(propertyName.trim()).as(propertyName.trim()));
+			}
+			criteria.setProjection(projectionList);
+		}
+		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
+		return list;
+	}
+
+	@Override
+	public List<T> findAll(String properties, List<Condition> conditions) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		for (Condition condition : conditions) {
+			addCondition(criteria, condition);
+		}
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String propertyName : propertyNames) {
+				projectionList.add(Projections.property(propertyName.trim()).as(propertyName.trim()));
+			}
+			criteria.setProjection(projectionList);
+		}
+		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
+		return list;
+	}
+
+	@Override
 	public List<T> findAll(List<Condition> conditions) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
 		for (Condition condition : conditions) {
@@ -299,6 +337,42 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public Page findPage(Integer current, Integer size, List<Condition> conditions, String properties) {
+		if (current == null) {
+			current = 1;
+		}
+		if (size == null) {
+			size = 15;
+		}
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		for (Condition condition : conditions) {
+			addCondition(criteria, condition);
+		}
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String propertyName : propertyNames) {
+				projectionList.add(Projections.property(propertyName.trim()).as(propertyName.trim()));
+			}
+			criteria.setProjection(projectionList);
+		}
+		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
+
+		criteria.setProjection(Projections.rowCount());
+		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		int totle = 0;
+		if (object != null) {
+			totle = ((Number) object).intValue();
+		}
+
+		Page page = new Page(current, size, totle, list);
+		return page;
+	}
+
+	@Override
 	public Page findPage(Integer current, Integer size, List<Condition> conditions, Class<T> entityClass) {
 		if (current == null) {
 			current = 1;
@@ -310,6 +384,43 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
+		}
+		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
+
+		criteria.setProjection(Projections.rowCount());
+		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		int totle = 0;
+		if (object != null) {
+			totle = ((Number) object).intValue();
+		}
+
+		Page page = new Page(current, size, totle, list);
+		return page;
+	}
+
+	@Override
+	public Page findPage(Integer current, Integer size, List<Condition> conditions, Class<T> entityClass,
+			String properties) {
+		if (current == null) {
+			current = 1;
+		}
+		if (size == null) {
+			size = 15;
+		}
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
+		for (Condition condition : conditions) {
+			addCondition(criteria, condition);
+		}
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String propertyName : propertyNames) {
+				projectionList.add(Projections.property(propertyName.trim()).as(propertyName.trim()));
+			}
+			criteria.setProjection(projectionList);
 		}
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
@@ -394,6 +505,29 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public T findOne(String propertyName, Operation operation, Object value, String properties) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		Condition condition = new Condition(propertyName, operation, value);
+		addCondition(criteria, condition);
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String property : propertyNames) {
+				projectionList.add(Projections.property(property.trim()).as(property.trim()));
+			}
+			criteria.setProjection(projectionList);
+		}
+
+		List<?> list = getTemplate().findByCriteria(criteria);
+		if (CollectionUtils.isNotEmpty(list)) {
+			return (T) list.get(0);
+		}
+		return null;
+	}
+
+	@Override
 	public T findOne(List<Condition> conditions) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
 		for (Condition condition : conditions) {
@@ -408,10 +542,54 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public T findOne(List<Condition> conditions, String properties) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		for (Condition condition : conditions) {
+			addCondition(criteria, condition);
+		}
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String property : propertyNames) {
+				projectionList.add(Projections.property(property.trim()).as(property.trim()));
+			}
+			criteria.setProjection(projectionList);
+		}
+
+		List<?> list = getTemplate().findByCriteria(criteria);
+		if (CollectionUtils.isNotEmpty(list)) {
+			return (T) list.get(0);
+		}
+		return null;
+	}
+
+	@Override
 	public List<T> findOnes(String propertyName, Operation operation, Object value) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
 		Condition condition = new Condition(propertyName, operation, value);
 		addCondition(criteria, condition);
+		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
+		return list;
+	}
+
+	@Override
+	public List<T> findOnes(String propertyName, Operation operation, Object value, String properties) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		Condition condition = new Condition(propertyName, operation, value);
+		addCondition(criteria, condition);
+
+		if (StringUtil.isNotBlank(properties)) {
+			ProjectionList projectionList = Projections.projectionList();
+
+			String[] propertyNames = properties.split(",");
+			for (String property : propertyNames) {
+				projectionList.add(Projections.property(property.trim()).as(property.trim()));
+			}
+			criteria.setProjection(projectionList);
+		}
+
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
 	}
