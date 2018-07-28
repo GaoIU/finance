@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.fanteng.util.StringUtil;
+
 @RestControllerAdvice
 public class ExceptionHandlerController {
 
@@ -19,7 +21,8 @@ public class ExceptionHandlerController {
 	@ExceptionHandler(value = Exception.class)
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	public Map<String, Object> handlerException(Exception e) {
-		logger.info(e.getMessage());
+		String msg = StringUtil.getExceptionMsg(e);
+		logger.info(msg);
 
 		Map<String, Object> map = new HashMap<String, Object>(0);
 		map.put("code", 10086);
@@ -55,6 +58,15 @@ public class ExceptionHandlerController {
 		Map<String, Object> map = new HashMap<String, Object>(0);
 		map.put("code", ree.getCode());
 		map.put("msg", ree.getMsg());
+
+		return map;
+	}
+
+	@ExceptionHandler(value = CustomException.class)
+	public Map<String, Object> handlerCustomException(CustomException ce) {
+		Map<String, Object> map = new HashMap<String, Object>(0);
+		map.put("code", ce.getCode());
+		map.put("msg", ce.getMsg());
 
 		return map;
 	}

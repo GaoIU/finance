@@ -16,6 +16,8 @@ import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
 import com.fanteng.core.base.BaseServiceImpl;
+import com.fanteng.exception.CustomException;
+import com.fanteng.exception.ParamErrorException;
 import com.fanteng.finance.cms.dao.SysUserDao;
 import com.fanteng.finance.cms.service.SysUserRoleService;
 import com.fanteng.finance.cms.service.SysUserService;
@@ -46,26 +48,26 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	public JsonResult register(SysUser sysUser) throws Exception {
 		String password = sysUser.getPassword();
 		if (StringUtil.isEmpty(password)) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "用户密码不能为空");
+			throw new ParamErrorException("用户密码不能为空");
 		}
 
 		if (password.length() < 6 || password.length() > 16) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "用户密码的长度只能在6-16位之间");
-		}
-
-		boolean checkMobile = checkPropertyName("mobile", sysUser.getMobile());
-		if (checkMobile) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "该手机号已存在");
-		}
-
-		boolean checkNickName = checkPropertyName("nickName", sysUser.getNickName());
-		if (checkNickName) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "该昵称已被使用");
+			throw new ParamErrorException("用户密码的长度只能在6-16位之间");
 		}
 
 		boolean checkUserName = checkPropertyName("userName", sysUser.getUserName());
 		if (checkUserName) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "该账号已被使用");
+			throw new ParamErrorException("该账号已被使用");
+		}
+
+		boolean checkNickName = checkPropertyName("nickName", sysUser.getNickName());
+		if (checkNickName) {
+			throw new ParamErrorException("该昵称已被使用");
+		}
+
+		boolean checkMobile = checkPropertyName("mobile", sysUser.getMobile());
+		if (checkMobile) {
+			throw new ParamErrorException("该手机号已存在");
 		}
 
 		password = EncryptUtil.encodeByBC(password);
@@ -87,7 +89,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			return new JsonResult(HttpStatus.OK, "操作成功");
 		}
 
-		return new JsonResult(HttpStatus.INTERNAL_SERVER_ERROR, "操作失败");
+		throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "操作失败");
 	}
 
 	/**
@@ -102,11 +104,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		String password = MapUtils.getString(param, "password");
 
 		if (StringUtil.isBlank(userName)) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "请输入用户名");
+			throw new ParamErrorException("请输入用户名");
 		}
 
 		if (StringUtil.isEmpty(password)) {
-			return new JsonResult(HttpStatus.BAD_REQUEST, "请输入密码");
+			throw new ParamErrorException("请输入密码");
 		}
 
 		SysUser sysUser = findOne("userName", Operation.EQ, userName);
@@ -115,10 +117,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 				if (sysUser.getStatus() == SysUser.status_normal) {
 					return new JsonResult(HttpStatus.OK, "登录成功，正在跳转...", sysUser);
 				}
-				return new JsonResult(HttpStatus.FORBIDDEN, "该用户已被禁用，请联系管理员");
+				throw new CustomException(HttpStatus.FORBIDDEN, "该用户已被禁用，请联系管理员");
 			}
 		}
-		return new JsonResult(HttpStatus.METHOD_NOT_ALLOWED, "用户名或密码错误");
+		throw new CustomException(HttpStatus.UNAUTHORIZED, "用户名或密码错误");
 	}
 
 	/**
@@ -129,18 +131,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	@Override
 	public JsonResult queryList() {
 		List<SysUser> list = findAll();
+		List<Map<String, Object>> maps = new ArrayList<>(0);
 
 		if (CollectionUtils.isNotEmpty(list)) {
-			List<Map<String, Object>> maps = new ArrayList<>(0);
 			for (SysUser sysUser : list) {
 				Map<String, Object> map = BeanUtil.toMapFiters(sysUser, "password, sysRoleIds");
 				maps.add(map);
 			}
-
-			return new JsonResult(HttpStatus.OK, "操作成功", maps);
 		}
 
-		return new JsonResult(HttpStatus.OK, "操作成功", list);
+		return new JsonResult(HttpStatus.OK, "操作成功", maps);
 	}
 
 	/**

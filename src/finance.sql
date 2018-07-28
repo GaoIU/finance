@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 04/07/2018 21:24:51
+ Date: 26/07/2018 21:06:12
 */
 
 SET NAMES utf8mb4;
@@ -372,6 +372,14 @@ CREATE TABLE `sys_resource`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '后台资源表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of sys_resource
+-- ----------------------------
+INSERT INTO `sys_resource` VALUES ('172e6d5275534507aeed3b294880b622', '后台资源管理', 'SYS_RESOURCE', '/sysResource', 'GET', 0, 2, 'fa-file-text', 'eebaad47f58547f2b541f89b59dff980', '后台资源管理，由开发人员维护', 0, '2018-07-22 12:21:01', NULL);
+INSERT INTO `sys_resource` VALUES ('bde09fdf52e24ef1850575b5b9afd292', '后台用户管理', 'SYS_USER', '/sysUser', 'GET', 0, 0, 'fa-user', 'eebaad47f58547f2b541f89b59dff980', '后台用户管理，由开发人员维护', 0, '2018-07-22 12:12:41', NULL);
+INSERT INTO `sys_resource` VALUES ('eb95e80d781146589f3d420f5aa71136', '后台角色管理', 'SYS_ROLE', '/sysRole', 'GET', 0, 1, 'fa-key', 'eebaad47f58547f2b541f89b59dff980', '后台角色管理，由开发人员维护', 0, '2018-07-22 12:17:32', NULL);
+INSERT INTO `sys_resource` VALUES ('eebaad47f58547f2b541f89b59dff980', '系统管理', 'SYS_MANAGE', NULL, 'GET', 0, 0, 'fa-gears', NULL, '后台系统管理，由开发人员维护', 0, '2018-07-22 12:05:22', NULL);
+
+-- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
@@ -423,7 +431,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '이지은', 'Gemini', 'admin', '$2a$10$f2nmNBAXgJXMf1Q7GKD7ZuUjTSaJpC89WGeCl1BaDFW.fk7Isxiz2', '18779141750', '192.168.1.6/group1/M00/00/00/wKgBBlsbUPSAL3d5ABQwVQyTXJU000.gif', 0, '2018-07-02 23:24:42', NULL);
+INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '이지은', 'Gemini', 'admin', '$2a$10$f2nmNBAXgJXMf1Q7GKD7ZuUjTSaJpC89WGeCl1BaDFW.fk7Isxiz2', '18779141750', 'http://192.168.1.6/group1/M00/00/00/fwAAAVtOGVyAag3yAAHk1oAXuBk538.jpg', 0, '2018-07-02 23:24:42', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -549,6 +557,6 @@ CREATE TABLE `user_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uc_userInfo`(`invitation_code`, `mobile`, `id_card`, `bank_no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

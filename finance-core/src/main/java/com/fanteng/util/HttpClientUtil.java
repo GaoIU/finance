@@ -17,6 +17,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -36,6 +37,11 @@ public class HttpClientUtil {
 
 	private final static HttpClient client = HttpClientBuilder.create().build();
 
+	private final static int timeout = 5000;
+
+	private final static RequestConfig REQUEST_CONFIG = RequestConfig.custom().setConnectTimeout(timeout)
+			.setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
+
 	/**
 	 * 发送HTTP的GET请求
 	 * 
@@ -49,6 +55,7 @@ public class HttpClientUtil {
 	 */
 	public static String sendGetByHttp(String url, String charset) throws ClientProtocolException, IOException {
 		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(REQUEST_CONFIG);
 		HttpResponse response = client.execute(httpGet);
 
 		int statusCode = response.getStatusLine().getStatusCode();
@@ -75,6 +82,7 @@ public class HttpClientUtil {
 	public static String sendGetByHttp(String url, Map<String, String> headers, String charset)
 			throws ClientProtocolException, IOException {
 		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(REQUEST_CONFIG);
 
 		if (headers != null && !headers.isEmpty()) {
 			headers.forEach((k, v) -> {
@@ -107,6 +115,7 @@ public class HttpClientUtil {
 	public static String sendPostByHttp(String url, String json, String charset)
 			throws ClientProtocolException, IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 		httpPost.setHeader("Accept", "application/json");
 		httpPost.setHeader("Content-Type", "application/json");
 
@@ -140,6 +149,7 @@ public class HttpClientUtil {
 	public static String sendPostByHttp(String url, Map<String, String> headers, String json, String charset)
 			throws ClientProtocolException, IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 		httpPost.setHeader("Accept", "application/json");
 		httpPost.setHeader("Content-Type", "application/json");
 
@@ -175,6 +185,7 @@ public class HttpClientUtil {
 	public static String sendPostByHttp(String url, Map<String, Object> param, String charset)
 			throws ClientProtocolException, IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>(0);
 		param.forEach((k, v) -> {
@@ -209,6 +220,7 @@ public class HttpClientUtil {
 	public static String sendPostByHttp(String url, Map<String, String> headers, Map<String, Object> param,
 			String charset) throws ClientProtocolException, IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 
 		headers.forEach((k, v) -> {
 			httpPost.setHeader(k, v);
@@ -246,6 +258,7 @@ public class HttpClientUtil {
 	public static String sendGetByHttps(String url, String charset) throws KeyManagementException,
 			ClientProtocolException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(REQUEST_CONFIG);
 		CloseableHttpResponse response = createSSLClientDefault().execute(httpGet);
 
 		int statusCode = response.getStatusLine().getStatusCode();
@@ -276,6 +289,7 @@ public class HttpClientUtil {
 			throws KeyManagementException, ClientProtocolException, NoSuchAlgorithmException, KeyStoreException,
 			IOException {
 		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(REQUEST_CONFIG);
 
 		headers.forEach((k, v) -> {
 			httpGet.setHeader(k, v);
@@ -310,6 +324,7 @@ public class HttpClientUtil {
 	public static String sendPostByHttps(String url, String json, String charset) throws KeyManagementException,
 			ClientProtocolException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 		httpPost.setHeader("Accept", "application/json");
 		httpPost.setHeader("Content-Type", "application/json");
 
@@ -345,6 +360,7 @@ public class HttpClientUtil {
 			throws KeyManagementException, ClientProtocolException, NoSuchAlgorithmException, KeyStoreException,
 			IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>(0);
 		param.forEach((k, v) -> {
@@ -383,6 +399,7 @@ public class HttpClientUtil {
 			throws KeyManagementException, ClientProtocolException, NoSuchAlgorithmException, KeyStoreException,
 			IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 		httpPost.setHeader("Accept", "application/json");
 		httpPost.setHeader("Content-Type", "application/json");
 
@@ -426,6 +443,7 @@ public class HttpClientUtil {
 			String charset) throws KeyManagementException, ClientProtocolException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
 		HttpPost httpPost = new HttpPost(url);
+		httpPost.setConfig(REQUEST_CONFIG);
 
 		if (headers != null && !headers.isEmpty()) {
 			headers.forEach((k, v) -> {

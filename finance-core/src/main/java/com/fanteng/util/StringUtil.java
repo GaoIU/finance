@@ -1,5 +1,7 @@
 package com.fanteng.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Blob;
 
 import org.apache.commons.lang3.StringUtils;
@@ -105,6 +107,12 @@ public class StringUtil extends StringUtils {
 		return null;
 	}
 
+	/**
+	 * 判断object是否为空
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	public static boolean isEmpty(Object obj) {
 		if (obj == null) {
 			return true;
@@ -120,6 +128,12 @@ public class StringUtil extends StringUtils {
 		return false;
 	}
 
+	/**
+	 * 判断object是否不为空
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	public static boolean isNotEmpty(Object obj) {
 		if (obj == null) {
 			return false;
@@ -134,6 +148,21 @@ public class StringUtil extends StringUtils {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * 获取Exception异常信息
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public static String getExceptionMsg(Throwable e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw, true);
+		e.printStackTrace(pw);
+		pw.flush();
+		sw.flush();
+		return sw.toString();
 	}
 
 }
