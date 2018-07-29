@@ -27,7 +27,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring-jdbc.xml,classpath:spring-security.xml</param-value>
+		<param-value>classpath:spring-jdbc.xml,classpath:spring-security.xml,classpath:spring-redis.xml</param-value>
 	</context-param>
 
 
