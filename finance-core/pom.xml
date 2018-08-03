@@ -192,6 +192,12 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.csource</groupId>
+			<artifactId>fastdfs-client-java</artifactId>
+			<version>1.27-SNAPSHOT</version>
+		</dependency>
 		<!-- 其他工具 end -->
 	</dependencies>
 
