@@ -33,6 +33,14 @@ public enum Operation {
 	/** 正序排序 */
 	ASC,
 	/** 倒序排序 */
-	DESC
+	DESC,
+	/** 等于空值 */
+	IS_NULL,
+	/** 非空值 */
+	IS_NOT_NULL,
+	/** 不等于列表中任意一个值 */
+	NOT_IN,
+	/** NOT BETWEEN */
+	NOT_BETWEEN
 
 }

@@ -259,9 +259,22 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			criteria.add(Restrictions.le(property, value));
 			break;
 
+		case IS_NULL:
+			criteria.add(Restrictions.isNull(property));
+			break;
+
+		case IS_NOT_NULL:
+			criteria.add(Restrictions.isNotNull(property));
+			break;
+
 		case BETWEEN:
 			Object[] obj = (Object[]) value;
 			criteria.add(Restrictions.between(property, obj[0], obj[1]));
+			break;
+
+		case NOT_BETWEEN:
+			Object[] objs = (Object[]) value;
+			criteria.add(Restrictions.not(Restrictions.between(property, objs[0], objs[1])));
 			break;
 
 		case LIKE_LEFT:
@@ -279,6 +292,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		case IN:
 			Collection<?> values = (Collection<?>) value;
 			criteria.add(Restrictions.in(property, values));
+			break;
+
+		case NOT_IN:
+			Collection<?> ins = (Collection<?>) value;
+			criteria.add(Restrictions.not(Restrictions.in(property, ins)));
 			break;
 
 		case AND:
