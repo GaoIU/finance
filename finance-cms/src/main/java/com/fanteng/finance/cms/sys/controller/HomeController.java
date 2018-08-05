@@ -1,10 +1,12 @@
 package com.fanteng.finance.cms.sys.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.JsonResult;
+import com.fanteng.exception.CustomException;
+import com.fanteng.finance.cms.service.SysResourceService;
+import com.fanteng.finance.entity.SysResource;
 import com.fanteng.finance.entity.SysUser;
 
 @RestController
@@ -21,6 +26,9 @@ public class HomeController {
 
 	@Value("${sys.user.default.session.key}")
 	private String default_session_key;
+
+	@Autowired
+	private SysResourceService sysResourceService;
 
 	/**
 	 * 跳转至登录页面
@@ -53,8 +61,15 @@ public class HomeController {
 	}
 
 	@PostMapping("/index")
-	public JsonResult getMenu() {
-		return null;
+	public JsonResult getMenu(HttpSession session) {
+		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		if (sysUser == null) {
+			throw new CustomException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
+		}
+
+		List<SysResource> list = sysResourceService.getResource(sysUser.getId());
+		List<Object> menu = sysResourceService.getMenu(list);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
 	}
 
 	/**
