@@ -110,7 +110,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	}
 
 	/**
-	 * 根据后台用户ID获取所有菜单资源
+	 * 根据后台用户ID获取所有父级菜单资源
 	 * 
 	 * @param sysUserId
 	 * @return
@@ -130,10 +130,12 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		List<Condition> conditions = new ArrayList<Condition>(0);
 		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
 		Condition type = new Condition("type", Operation.EQ, SysResource.type_menu);
+		Condition parentId = new Condition("parentId", Operation.IS_NULL, null);
 		Condition sort = new Condition("sort", Operation.ASC, "sort");
 		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
 		conditions.add(status);
 		conditions.add(type);
+		conditions.add(parentId);
 		conditions.add(sort);
 		conditions.add(createTime);
 
