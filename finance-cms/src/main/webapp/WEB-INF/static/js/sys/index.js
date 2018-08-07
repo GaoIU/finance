@@ -62,7 +62,7 @@ $('#gloMenu').on('click', 'a', function() {
 $('#gloTop').find('.menuBar').click(function() {
 	if($('#gloBox').hasClass('menu_close')) {
 		$('#gloBox').removeClass('menu_close');
-		$('.navT').find('a').each(function() {
+		$('.navT').find('span').each(function() {
 			if($(this).hasClass('tooltip')) {
 				$(this).css('display', 'none');
 			} else {
@@ -71,7 +71,7 @@ $('#gloTop').find('.menuBar').click(function() {
 		});
 	} else {
 		$('#gloBox').addClass('menu_close');
-		$('.navT').find('a').each(function() {
+		$('.navT').find('span').each(function() {
 			if($(this).hasClass('tooltip')) {
 				$(this).css('display', 'block');
 			} else {
@@ -173,14 +173,17 @@ function full_screen() {
 	}
 }
 
-new Vue({
-	el: 'gloMenu',
-	data: {html: ''},
+var gloMenu = new Vue({
+	el: '#gloMenu',
+	data: {
+		html: ''
+	},
 	created: function() {
 		axios.post('/index').then(function(data) {
 			var json = data.data.data;
 			var menu = "";
 			menu = getMenu(json, menu);
+			gloMenu.html = menu;
 		});
 	}
 });
@@ -189,16 +192,23 @@ function getMenu(data, menu) {
 	$.each(data, function(index, obj) {
 		menu += "<li class='layui-nav-item '>";
 		menu += "<div class='navT'>";
+		
 		var url = "javascript:;";
 		if(obj.url != null) {
 			url = obj.url;
 		}
-		menu += "<a href='" + url + "' style='display: block;' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='fa " + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
-		menu += "<a href='" + url + "' style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon=''><i data-icon='" + obj.icon + "' class='fa " + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+		if(obj.childList.length) {
+			menu += "<span style='display: block;'><i data-icon='" + obj.icon + "' class='fa " + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></span>";
+			menu += "<span style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='fa " + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></span>";
+		} else {
+			menu += "<a href='" + url + "' style='display: block;' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='fa " + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+			menu += "<a href='" + url + "' style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='fa " + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+		}
+		
 		menu += "</div>";
 		menu += "<div class='navC'>";
 		menu += "<ul class='list'>";
-		menu += menuChild(obj.childList, menu);
+		menu = menuChild(obj.childList, menu);
 		menu += "</ul>";
 		menu += "</div>";
 		menu += "</li>";
@@ -208,12 +218,12 @@ function getMenu(data, menu) {
 }
 
 function menuChild(childList, menu) {
-	if(childList == null || childList.length == 0) {
+	if(!childList.length) {
 		return menu;
 	}
 	
 	$.each(childList, function(index, obj) {
-		if(obj.childList == null || obj.childList.length == 0) {
+		if(!obj.childList.length) {
 			menu += "<li class='b'>";
 			var url = "javascript:;";
 			if(obj.url != null) {
@@ -225,7 +235,7 @@ function menuChild(childList, menu) {
 			menu += "<a href='" + url + "' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i class='fa " + obj.icon + "'></i></a>";
 			menu += "</li>";
 		} else {
-			menu += getMenu(obj, menu);
+			menu = getMenu(obj.childList, menu);
 		}
 	});
 	
