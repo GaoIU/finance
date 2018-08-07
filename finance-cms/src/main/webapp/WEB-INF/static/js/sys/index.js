@@ -15,30 +15,30 @@ layui.use(['element', 'tab'], function() {
 		contextMenu: true,
 		autoRefresh: true
 	});
-})
+	
+	$('#gloMenu').on('click', '.navT', function() {
+		var parent = $(this).closest('li');
+		var index = parent.index();
+		if(parent.find('.navC').find('li').length) {
+			if(parent.hasClass('open')) {
+				parent.find('.navC').stop(true).slideUp(300, function() {
+					parent.removeClass('open')
+				});
+			} else {
+				var openLi = $('#gloMenu').find('li.open');
+				openLi.removeClass('open').find('.navC').stop(true).slideUp(300);
+				parent.addClass('open').find('.navC').stop(true).slideDown(300);
+			}
+
+		}
+	});
+});
 
 $('#gloMenu>li').each(function() {
 	var childLen = $(this).find('.navC').find('li').length;
 	if(childLen) {
 		var html = $(this).find('.navT').find('a').html();
 		$(this).find('.navT').html('<span>' + html + '</span>');
-	}
-});
-
-$('#gloMenu').on('click', '.navT', function() {
-	var parent = $(this).closest('li');
-	var index = parent.index();
-	if(parent.find('.navC').find('li').length) {
-		if(parent.hasClass('open')) {
-			parent.find('.navC').stop(true).slideUp(300, function() {
-				parent.removeClass('open')
-			});
-		} else {
-			var openLi = $('#gloMenu').find('li.open');
-			openLi.removeClass('open').find('.navC').stop(true).slideUp(300);
-			parent.addClass('open').find('.navC').stop(true).slideDown(300);
-		}
-
 	}
 });
 
