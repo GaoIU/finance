@@ -53,7 +53,7 @@ background: -webkit-linear-gradient(left , rgb(247,248,248) 1% , rgb(173,211,237
 
 #gloTop .gtRght .layui-nav .layui-nav-child{ top: 57px; left: -5px; padding: 0;}
 #gloTop .gtRght .layui-nav .layui-nav-child i.i{  position: absolute;top: -7px;right: 7px;display: inline-block;border-right: 7px solid transparent;border-bottom: 7px solid #ccc;border-left: 7px solid transparent;border-bottom-color: rgba(0,0,0,.1);content: '';}
-#gloTop .gtRght .layui-nav .layui-nav-child .bt{ border-top: 1px solid #ddd;background: #fcfafa;}
+#gloTop .gtRght .layui-nav .layui-nav-child .bt{ border-top: 1px solid #ddd;background: #fcfafa; cursor: pointer;}
 #gloTop .gtRght .layui-nav .layui-nav-child .fa{ margin-right: 4px;}
 
 #gloTop .layui-nav-item .skin-show{ display: none; position: absolute;top: 50px;background: rgba(0,0,0,0.02);left: 50%;width: 170px;margin-left: -91px;padding: 8px 5px;border: 1px solid #ccc;border-top: 0;}
