@@ -60,6 +60,12 @@ public class HomeController {
 		return mav;
 	}
 
+	/**
+	 * 获取菜单
+	 * 
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/index")
 	public JsonResult getMenu(HttpSession session) {
 		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
@@ -70,6 +76,25 @@ public class HomeController {
 		List<SysResource> list = sysResourceService.getResource(sysUser.getId());
 		List<Object> menu = sysResourceService.getMenu(list);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
+	}
+
+	/**
+	 * 跳转至个人信息页面
+	 * 
+	 * @return
+	 */
+	@GetMapping("/sysUserInfo")
+	public ModelAndView sysUserInfo(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		if (sysUser == null) {
+			mav.setViewName("/sys/login");
+			return mav;
+		}
+		
+		mav.setViewName("/sys/user/userinfo");
+		
+		return mav;
 	}
 
 	/**

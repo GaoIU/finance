@@ -36,6 +36,8 @@
 		
 		<security:intercept-url pattern="/index" requires-channel="any" access="permitAll" />
 		
+		<security:intercept-url pattern="/sysUserInfo" method="GET" requires-channel="any" access="permitAll" />
+		
 		<security:intercept-url pattern="/403" method="GET" requires-channel="any" access="permitAll" />
 		
 		<security:intercept-url pattern="/404" method="GET" requires-channel="any" access="permitAll" />
