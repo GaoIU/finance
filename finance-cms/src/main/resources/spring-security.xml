@@ -48,6 +48,10 @@
 		
 		<security:access-denied-handler error-page="/403"/>
 		
+		<security:headers>
+			<security:frame-options policy="SAMEORIGIN" />
+		</security:headers>
+		
 		<security:form-login login-page="/" username-parameter="userName" password-parameter="password" />
 		
 		<security:csrf disabled="true"/>

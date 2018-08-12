@@ -42,7 +42,6 @@ layui.use("layer", function() {
 				layer.load();
 			},
 			success: function(data) {
-				console.log(data);
 				layer.closeAll('loading');
 				if(data.code == 200) {
 					layer.msg(data.msg, {

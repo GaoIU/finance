@@ -18,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fanteng.core.JsonResult;
 import com.fanteng.exception.CustomException;
 import com.fanteng.finance.cms.service.SysResourceService;
+import com.fanteng.finance.cms.service.SysRoleService;
 import com.fanteng.finance.entity.SysResource;
+import com.fanteng.finance.entity.SysRole;
 import com.fanteng.finance.entity.SysUser;
 
 @RestController
@@ -29,6 +31,9 @@ public class HomeController {
 
 	@Autowired
 	private SysResourceService sysResourceService;
+	
+	@Autowired
+	private SysRoleService sysRoleService;
 
 	/**
 	 * 跳转至登录页面
@@ -92,6 +97,8 @@ public class HomeController {
 			return mav;
 		}
 		
+		List<SysRole> list = sysRoleService.getSysRolesBySysUserId(sysUser.getId());
+		mav.addObject("roles", list);
 		mav.setViewName("/sys/user/userinfo");
 		
 		return mav;
