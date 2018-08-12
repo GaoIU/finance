@@ -2,6 +2,8 @@ package com.fanteng.finance.cms.service;
 
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.base.BaseService;
 import com.fanteng.finance.entity.SysUser;
@@ -40,5 +42,15 @@ public interface SysUserService extends BaseService<SysUser> {
 	 * @return
 	 */
 	boolean checkPropertyName(String propertyName, Object value);
+
+	/**
+	 * 上传头像
+	 * 
+	 * @param avatar
+	 * @param sysUserId
+	 * @return
+	 * @throws Exception
+	 */
+	JsonResult uploadAvatar(MultipartFile avatar, String sysUserId) throws Exception;
 
 }

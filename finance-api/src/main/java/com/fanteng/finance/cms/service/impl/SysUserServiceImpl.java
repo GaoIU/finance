@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
@@ -25,6 +26,7 @@ import com.fanteng.finance.entity.SysUser;
 import com.fanteng.finance.entity.SysUserRole;
 import com.fanteng.util.BeanUtil;
 import com.fanteng.util.EncryptUtil;
+import com.fanteng.util.FastDFSUtil;
 import com.fanteng.util.StringUtil;
 
 @Service
@@ -35,6 +37,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 
 	@Value("${sys.user.default.avatar}")
 	private String default_avatar;
+
+	@Value("${sys.default.server.url}")
+	private String sys_default_server_url;
 
 	/**
 	 * 注册后台用户
@@ -159,6 +164,33 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		}
 
 		return false;
+	}
+
+	/**
+	 * 上传头像
+	 * 
+	 * @param avatar
+	 * @param sysUserId
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public JsonResult uploadAvatar(MultipartFile avatar, String sysUserId) throws Exception {
+		String path = FastDFSUtil.upload(avatar);
+		if (StringUtil.isNotBlank(path)) {
+			path = sys_default_server_url + path;
+			System.out.println(path);
+			SysUser sysUser = get(sysUserId);
+			String oldAvatar = sysUser.getAvatar();
+			String fileId = oldAvatar.replaceAll(sys_default_server_url, oldAvatar);
+			int code = FastDFSUtil.delete(fileId);
+			System.out.println(code);
+			sysUser.setAvatar(path);
+			update(sysUser);
+			return new JsonResult(HttpStatus.OK, "操作成功", sysUser);
+		}
+		throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "上传文件失败");
 	}
 
 }
