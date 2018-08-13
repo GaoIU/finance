@@ -15,6 +15,12 @@
 		<link rel="icon" href="/static/img/icon.png" />
 		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="/static/css/public.css" media="all" />
+		
+		<style type="text/css">
+			.userHobby span {
+				background-color: #5FB878 !important;
+			}
+		</style>
 	</head>
 
 	<body class="childrenBody">
@@ -46,17 +52,10 @@
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">拥有角色</label>
-					<div class="layui-input-block">
-						<div class="layui-row layui-col-space10" style="display: inline-block;">
-							<#list roles as role>
-								<div class="layui-col-md3">
-									<input type="checkbox" checked="checked" disabled="disabled" />
-									<div class="layui-unselect layui-form-checkbox layui-form-checked layui-disabled">
-										<span>${role.name}</span><i class="layui-icon layui-icon-ok"></i>
-									</div>
-								</div>
-							</#list>
-						</div>
+					<div class="layui-input-block userHobby">
+						<#list roles as role>
+							<div class="layui-unselect layui-form-checkbox layui-form-checked layui-checkbox-disbaled layui-disabled"><span>${role.name}</span></div>
+						</#list>
 					</div>
 				</div>
 				<div class="layui-form-item">
