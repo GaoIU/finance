@@ -34,9 +34,11 @@
 		
 		<security:intercept-url pattern="/signOut" method="GET" requires-channel="any" access="permitAll" />
 		
-		<security:intercept-url pattern="/index" requires-channel="any" access="permitAll" />
+		<security:intercept-url pattern="/index" requires-channel="any" access="isAuthenticated()" />
 		
-		<security:intercept-url pattern="/sysUserInfo" method="GET" requires-channel="any" access="permitAll" />
+		<security:intercept-url pattern="/sysUserInfo" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/resetPwd" requires-channel="any" access="isAuthenticated()" />
 		
 		<security:intercept-url pattern="/403" method="GET" requires-channel="any" access="permitAll" />
 		

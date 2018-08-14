@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fanteng.core.JsonResult;
+import com.fanteng.exception.UnauthorizedException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysUser;
+import com.fanteng.util.EncryptUtil;
 
 @RestController
 public class AuthenticationController {
@@ -63,6 +65,22 @@ public class AuthenticationController {
 
 		jsonResult.setData("/index");
 		return jsonResult;
+	}
+
+	/**
+	 * 验证密码是否一致
+	 * 
+	 * @param password
+	 * @return
+	 */
+	@PostMapping("/checkPassword")
+	public JsonResult checkPassword(HttpSession session, @RequestParam(required = false) String password) {
+		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		if (sysUser == null) {
+			throw new UnauthorizedException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
+		}
+		boolean checkPassword = EncryptUtil.matchesByBC(password, sysUser.getPassword());
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkPassword);
 	}
 
 	/**

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.JsonResult;
-import com.fanteng.exception.CustomException;
+import com.fanteng.exception.UnauthorizedException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysRoleService;
 import com.fanteng.finance.entity.SysResource;
@@ -31,7 +31,7 @@ public class HomeController {
 
 	@Autowired
 	private SysResourceService sysResourceService;
-	
+
 	@Autowired
 	private SysRoleService sysRoleService;
 
@@ -52,16 +52,8 @@ public class HomeController {
 	 * @return
 	 */
 	@GetMapping("/index")
-	public ModelAndView index(HttpSession session) {
-		ModelAndView mav = new ModelAndView();
-		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
-		if (sysUser == null) {
-			mav.setViewName("/sys/login");
-			return mav;
-		}
-
-		mav.setViewName("/sys/index");
-
+	public ModelAndView index() {
+		ModelAndView mav = new ModelAndView("/sys/index");
 		return mav;
 	}
 
@@ -75,7 +67,7 @@ public class HomeController {
 	public JsonResult getMenu(HttpSession session) {
 		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
 		if (sysUser == null) {
-			throw new CustomException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
+			throw new UnauthorizedException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
 		}
 
 		List<SysResource> list = sysResourceService.getResource(sysUser.getId());
@@ -93,14 +85,29 @@ public class HomeController {
 		ModelAndView mav = new ModelAndView();
 		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
 		if (sysUser == null) {
-			mav.setViewName("/sys/login");
-			return mav;
+			throw new UnauthorizedException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
 		}
-		
+
 		List<SysRole> list = sysRoleService.getSysRolesBySysUserId(sysUser.getId());
 		mav.addObject("roles", list);
 		mav.setViewName("/sys/user/userinfo");
-		
+
+		return mav;
+	}
+
+	/**
+	 * 跳转至重置密码页面
+	 * 
+	 * @return
+	 */
+	@GetMapping("/resetPwd")
+	public ModelAndView resetPwd(HttpSession session) {
+		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		if (sysUser == null) {
+			throw new UnauthorizedException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
+		}
+
+		ModelAndView mav = new ModelAndView("/sys/user/resetPwd");
 		return mav;
 	}
 
