@@ -62,6 +62,16 @@ public class ExceptionHandlerController {
 		return map;
 	}
 
+	@ExceptionHandler(value = UnauthorizedException.class)
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	public Map<String, Object> handlerUnauthorizedException(UnauthorizedException ue) {
+		Map<String, Object> map = new HashMap<String, Object>(0);
+		map.put("code", ue.getCode());
+		map.put("msg", ue.getMsg());
+
+		return map;
+	}
+
 	@ExceptionHandler(value = CustomException.class)
 	public Map<String, Object> handlerCustomException(CustomException ce) {
 		Map<String, Object> map = new HashMap<String, Object>(0);
