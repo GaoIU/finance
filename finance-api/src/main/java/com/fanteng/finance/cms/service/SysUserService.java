@@ -53,4 +53,15 @@ public interface SysUserService extends BaseService<SysUser> {
 	 */
 	JsonResult uploadAvatar(MultipartFile avatar, String sysUserId) throws Exception;
 
+	/**
+	 * 修改密码
+	 * 
+	 * @param sysUser
+	 * @param password
+	 * @param oldPwd
+	 * @return
+	 * @throws Exception
+	 */
+	JsonResult changePwd(SysUser sysUser, String password, String oldPwd) throws Exception;
+
 }

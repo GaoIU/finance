@@ -193,4 +193,30 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, "上传文件失败");
 	}
 
+	/**
+	 * 修改密码
+	 * 
+	 * @param sysUser
+	 * @param password
+	 * @param oldPwd
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public JsonResult changePwd(SysUser sysUser, String password, String oldPwd) throws Exception {
+		boolean checkPassword = EncryptUtil.matchesByBC(oldPwd, sysUser.getPassword());
+		if (checkPassword) {
+			password = EncryptUtil.encodeByBC(password);
+			sysUser.setPassword(password);
+			checkPassword = update(sysUser);
+			String msg = "操作成功";
+			if (!checkPassword) {
+				msg = "操作失败";
+			}
+			return new JsonResult(HttpStatus.OK, msg, checkPassword);
+		}
+		throw new ParamErrorException("旧密码错误，请重新输入");
+	}
+
 }
