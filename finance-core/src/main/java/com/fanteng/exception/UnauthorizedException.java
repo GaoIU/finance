@@ -1,5 +1,7 @@
 package com.fanteng.exception;
 
+import com.fanteng.core.HttpStatus;
+
 public class UnauthorizedException extends RuntimeException {
 
 	/**
@@ -24,6 +26,17 @@ public class UnauthorizedException extends RuntimeException {
 	}
 
 	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public UnauthorizedException() {
+		super();
+		this.code = HttpStatus.UNAUTHORIZED;
+	}
+
+	public UnauthorizedException(String msg) {
+		super(msg);
+		this.code = HttpStatus.UNAUTHORIZED;
 		this.msg = msg;
 	}
 
