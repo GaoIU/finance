@@ -34,17 +34,27 @@
 		
 		<security:intercept-url pattern="/signOut" method="GET" requires-channel="any" access="permitAll" />
 		
-		<security:intercept-url pattern="/index" requires-channel="any" access="isAuthenticated()" />
-		
-		<security:intercept-url pattern="/sysUserInfo" requires-channel="any" access="isAuthenticated()" />
-		
-		<security:intercept-url pattern="/resetPwd" requires-channel="any" access="isAuthenticated()" />
-		
 		<security:intercept-url pattern="/403" method="GET" requires-channel="any" access="permitAll" />
 		
 		<security:intercept-url pattern="/404" method="GET" requires-channel="any" access="permitAll" />
 		
 		<security:intercept-url pattern="/500" method="GET" requires-channel="any" access="permitAll" />
+		
+		<security:intercept-url pattern="/index" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/sysUserInfo" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/upload" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/resetPwd" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/checkPassword" method="POST" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/checkMobile" method="POST" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/checkNickName" method="POST" requires-channel="any" access="isAuthenticated()" />
+		
+		<security:intercept-url pattern="/checkUserName" method="POST" requires-channel="any" access="isAuthenticated()" />
 		
 		<security:intercept-url pattern="/**/" requires-channel="any" access="@myUserDetailsService.hasPermission(request, authentication)" />
 		

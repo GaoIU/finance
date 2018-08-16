@@ -4,6 +4,7 @@ layui.use(['form', 'layer'], function() {
 
 	form.verify({
 		oldPwd: function(value, item) {
+			var msg;
 			$.ajax({
 				url: '/checkPassword',
 				type: 'POST',
@@ -11,15 +12,16 @@ layui.use(['form', 'layer'], function() {
 					"password": value
 				},
 				dataType: 'JSON',
-				async: true,
+				async: false,
 				success: function(data) {
 					if(data.code == 200) {
 						if(!data.data) {
-							return "密码错误，请重新输入！";
+							msg = "旧密码错误，请重新输入！";
 						}
 					}
 				}
 			});
+			return msg;
 		},
 		newPwd: function(value, item) {
 			if(value.length < 6 || value.length > 16) {
@@ -33,8 +35,36 @@ layui.use(['form', 'layer'], function() {
 		}
 	});
 	
-	form.on('submit(changePwd)', function() {
+	form.on('submit(changePwd)', function(data) {
 		layer.load();
+		$.ajax({
+			url: '/resetPwd',
+			type: 'POST',
+			data: data.field,
+			dataType: 'JSON',
+			async: true,
+			success: function(res) {
+				layer.closeAll('loading');
+				layer.msg(res.msg, {
+					icon: 6,
+					time: 1500
+				});
+				setTimeout(function() {
+					if(res.code == 200) {
+						window.parent.location.href = "/logout";
+					}
+				}, 2000);
+			},
+			error: function() {
+				layer.closeAll('loading');
+				layer.msg('操作失败', {
+					icon: 5,
+					anim: 6
+				});
+			}
+		});
 		
+		$(".pwd").val('');
+		return false;
 	});
 });

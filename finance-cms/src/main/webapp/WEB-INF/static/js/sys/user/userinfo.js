@@ -5,7 +5,7 @@ layui.use([ 'form', 'layer', 'upload' ], function() {
 	
 	upload.render({
 		elem: '.userFaceBtn',
-		url: '/sysUser/upload',
+		url: '/upload',
 		method: 'POST',
 		data: {
 			"sysUserId": "${SYS_USER_SESSION_KEY.id}"
@@ -26,5 +26,92 @@ layui.use([ 'form', 'layer', 'upload' ], function() {
 			layer.closeAll('loading');
 			layer.msg('上传失败', {icon: 5});
 		}
+	});
+	
+	form.verify({
+		nickName: function(value, item) {
+			if(value.length > 8) {
+				return "用户昵称长度不能大于8位";
+			}
+			
+			var msg;
+			$.ajax({
+				url: '/checkNickName',
+				type: 'POST',
+				data: {
+					"nickName": value,
+					"sysUserId": $('.id').val()
+				},
+				dataType: 'JSON',
+				async: false,
+				success: function(res) {
+					if(res.code == 200) {
+						if(res.data) {
+							msg = "该昵称已被使用";
+						}
+					}
+				}
+			});
+			return msg;
+		},
+		mobile: function(value, item) {
+			if(!new RegExp('0?(13|14|15|17|18|19)[0-9]{9}').test(value)) {
+				return "手机号码不合法";
+			}
+			
+			var msg;
+			$.ajax({
+				url: '/checkMobile',
+				type: 'POST',
+				data: {
+					"mobile": value,
+					"sysUserId": $('.id').val()
+				},
+				dataType: 'JSON',
+				async: false,
+				success: function(res) {
+					console.log(res)
+					if(res.code == 200) {
+						if(res.data) {
+							msg = "该手机号已存在";
+						}
+					}
+				}
+			});
+			return msg;
+		}
+	});
+	
+	form.on('submit(changeUser)', function(data) {
+		layer.load();
+		$.ajax({
+			url: '/sysUserInfo',
+			type: 'PUT',
+			data: JSON.stringify(data.field),
+			dataType: 'JSON',
+			contentType: 'application/json;charset=UTF-8',
+			async: true,
+			success: function(res) {
+				layer.closeAll('loading');
+				layer.msg(res.msg, {
+					icon: 6,
+					time: 1500
+				});
+				setTimeout(function() {
+					if(res.code == 200) {
+						location.reload();
+					}
+				}, 2000);
+			},
+			error: function() {
+				layer.closeAll('loading');
+				layer.msg('操作失败', {
+					icon: 5,
+					anim: 6
+				});
+			}
+		});
+		
+		return false;
 	});
 });

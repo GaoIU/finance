@@ -20,8 +20,10 @@ import com.fanteng.core.JsonResult;
 import com.fanteng.exception.UnauthorizedException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysUserService;
+import com.fanteng.finance.entity.SysResource;
 import com.fanteng.finance.entity.SysUser;
 import com.fanteng.util.EncryptUtil;
+import com.fanteng.util.StringUtil;
 
 @RestController
 public class AuthenticationController {
@@ -90,8 +92,16 @@ public class AuthenticationController {
 	 * @return
 	 */
 	@PostMapping("/checkMobile")
-	public JsonResult checkMobile(@RequestParam(required = false) String mobile) {
+	public JsonResult checkMobile(String mobile, String sysUserId) {
 		boolean checkMobile = sysUserService.checkPropertyName("mobile", mobile);
+		if (StringUtil.isNotBlank(sysUserId)) {
+			SysUser sysUser = sysUserService.get(sysUserId);
+			if (sysUser != null) {
+				if (StringUtil.equals(mobile, sysUser.getMobile())) {
+					checkMobile = false;
+				}
+			}
+		}
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkMobile);
 	}
 
@@ -102,8 +112,16 @@ public class AuthenticationController {
 	 * @return
 	 */
 	@PostMapping("/checkNickName")
-	public JsonResult checkNickName(@RequestParam(required = false) String nickName) {
+	public JsonResult checkNickName(String nickName, String sysUserId) {
 		boolean checkNickName = sysUserService.checkPropertyName("nickName", nickName);
+		if (StringUtil.isNotBlank(sysUserId)) {
+			SysUser sysUser = sysUserService.get(sysUserId);
+			if (sysUser != null) {
+				if (StringUtil.equals(nickName, sysUser.getNickName())) {
+					checkNickName = false;
+				}
+			}
+		}
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkNickName);
 	}
 
@@ -126,8 +144,16 @@ public class AuthenticationController {
 	 * @return
 	 */
 	@PostMapping("/checkCode")
-	public JsonResult checkCode(@RequestParam(required = false) String code) {
+	public JsonResult checkCode(String code, String sysResourceId) {
 		boolean checkCode = sysResourceService.checkPropertyName("code", code);
+		if (StringUtil.isNotBlank(sysResourceId)) {
+			SysResource sysResource = sysResourceService.get(sysResourceId);
+			if (sysResource != null) {
+				if (StringUtil.equals(code, sysResource.getCode())) {
+					checkCode = false;
+				}
+			}
+		}
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkCode);
 	}
 
