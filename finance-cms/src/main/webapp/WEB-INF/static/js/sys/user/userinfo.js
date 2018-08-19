@@ -8,7 +8,7 @@ layui.use([ 'form', 'layer', 'upload' ], function() {
 		url: '/upload',
 		method: 'POST',
 		data: {
-			"sysUserId": "${SYS_USER_SESSION_KEY.id}"
+			"sysUserId": $('.id').val()
 		},
 		accept: 'images',
 		acceptMime: 'image/*',
