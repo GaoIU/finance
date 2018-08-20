@@ -1,5 +1,7 @@
 package com.fanteng.finance.cms.sys.controller;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.JsonResult;
 import com.fanteng.finance.cms.service.SysUserService;
@@ -25,9 +28,15 @@ public class SysUserController {
 	@Value("${sys.user.default.session.key}")
 	private String default_session_key;
 
+	@GetMapping("/gotoList")
+	public ModelAndView gotoList() {
+		ModelAndView mav = new ModelAndView("/sys/user/list");
+		return mav;
+	}
+
 	@GetMapping
-	public JsonResult queryList(@RequestParam SysUser sysUser) {
-		return sysUserService.queryList();
+	public JsonResult queryList(@RequestParam Map<String, Object> params) {
+		return sysUserService.queryList(params);
 	}
 
 	/**

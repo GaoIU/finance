@@ -1117,7 +1117,7 @@ a:hover {
 	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
 	color: #606060;
 	cursor: pointer;
-	background: #f2f2f2 url(../../images/admin/more.png) 10px center no-repeat;
+	background: #f2f2f2 url(/static/img/more.png) 10px center no-repeat;
 }
 
 a#list_search_toggle:hover {
@@ -1125,7 +1125,7 @@ a#list_search_toggle:hover {
 }
 
 #list_search {
-	background: #f4f4f4 url(../../images/admin/ui-search.gif) repeat-x scroll 0 0;
+	background: #f4f4f4 url(/static/img/ui-search.gif) repeat-x scroll 0 0;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-radius: 4px;
 	margin-top: 5px;
@@ -1368,7 +1368,7 @@ a#list_search_toggle:hover {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url(../../images/admin/pagination_icons.png);
+	background-image: url(/static/img/pagination_icons.png);
 }
 
 .nice_pageination .nice-link.prev-first-page span i {

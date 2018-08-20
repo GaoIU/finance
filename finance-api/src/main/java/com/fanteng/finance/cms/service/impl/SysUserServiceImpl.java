@@ -1,10 +1,10 @@
 package com.fanteng.finance.cms.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fanteng.core.Condition;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
+import com.fanteng.core.Page;
 import com.fanteng.core.base.BaseServiceImpl;
 import com.fanteng.exception.CustomException;
 import com.fanteng.exception.ParamErrorException;
@@ -131,21 +133,47 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	/**
 	 * 获取后台用户列表
 	 * 
+	 * @param params
 	 * @return
 	 */
 	@Override
-	public JsonResult queryList() {
-		List<SysUser> list = findAll();
-		List<Map<String, Object>> maps = new ArrayList<>(0);
+	public JsonResult queryList(Map<String, Object> params) {
+		Integer current = MapUtils.getInteger(params, "current");
+		Integer size = MapUtils.getInteger(params, "size");
+		String userName = MapUtils.getString(params, "userName");
+		String mobile = MapUtils.getString(params, "mobile");
+		Short status = MapUtils.getShort(params, "status");
+		// String beginTime = MapUtils.getString(params, "beginTime");
+		// String endTime = MapUtils.getString(params, "endTime");
+		List<Condition> conditions = new ArrayList<>(0);
 
-		if (CollectionUtils.isNotEmpty(list)) {
-			for (SysUser sysUser : list) {
-				Map<String, Object> map = BeanUtil.toMapFiters(sysUser, "password, sysRoleIds");
-				maps.add(map);
-			}
+		if (StringUtil.isNotBlank(userName)) {
+			Condition condition = new Condition("userName", Operation.LIKE_ANY, userName);
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(mobile)) {
+			Condition condition = new Condition("mobile", Operation.LIKE_ANY, mobile);
+			conditions.add(condition);
+		}
+		if (status != null) {
+			Condition condition = new Condition("status", Operation.EQ, status);
+			conditions.add(condition);
 		}
 
-		return new JsonResult(HttpStatus.OK, "操作成功", maps);
+		List<Map<String, Object>> maps = new ArrayList<>(0);
+		Page page = findPage(current, size, conditions);
+		List<?> list = page.getList();
+		for (Object object : list) {
+			Map<String, Object> map = BeanUtil.toMapFiters(object, "password, sysRoleIds");
+			maps.add(map);
+		}
+		page.setList(maps);
+		
+		Map<String, Object> data = new HashMap<>(0);
+		data.put("page", page);
+		data.put("condition", params);
+
+		return new JsonResult(HttpStatus.OK, "操作成功", data);
 	}
 
 	/**

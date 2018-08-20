@@ -30,9 +30,10 @@ public interface SysUserService extends BaseService<SysUser> {
 	/**
 	 * 获取后台用户列表
 	 * 
+	 * @param params
 	 * @return
 	 */
-	JsonResult queryList();
+	JsonResult queryList(Map<String, Object> params);
 
 	/**
 	 * 验证属性字段是否存在
