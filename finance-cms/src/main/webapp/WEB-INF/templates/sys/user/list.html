@@ -58,7 +58,7 @@
 					<i class="line"></i>
 					<a class="javascript" id="list_search_toggle" rel='list_search_switch'>展开搜索</a>
 					<div id="list_search" class="clearfix hidden">
-						<form id="UserForm" class="layui-form layui-form-pane" novalidate="1">
+						<form id="sysUserForm" class="layui-form layui-form-pane" novalidate="1">
 							<div class="layui-form-item">
 								<label class="layui-form-label">用户名</label>
 								<div class="layui-input-inline">
@@ -94,7 +94,7 @@
 								</div>
 							</div>
 							<div class="search_action">
-								<button class="layui-btn" lay-submit="">搜索</button>
+								<button class="layui-btn">搜索</button>
 								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 							</div>
 						</form>
@@ -124,13 +124,40 @@
 										<th>手机号</th>
 										<th>注册时间</th>
 										<th>状态</th>
-										<th>修改时间</th>
 										<th class="item_action">操作</th>
 									</tr>
 								</thead>
 
 								<tbody>
-									
+									<template v-if="items.length">
+										<tr v-for="item in items">
+											<td><input :value="item.id" lay-skin="primary" class="batch_selected" type="checkbox" /></td>
+											<td><span :title="item.userName">{{ item.userName }}</span></td>
+											<td><span :title="item.nickName">{{ item.nickName }}</span></td>
+											<td>
+												<div :title="item.avatar" class="layui-table-cell laytable-cell-1-avatar">
+													<img style="display: inline-block; width: 50%; height: 100%;" :src="item.avatar">
+												</div>
+											</td>
+											<td><span :title="item.realName">{{ item.realName }}</span></td>
+											<td><span :title="item.mobile">{{ item.mobile }}</span></td>
+											<td><span :title="item.createTime">{{ item.createTime }}</span></td>
+											<td v-if="item.status === 0"><span title="正常" style="color: green;">正常</span></td>
+											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
+											<td>
+												<div class="layui-table-cell laytable-cell-1-7">
+													<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+													<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
+													<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+												</div>
+											</td>
+										</tr>
+									</template>
+									<template v-else>
+										<tr>
+											<td colspan="9" style="color: rgba(0,0,0,0.5);"><i class="fa fa-spinner"></i> 当前暂无数据...</td>
+										</tr>
+									</template>
 								</tbody>
 							</table>
 						</form>
@@ -143,9 +170,52 @@
                     -->
 					<div class="page-box">
 						<div id="pageShow">
-							<template>
-							        <v-pagination :total="total" :current-page='current' @pagechange="pagechange"></v-pagination>
-							</template>
+							<div class="nice_pageination clearfix">
+								<table cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td>
+											<a v-if="current === 1" class="prev-first-page nice-link disabled-link layui-disabled" href="javascript:void(0);"><span><i></i></span></a>
+											<a v-else href="javascript:void(0);" class="prev-first-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<a v-if="current === 1" href="javascript:void(0);" class="prev-page nice-link disabled-link layui-disabled"><span><i></i></span></a>
+											<a v-else href="javascript:void(0);" class="prev-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<div class="separator mr"></div>
+										</td>
+										<td><span>第</span></td>
+										<td><input id="goPage" size="2" :value="current" :max="pagenumber" />页</td>
+										<td>共{{ pagenumber }}页</td>
+										<td>
+											<div class="separator ml"></div>
+										</td>
+										<td>
+											<a v-if="current === pagenumber" href="javascript:void(0);" class="next-page nice-link disabled-link layui-disabled"><span><i></i></span></a>
+											<a v-else href="javascript:void(0);" class="next-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<a v-if="current === pagenumber" href="javascript:void(0);" class="next-last-page nice-link disabled-link layui-disabled"><span><i></i></span></a>
+											<a v-else href="javascript:void(0);" class="next-last-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<div class="separator"></div>
+										</td>
+										<td>
+											<select v-model="size" style="height: 25px; margin-left: 5px; margin-right: 5px;">
+												<option v-for="item in pagesizes" :value="item.value">{{ item.name }}</option>
+											</select>
+										</td>
+										<td>
+											<div class="separator"></div>
+										</td>
+										<td>
+											<a href="javascript:void(0);" @click="pageRefresh" class="page-refresh nice-link tooltip" data-tip-text="刷新" data-tip-type="1"><span><i></i></span></a>
+										</td>
+									</tr>
+								</table>
+								<div class="pageination-info" style="margin-right: 100px;">共{{ total }}条记录</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -156,10 +226,10 @@
 	</body>
 
 	<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="/static/js/vue.js"></script>
+	<script type="text/javascript" src="/static/js/vue.min.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script type="text/javascript" src="/static/layui/layui.js"></script>
-	<script type="text/javascript" src="/static/js/lightense.min.js"></script>
+	<script type="text/javascript" src="/static/js/global.js"></script>
 	<script type="text/javascript" src="/static/js/tableResize.js"></script>
 	<script type="text/javascript" src="/static/js/sys/user/list.js"></script>
 

@@ -55,4 +55,81 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 			$('#list_search_toggle').text('展开搜索');
 		}
 	});
+	
+	$('#goPage').keyup(function() {
+		var max_page = parseInt($('#goPage').attr('max'));
+		var target_page = $('#goPage').val();
+		if(!/\d{1,}/.test(target_page)) {
+			target_page = 1;
+		} else {
+			target_page = parseInt(target_page);
+		}
+		if(target_page > max_page) target_page = max_page;
+		$('#goPage').val(target_page);
+	});
+});
+
+$(document).ready(function() {
+	$("table.list").tableresize({
+		resizeTable: false
+	});
+});
+
+var pageShow = new Vue({
+	el: '#pageShow',
+	data: {
+		current: '1',
+		size: '15',
+		total: '0',
+		pagenumber: '1',
+		pagesizes: [{
+			name: '10 条/页',
+			value: '10'
+		}, {
+			name: '15 条/页',
+			value: '15'
+		}, {
+			name: '20 条/页',
+			value: '20'
+		}, {
+			name: '25 条/页',
+			value: '25'
+		}],
+		condition: {}
+	},
+	created: function() {
+		this.size = this.pagesizes[1].value;
+		if(this.total <= this.size) {
+			this.pagenumber = 1;
+		} else if((this.total % this.size) == 0) {
+			this.pagenumber = this.total / this.size;
+		} else {
+			this.pagenumber = this.total / this.size + 1;
+		}
+		this.condition = $('#sysUserForm').serialize();
+		this.$set(this.condition, 'current', this.current);
+		this.$set(this.condition, 'size', this.size);
+	},
+	methods: {
+		pageRefresh() {
+			console.log(this.size);
+		}
+	}
+});
+
+var queryList = new Vue({
+	el: '#queryList',
+	data: {
+		items: []
+	},
+	created: function() {
+		console.log(pageShow.condition);
+		axios.get('/sysUser', pageShow.condition).then(function(res) {
+			var json = res.data.data;
+			pageShow.current = json.page.current;
+			pageShow.size = json.page.size;
+			pageShow.total = json.page.total;
+			queryList.items = json.page.list;
+		});
+	}
 });
