@@ -17,7 +17,7 @@ public class Page {
 	/**
 	 * 总条数，默认：0
 	 */
-	private Integer totle = 0;
+	private Integer total = 0;
 
 	/**
 	 * 数据
@@ -40,12 +40,12 @@ public class Page {
 		this.size = size;
 	}
 
-	public Integer getTotle() {
-		return totle;
+	public Integer getTotal() {
+		return total;
 	}
 
-	public void setTotle(Integer totle) {
-		this.totle = totle;
+	public void setTotal(Integer total) {
+		this.total = total;
 	}
 
 	public List<?> getList() {
@@ -60,11 +60,11 @@ public class Page {
 		super();
 	}
 
-	public Page(Integer current, Integer size, Integer totle, List<?> list) {
+	public Page(Integer current, Integer size, Integer total, List<?> list) {
 		super();
 		this.current = current;
 		this.size = size;
-		this.totle = totle;
+		this.total = total;
 		this.list = list;
 	}
 
