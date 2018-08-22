@@ -28,12 +28,23 @@ public class SysUserController {
 	@Value("${sys.user.default.session.key}")
 	private String default_session_key;
 
+	/**
+	 * 跳转至后台用户列表页面
+	 * 
+	 * @return
+	 */
 	@GetMapping("/gotoList")
 	public ModelAndView gotoList() {
 		ModelAndView mav = new ModelAndView("/sys/user/list");
 		return mav;
 	}
 
+	/**
+	 * 获取后台用户列表
+	 * 
+	 * @param params
+	 * @return
+	 */
 	@GetMapping
 	public JsonResult queryList(@RequestParam Map<String, Object> params) {
 		return sysUserService.queryList(params);

@@ -94,8 +94,7 @@ var pageShow = new Vue({
 		}, {
 			name: '25 条/页',
 			value: '25'
-		}],
-		condition: {}
+		}]
 	},
 	created: function() {
 		this.size = this.pagesizes[1].value;
@@ -106,13 +105,22 @@ var pageShow = new Vue({
 		} else {
 			this.pagenumber = this.total / this.size + 1;
 		}
-		this.condition = $('#sysUserForm').serialize();
-		this.$set(this.condition, 'current', this.current);
-		this.$set(this.condition, 'size', this.size);
 	},
 	methods: {
 		pageRefresh() {
-			console.log(this.size);
+			queryList.created();
+		}
+	}
+});
+
+var listSearch = new Vue({
+	el: '#list_search',
+	data: {
+		condition: {}
+	},
+	methods: {
+		search() {
+			queryList.created();
 		}
 	}
 });
@@ -122,14 +130,18 @@ var queryList = new Vue({
 	data: {
 		items: []
 	},
-	created: function() {
-		console.log(pageShow.condition);
-		axios.get('/sysUser', pageShow.condition).then(function(res) {
-			var json = res.data.data;
-			pageShow.current = json.page.current;
-			pageShow.size = json.page.size;
-			pageShow.total = json.page.total;
-			queryList.items = json.page.list;
-		});
+	created(): return {
+		function() {
+			var URL = "/sysUser?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
+			console.log(URL);
+			axios.get(URL).then(function(res) {
+				var json = res.data.data;
+				pageShow.current = json.page.current;
+				pageShow.size = json.page.size;
+				pageShow.total = json.page.total;
+				listSearch.condition = json.condition;
+				queryList.items = json.page.list;
+			});
+		}
 	}
 });

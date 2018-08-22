@@ -58,35 +58,35 @@
 					<i class="line"></i>
 					<a class="javascript" id="list_search_toggle" rel='list_search_switch'>展开搜索</a>
 					<div id="list_search" class="clearfix hidden">
-						<form id="sysUserForm" class="layui-form layui-form-pane" novalidate="1">
+						<form id="searchForm" class="layui-form layui-form-pane" novalidate="1">
 							<div class="layui-form-item">
 								<label class="layui-form-label">用户名</label>
 								<div class="layui-input-inline">
-									<input type="text" name="userName" value="" id="SearchUserName" class="layui-input" />
+									<input type="text" name="userName" v-model="condition.userName" class="layui-input" />
 								</div>
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">手机号码</label>
 								<div class="layui-input-inline">
-									<input type="text" name="mobile" value="" id="SearchMobile" class="layui-input" />
+									<input type="text" name="mobile" v-model="condition.mobile" class="layui-input" />
 								</div>
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">开始日期</label>
 								<div class="layui-input-inline">
-									<input type="text" name="beginTime" value="" id="SearchBeginTime" class="layui-input datepicker" />
+									<input type="text" name="beginTime" v-model="condition.beginTime" class="layui-input datepicker" />
 								</div>
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">结束日期</label>
 								<div class="layui-input-inline">
-									<input type="text" name="endTime" value="" id="SearchEndTime" class="layui-input datepicker" />
+									<input type="text" name="endTime" v-model="condition.endTime" class="layui-input datepicker" />
 								</div>
 							</div>
 							<div class="layui-form-item">
 								<label class="layui-form-label">状态</label>
 								<div class="layui-input-inline">
-									<select name="status" id="SearchStatus" class="form_item" lay-search="" lay-filter="status">
+									<select name="status" id="SearchStatus" class="form_item">
 										<option value="">≡请选择状态≡</option>
 										<option value="0">正常</option>
 										<option value="1">禁用</option>
@@ -94,7 +94,7 @@
 								</div>
 							</div>
 							<div class="search_action">
-								<button class="layui-btn">搜索</button>
+								<button class="layui-btn" @click="search">搜索</button>
 								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 							</div>
 						</form>
