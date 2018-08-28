@@ -141,7 +141,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		Integer current = MapUtils.getInteger(params, "current");
 		Integer size = MapUtils.getInteger(params, "size");
 		String userName = MapUtils.getString(params, "userName");
-		String mobile = MapUtils.getString(params, "mobile");
+		String mobile = MapUtils.getString(params, "phone");
 		Short status = MapUtils.getShort(params, "status");
 		// String beginTime = MapUtils.getString(params, "beginTime");
 		// String endTime = MapUtils.getString(params, "endTime");

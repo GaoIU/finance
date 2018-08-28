@@ -67,9 +67,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 		if(target_page > max_page) target_page = max_page;
 		$('#goPage').val(target_page);
 	});
-});
-
-$(document).ready(function() {
+	
 	$("table.list").tableresize({
 		resizeTable: false
 	});
@@ -108,7 +106,7 @@ var pageShow = new Vue({
 	},
 	methods: {
 		pageRefresh() {
-			queryList.created();
+			queryList.find();
 		}
 	}
 });
@@ -120,7 +118,7 @@ var listSearch = new Vue({
 	},
 	methods: {
 		search() {
-			queryList.created();
+			queryList.find();
 		}
 	}
 });
@@ -130,8 +128,11 @@ var queryList = new Vue({
 	data: {
 		items: []
 	},
-	created(): return {
-		function() {
+	created: function() {
+		this.find();
+	},
+	methods: {
+		find() {
 			var URL = "/sysUser?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			console.log(URL);
 			axios.get(URL).then(function(res) {
