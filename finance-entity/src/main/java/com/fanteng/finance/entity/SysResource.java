@@ -50,7 +50,6 @@ public class SysResource implements Serializable {
 
 	private String description;
 
-	@NotBlank(message = "请选择资源图标")
 	private String icon;
 
 	@NotBlank(message = "访问方式不能为空")

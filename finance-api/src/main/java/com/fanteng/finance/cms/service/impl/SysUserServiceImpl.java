@@ -208,12 +208,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		String path = FastDFSUtil.upload(avatar);
 		if (StringUtil.isNotBlank(path)) {
 			path = sys_default_server_url + path;
-			System.out.println(path);
 			SysUser sysUser = get(sysUserId);
 			String oldAvatar = sysUser.getAvatar();
 			String fileId = oldAvatar.replaceAll(sys_default_server_url, oldAvatar);
-			int code = FastDFSUtil.delete(fileId);
-			System.out.println(code);
+			FastDFSUtil.delete(fileId);
 			sysUser.setAvatar(path);
 			update(sysUser);
 			return new JsonResult(HttpStatus.OK, "操作成功", sysUser);
