@@ -199,6 +199,9 @@ layui.define(['element', 'common'], function(exports) {
 			element.tabChange(ELEM.tabFilter, that.getTabId(data.title));
 			//自动刷新
 			if(_config.autoRefresh) {
+				if(tabIndex == 0) {
+					tabIndex += 1;
+				}
 				_config.elem.find('div.layui-tab-content > div').eq(tabIndex).children('iframe')[0].contentWindow.location.reload();
 			}
 		}
