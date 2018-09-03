@@ -56,6 +56,18 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 		}
 	});
 	
+	$('.batch_selected').on('click', function() {
+		var batch = $(this).prev();
+		if($(this).hasClass('layui-form-checked')) {
+			$(this).removeClass('layui-form-checked');
+			batch.attr('checked', 'false');
+			$('#allChoose').attr('checked', 'false');
+		} else {
+			$(this).addClass('layui-form-checked');
+			batch.attr('checked', 'true');
+		}
+	});
+	
 	$('#goPage').keyup(function() {
 		var max_page = parseInt($('#goPage').attr('max'));
 		var target_page = $('#goPage').val();
@@ -67,9 +79,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 		if(target_page > max_page) target_page = max_page;
 		$('#goPage').val(target_page);
 	});
-});
-
-$(document).ready(function() {
+	
 	$("table.list").tableresize({
 		resizeTable: false
 	});
@@ -108,7 +118,12 @@ var pageShow = new Vue({
 	},
 	methods: {
 		pageRefresh() {
-			queryList.created();
+			queryList.find();
+		},
+		gotoPage(current, size) {
+			this.size = size;
+			this.current = current;
+			queryList.find();
 		}
 	}
 });
@@ -120,7 +135,7 @@ var listSearch = new Vue({
 	},
 	methods: {
 		search() {
-			queryList.created();
+			queryList.find();
 		}
 	}
 });
@@ -128,10 +143,14 @@ var listSearch = new Vue({
 var queryList = new Vue({
 	el: '#queryList',
 	data: {
-		items: []
+		items: [],
+		checked: false
 	},
-	created(): return {
-		function() {
+	created: function() {
+		this.find();
+	},
+	methods: {
+		find() {
 			var URL = "/sysUser?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			console.log(URL);
 			axios.get(URL).then(function(res) {
@@ -141,6 +160,49 @@ var queryList = new Vue({
 				pageShow.total = json.page.total;
 				listSearch.condition = json.condition;
 				queryList.items = json.page.list;
+			});
+		},
+		oneChoose(e) {
+			var divbox = e.currentTarget;
+			var checkbox = $(divbox).prev();
+	    	if($(divbox).hasClass('layui-form-checked')) {
+	    		$(divbox).removeClass('layui-form-checked');
+	    		$(checkbox).attr('checked', false);
+	    		$('.allChoose').removeClass('layui-form-checked');
+	    	} else {
+	    		$(divbox).addClass('layui-form-checked');
+	    		$(checkbox).attr('checked', true);
+	    		var ischecked = true;
+	    		$.each($('.oneChoose'), function(index, obj) {
+	    			if(!$(obj).hasClass('layui-form-checked')) {
+	    				ischecked = false;
+	    			}
+	    		});
+	    		if(ischecked) {
+	    			$('.allChoose').addClass('layui-form-checked');
+	    		} else {
+	    			$('.allChoose').removeClass('layui-form-checked');
+	    		}
+	    	}
+		},
+		allChoose(e) {
+			var divbox = e.currentTarget;
+			var ischecked = $(divbox).hasClass('layui-form-checked');
+			
+			if(ischecked) {
+				$(divbox).removeClass('layui-form-checked');
+			} else {
+				$(divbox).addClass('layui-form-checked');
+			}
+			$.each($('.oneChoose'), function(index, obj) {
+				var inp = $(obj).prev();
+				if(ischecked) {
+					$(obj).removeClass('layui-form-checked');
+					$(inp).attr('checked', false);
+				} else {
+					$(obj).addClass('layui-form-checked');
+					$(inp).attr('checked', true);
+				}
 			});
 		}
 	}

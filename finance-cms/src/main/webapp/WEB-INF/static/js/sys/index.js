@@ -65,14 +65,6 @@ layui.use(['element', 'tab'], function() {
 	});
 });
 
-$('#gloMenu>li').each(function() {
-	var childLen = $(this).find('.navC').find('li').length;
-	if(childLen) {
-		var html = $(this).find('.navT').find('a').html();
-		$(this).find('.navT').html('<span>' + html + '</span>');
-	}
-});
-
 $('#gloMenu').on('click', 'a', function() {
 	var href = $(this).attr('href');
 	var title = $(this).attr('data-title') || $(this).attr('title');
@@ -146,7 +138,7 @@ function change_skin() {
 	var color = $(this).css('background-color');
 	$('.tooltip').attr('data-tip-bg', color);
 	$('.current').css('background-color', color);
-	$('#gloBox').removeClass().addClass(skin);
+	$('#gloBox').removeClass().addClass('layui-fluid').addClass(skin);
 }
 
 // resize
