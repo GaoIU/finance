@@ -1,6 +1,7 @@
 layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	layForm = layui.form;
 	laydate = layui.laydate;
+	layer = layui.layer;
 	
 	var anim = Math.floor(Math.random() * 6 + 1);
 	var color;
@@ -70,6 +71,28 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	
 	$("table.list").tableresize({
 		resizeTable: false
+	});
+	
+	$('.create').on('click', function() {
+		var index = layer.open({
+			title: '添加后台资源',
+			anim: anim,
+			type: 2,
+			area: ['100%', '100%'],
+			content: '/sysResource/gotoInfo',
+			success: function(index, layero) {
+				setTimeout(function() {
+					layer.tips('点击此处返回后台资源列表', '.layui-layer-setwin .layui-layer-close', {
+						tips: 3
+					});
+				}, 500);
+			}
+		});
+		layer.full(index);
+		window.sessionStorage.setItem("index", index);
+		$(window).on('resize', function() {
+			layer.full(window.sessionStorage.getItem("index"));
+		});
 	});
 });
 

@@ -50,7 +50,7 @@ public class MyUserDetailsService implements UserDetailsService {
 		List<SysResource> list = sysResourceService.getResourcesBySysUserId(sysUserId);
 		for (SysResource sysResource : list) {
 			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(
-					sysResource.getCode() + "." + sysResource.getMethod());
+					sysResource.getCode() + "@" + sysResource.getMethod());
 			authorities.add(grantedAuthority);
 		}
 

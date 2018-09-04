@@ -52,6 +52,10 @@ $(document).ready(function() {
     });
 });
 
+function basePath() {
+	return window.location.protocol + "//" + window.location.host;
+}
+
 Vue.filter('datetime', function (value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
     return moment(value).format(formatString);

@@ -74,4 +74,13 @@ public class SysResourceController {
 		return sysResourceService.queryList(params);
 	}
 
+	/**
+	 * 跳转至后台资源新增或修改页面
+	 */
+	@GetMapping("/gotoInfo")
+	public ModelAndView gotoInfo() {
+		ModelAndView mav = new ModelAndView("/sys/resource/info");
+		return mav;
+	}
+
 }

@@ -28,7 +28,7 @@
                 var left = _this.offset().left, top = _this.offset().top, width = _this.outerWidth(), height = _this.outerHeight(), right = left + width, bottom = top + height, pageX = e.pageX, pageY = e.pageY;
                 var leftside = !_firstth.is(_this) && Math.abs(left - pageX) <= 5, rightside = Math.abs(right - pageX) <= 5;
                 if (cobjs._currentLeft || pageY > top && pageY < bottom && (leftside || rightside)) {
-                    _document.css("cursor", "e-resize");
+                    // _document.css("cursor", "e-resize");
                     set_user_select(_table, "none");
                     if (!cobjs._currentLeft) {
                         if (leftside) {
@@ -40,14 +40,14 @@
                     }
                 }
                 else {
-                    _document.css("cursor", "auto");
+                    // _document.css("cursor", "auto");
                     cobjs._currentObj = null;
                 }
             });
             ths.mouseout(function (e) {
                 if (!cobjs._currentLeft) {
                     cobjs._currentObj = null;
-                    _document.css("cursor", "auto");
+                    // _document.css("cursor", "auto");
                     set_user_select(_table, "auto");
                 }
             });
@@ -69,7 +69,7 @@
                 }
                 cobjs._currentObj = null;
                 cobjs._currentLeft = null;
-                _document.css("cursor", "auto");
+                // _document.css("cursor", "auto");
                 set_user_select(_table, "auto");
             });
         });
