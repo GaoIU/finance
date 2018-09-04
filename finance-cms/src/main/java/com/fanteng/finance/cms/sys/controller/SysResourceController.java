@@ -1,14 +1,18 @@
 package com.fanteng.finance.cms.sys.controller;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.JsonResult;
 import com.fanteng.finance.cms.service.SysResourceService;
@@ -45,6 +49,29 @@ public class SysResourceController {
 		}
 
 		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
+	}
+
+	/**
+	 * 跳转至后台资源列表页面
+	 * 
+	 * @return
+	 */
+	@GetMapping("/gotoList")
+	public ModelAndView gotoList() {
+		ModelAndView mav = new ModelAndView("/sys/resource/list");
+		return mav;
+	}
+
+	/**
+	 * 获取后台资源列表
+	 * 
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	@GetMapping
+	public JsonResult queryList(@RequestParam Map<String, Object> params) throws Exception {
+		return sysResourceService.queryList(params);
 	}
 
 }

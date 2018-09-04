@@ -138,7 +138,7 @@ var queryList = new Vue({
 	},
 	methods: {
 		find() {
-			var URL = "/sysUser?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
+			var URL = "/sysRole?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			axios.get(URL).then(function(res) {
 				var json = res.data.data;
 				pageShow.current = json.page.current;

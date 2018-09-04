@@ -1,6 +1,8 @@
 package com.fanteng.finance.cms.service.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysUser;
 import com.fanteng.finance.entity.SysUserRole;
 import com.fanteng.util.BeanUtil;
+import com.fanteng.util.DateUtil;
 import com.fanteng.util.EncryptUtil;
 import com.fanteng.util.FastDFSUtil;
 import com.fanteng.util.StringUtil;
@@ -135,16 +138,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	 * 
 	 * @param params
 	 * @return
+	 * @throws Exception
 	 */
 	@Override
-	public JsonResult queryList(Map<String, Object> params) {
+	public JsonResult queryList(Map<String, Object> params) throws Exception {
 		Integer current = MapUtils.getInteger(params, "current");
 		Integer size = MapUtils.getInteger(params, "size");
 		String userName = MapUtils.getString(params, "userName");
 		String mobile = MapUtils.getString(params, "phone");
 		Short status = MapUtils.getShort(params, "status");
-		// String beginTime = MapUtils.getString(params, "beginTime");
-		// String endTime = MapUtils.getString(params, "endTime");
+		String beginTime = MapUtils.getString(params, "beginTime");
+		String endTime = MapUtils.getString(params, "endTime");
 		List<Condition> conditions = new ArrayList<>(0);
 
 		if (StringUtil.isNotBlank(userName)) {
@@ -159,6 +163,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			Condition condition = new Condition("status", Operation.EQ, status);
 			conditions.add(condition);
 		}
+		if (StringUtil.isNotBlank(beginTime)) {
+			Date begin = DateUtil.toDate(beginTime, "yyyy-MM-dd");
+			Condition condition = new Condition("createTime", Operation.GE, new Timestamp(begin.getTime()));
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(endTime)) {
+			Date end = DateUtil.toDate(endTime, "yyyy-MM-dd");
+			Condition condition = new Condition("createTime", Operation.LE, new Timestamp(end.getTime()));
+			conditions.add(condition);
+		}
 
 		List<Map<String, Object>> maps = new ArrayList<>(0);
 		Page page = findPage(current, size, conditions);
@@ -168,7 +182,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			maps.add(map);
 		}
 		page.setList(maps);
-		
+
 		Map<String, Object> data = new HashMap<>(0);
 		data.put("page", page);
 		data.put("condition", params);

@@ -1,6 +1,7 @@
 package com.fanteng.finance.cms.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.base.BaseService;
@@ -24,5 +25,14 @@ public interface SysRoleService extends BaseService<SysRole> {
 	 * @return
 	 */
 	List<SysRole> getSysRolesBySysUserId(String sysUserId);
+
+	/**
+	 * 获取后台角色列表
+	 * 
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	JsonResult queryList(Map<String, Object> params) throws Exception;
 
 }

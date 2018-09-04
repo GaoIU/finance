@@ -32,8 +32,9 @@ public interface SysUserService extends BaseService<SysUser> {
 	 * 
 	 * @param params
 	 * @return
+	 * @throws Exception
 	 */
-	JsonResult queryList(Map<String, Object> params);
+	JsonResult queryList(Map<String, Object> params) throws Exception;
 
 	/**
 	 * 验证属性字段是否存在

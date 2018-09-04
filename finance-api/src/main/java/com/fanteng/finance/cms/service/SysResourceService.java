@@ -1,7 +1,9 @@
 package com.fanteng.finance.cms.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.fanteng.core.JsonResult;
 import com.fanteng.core.base.BaseService;
 import com.fanteng.finance.entity.SysResource;
 
@@ -47,5 +49,14 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 * @return
 	 */
 	List<SysResource> getMenuByParentId(String id);
+
+	/**
+	 * 获取后台资源列表
+	 * 
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	JsonResult queryList(Map<String, Object> params) throws Exception;
 
 }

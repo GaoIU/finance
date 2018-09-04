@@ -44,9 +44,10 @@ public class SysUserController {
 	 * 
 	 * @param params
 	 * @return
+	 * @throws Exception
 	 */
 	@GetMapping
-	public JsonResult queryList(@RequestParam Map<String, Object> params) {
+	public JsonResult queryList(@RequestParam Map<String, Object> params) throws Exception {
 		return sysUserService.queryList(params);
 	}
 
