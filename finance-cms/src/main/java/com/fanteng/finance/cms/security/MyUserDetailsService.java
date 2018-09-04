@@ -24,6 +24,7 @@ import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysResource;
 import com.fanteng.finance.entity.SysUser;
+import com.fanteng.util.StringUtil;
 
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -77,6 +78,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
 			List<SysResource> list = sysResourceService.getResourcesBySysUserId(sysUser.getId());
 			for (SysResource sysResource : list) {
+				if (StringUtil.isBlank(sysResource.getUrl())) {
+					continue;
+				}
+
 				if (antPathMatcher.match(request.getRequestURI(), sysResource.getUrl())) {
 					hasPermission = true;
 					break;
