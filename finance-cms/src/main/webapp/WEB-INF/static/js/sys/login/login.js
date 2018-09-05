@@ -50,7 +50,10 @@ layui.use("layer", function() {
 						skin: 'msg'
 					});
 					setTimeout(function() {
-						location.href = data.data;
+						window.parent.location.href = data.data;
+						if(self != top) {
+							window.top.location.replace(self.location + data.data.replace('/'));
+						}
 					}, 2000);
 				} else {
 					layer.msg(data.msg, {
