@@ -1,6 +1,7 @@
 package com.fanteng.finance.cms.sys.controller;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -81,6 +82,18 @@ public class SysResourceController {
 	public ModelAndView gotoInfo() {
 		ModelAndView mav = new ModelAndView("/sys/resource/info");
 		return mav;
+	}
+
+	/**
+	 * 获取所有资源
+	 * 
+	 * @return
+	 */
+	@PostMapping("/getMenu")
+	public JsonResult getMenu() {
+		List<SysResource> list = sysResourceService.findAll();
+		List<Object> menu = sysResourceService.getMenu(list);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
 	}
 
 }

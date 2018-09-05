@@ -17,6 +17,28 @@
 		<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
 		<link rel="stylesheet" href="/static/fontIconPicker-2.0.0/themes/grey-theme/jquery.fonticonpicker.grey.min.css" media="all" />
 		<link rel="stylesheet" href="/static/css/public.css" media="all" />
+		
+		<style type="text/css">
+			.layui-form-select .layui-tree {
+			    display: none;
+			    position: absolute;
+			    left: 0;
+			    top: 42px;
+			    padding: 5px 0;
+			    z-index: 999;
+			    min-width: 100%;
+			    border: 1px solid #d2d2d2;
+			    max-height: 300px;
+			    overflow-y: auto;
+			    background-color: #fff;
+			    border-radius: 2px;
+			    box-shadow: 0 2px 4px rgba(0,0,0,.12);
+			    box-sizing: border-box;
+			}
+			.layui-form-selected .layui-tree {
+			    display: block;
+			}
+		</style>
 	</head>
 
 	<body class="childrenBody">
@@ -79,7 +101,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">上级资源</label>
 				<div class="layui-input-block">
-					
+					<input type="text" name="parentId" id="treeSelect" placeholder="上级资源" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
