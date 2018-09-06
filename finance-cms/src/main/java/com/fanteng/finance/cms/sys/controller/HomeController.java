@@ -80,7 +80,7 @@ public class HomeController {
 		}
 
 		List<SysResource> list = sysResourceService.getResource(sysUser.getId());
-		List<Object> menu = sysResourceService.getMenu(list);
+		List<Object> menu = sysResourceService.getMenu(list, "childList");
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
 	}
 

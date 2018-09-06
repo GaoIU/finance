@@ -38,9 +38,10 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 * 获取树形菜单
 	 * 
 	 * @param list
+	 * @param childName
 	 * @return
 	 */
-	List<Object> getMenu(List<SysResource> list);
+	List<Object> getMenu(List<SysResource> list, String childName);
 
 	/**
 	 * 根据父级ID查询菜单

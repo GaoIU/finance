@@ -10,21 +10,10 @@ layui.use(['form', 'layer', 'treeselect'], function() {
 		hasSearch: true
 	});
 	
-	var treeJson;
-	$.ajax({
-		url: "/sysResource/getMenu",
-		type: "POST",
-		async: false,
-		success: function(res) {
-			treeJson = res.data;
-		}
-	});
-	
-	console.log(treeJson);
-	
 	treeselect.render({
-		elem: "#treeSelect",
-		data: treeJson
+		elem: "#pidSelect",
+		data: "/sysResource/getMenu",
+		type: 'POST'
 	});
 	
 	treeselect.render();

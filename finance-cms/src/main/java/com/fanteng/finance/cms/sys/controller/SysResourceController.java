@@ -107,7 +107,7 @@ public class SysResourceController {
 		conditions.add(createTime);
 		
 		List<SysResource> list = sysResourceService.findAll(conditions);
-		List<Object> menu = sysResourceService.getMenu(list);
+		List<Object> menu = sysResourceService.getMenu(list, "children");
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
 	}
 

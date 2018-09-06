@@ -180,15 +180,16 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	 * 获取树形菜单
 	 * 
 	 * @param list
+	 * @param childName
 	 * @return
 	 */
 	@Override
-	public List<Object> getMenu(List<SysResource> list) {
+	public List<Object> getMenu(List<SysResource> list, String childName) {
 		List<Object> menu = new ArrayList<>(0);
 		for (SysResource sysResource : list) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>(0);
 			map = BeanUtil.toMap(sysResource);
-			map.put("childList", menuChild(sysResource.getId()));
+			map.put(childName, menuChild(sysResource.getId(), childName));
 			menu.add(map);
 		}
 		return menu;
@@ -198,16 +199,17 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	 * 递归处理菜单
 	 * 
 	 * @param id
+	 * @param childName
 	 * @return
 	 */
-	private List<?> menuChild(String id) {
+	private List<?> menuChild(String id, String childName) {
 		List<Object> list = new ArrayList<>(0);
 
 		List<SysResource> menu = getMenuByParentId(id);
 		for (SysResource sysResource : menu) {
 			Map<String, Object> child = new LinkedHashMap<String, Object>(0);
 			child = BeanUtil.toMap(sysResource);
-			child.put("childList", menuChild(sysResource.getId()));
+			child.put(childName, menuChild(sysResource.getId(), childName));
 			list.add(child);
 		}
 
