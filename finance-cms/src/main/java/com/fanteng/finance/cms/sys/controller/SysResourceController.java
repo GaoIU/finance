@@ -1,6 +1,7 @@
 package com.fanteng.finance.cms.sys.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fanteng.core.Condition;
 import com.fanteng.core.JsonResult;
+import com.fanteng.core.Operation;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.entity.SysResource;
 
@@ -91,7 +94,19 @@ public class SysResourceController {
 	 */
 	@PostMapping("/getMenu")
 	public JsonResult getMenu() {
-		List<SysResource> list = sysResourceService.findAll();
+		List<Condition> conditions = new ArrayList<Condition>(0);
+		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
+		Condition type = new Condition("type", Operation.EQ, SysResource.type_menu);
+		Condition parentId = new Condition("parentId", Operation.IS_NULL, null);
+		Condition sort = new Condition("sort", Operation.ASC, "sort");
+		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
+		conditions.add(status);
+		conditions.add(type);
+		conditions.add(parentId);
+		conditions.add(sort);
+		conditions.add(createTime);
+		
+		List<SysResource> list = sysResourceService.findAll(conditions);
 		List<Object> menu = sysResourceService.getMenu(list);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
 	}

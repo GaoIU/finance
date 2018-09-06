@@ -78,7 +78,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 			title: '添加后台资源',
 			anim: anim,
 			type: 2,
-			area: ['100%', '100%'],
+			// area: ['100%', '100%'],
 			content: '/sysResource/gotoInfo',
 			success: function(index, layero) {
 				setTimeout(function() {
@@ -88,11 +88,16 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 				}, 500);
 			}
 		});
-		layer.full(index);
+		window.sessionStorage.setItem("index", index);
+		$(window).on('resize', function() {
+			alert(123);
+			layer.full(window.sessionStorage.getItem("index"));
+		});
+		/*layer.full(index);
 		window.sessionStorage.setItem("index", index);
 		$(window).on('resize', function() {
 			layer.full(window.sessionStorage.getItem("index"));
-		});
+		});*/
 	});
 });
 
