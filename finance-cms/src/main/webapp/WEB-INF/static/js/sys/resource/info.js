@@ -16,8 +16,6 @@ layui.use(['form', 'layer', 'treeselect'], function() {
 		type: 'POST'
 	});
 	
-	treeselect.render();
-	
 	form.verify({
 		name: function(value, item) {
 			if(value.length > 16) {
