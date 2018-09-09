@@ -74,7 +74,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	});
 	
 	$('.create').on('click', function() {
-		var index = layer.open({
+		layer.open({
 			title: '添加后台资源',
 			anim: anim,
 			type: 2,
@@ -157,8 +157,8 @@ var queryList = new Vue({
 	methods: {
 		find() {
 			var URL = "/sysResource?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
-			axios.get(URL).then(function(res) {
-				var json = res.data.data;
+			$.get(URL, function(res) {
+				var json = res.data;
 				pageShow.current = json.page.current;
 				pageShow.size = json.page.size;
 				pageShow.total = json.page.total;
@@ -206,6 +206,23 @@ var queryList = new Vue({
 				} else {
 					$(obj).addClass('layui-form-checked');
 					$(inp).attr('checked', true);
+				}
+			});
+		},
+		edit(id) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.open({
+				title: '修改后台资源',
+				anim: anim,
+				type: 2,
+				area: ['100%', '100%'],
+				content: '/sysResource/gotoInfo?id=' + id,
+				success: function(index, layero) {
+					setTimeout(function() {
+						layer.tips('点击此处返回后台资源列表', '.layui-layer-setwin .layui-layer-close', {
+							tips: 3
+						});
+					}, 500);
 				}
 			});
 		}

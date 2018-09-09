@@ -20,29 +20,29 @@
 	</head>
 
 	<body class="childrenBody">
-		<form class="layui-form" style="width:80%;">
+		<form id="info" class="layui-form" style="width:80%;">
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源名称</label>
 				<div class="layui-input-block">
-					<input type="text" class="layui-input" name="name" lay-verify="required|name" placeholder="请输入资源名称">
+					<input type="text" class="layui-input" name="name" :value="info.name" lay-verify="required|name" placeholder="请输入资源名称">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源编码</label>
 				<div class="layui-input-block">
-					<input type="text" class="layui-input" name="code" lay-verify="required|code" placeholder="请输入资源编码">
+					<input type="text" class="layui-input" name="code" :value="info.code" lay-verify="required|code" placeholder="请输入资源编码">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源地址</label>
 				<div class="layui-input-block">
-					<textarea name="url" placeholder="请输入资源地址" class="layui-textarea"></textarea>
+					<textarea name="url" :value="info.url" placeholder="请输入资源地址" class="layui-textarea"></textarea>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">访问方式</label>
 				<div class="layui-input-block">
-					<select name="method">
+					<select name="method" v-model="info.method">
 						<option value="GET">GET</option>
 						<option value="POST">POST</option>
 						<option value="PUT">PUT</option>
@@ -101,7 +101,7 @@
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
-			<input type="hidden" name="id" />
+			<input type="hidden" name="id" value="${id!}" class="id" />
 			<input type="hidden" name="createTime" />
 		</form>
 	</body>
@@ -109,7 +109,6 @@
 	<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="/static/fontIconPicker-2.0.0/jquery.fonticonpicker.min.js"></script>
 	<script type="text/javascript" src="/static/js/vue.min.js"></script>
-	<script type="text/javascript" src="/static/js/axios.min.js"></script>
 	<script type="text/javascript" src="/static/js/moment.min.js"></script>
 	<script type="text/javascript" src="/static/layui/layui.js"></script>
 	<script type="text/javascript" src="/static/js/global.js"></script>

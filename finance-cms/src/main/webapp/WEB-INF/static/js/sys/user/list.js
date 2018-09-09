@@ -139,8 +139,8 @@ var queryList = new Vue({
 	methods: {
 		find() {
 			var URL = "/sysUser?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
-			axios.get(URL).then(function(res) {
-				var json = res.data.data;
+			$.get(URL, function(res) {
+				var json = res.data;
 				pageShow.current = json.page.current;
 				pageShow.size = json.page.size;
 				pageShow.total = json.page.total;

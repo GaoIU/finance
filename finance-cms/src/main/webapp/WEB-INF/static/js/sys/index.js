@@ -204,8 +204,8 @@ var gloMenu = new Vue({
 		html: ''
 	},
 	created: function() {
-		axios.post('/index').then(function(data) {
-			var json = data.data.data;
+		$.post('/index', function(res) {
+			var json = res.data;
 			var menu = "";
 			menu = getMenu(json, menu);
 			gloMenu.html = menu;

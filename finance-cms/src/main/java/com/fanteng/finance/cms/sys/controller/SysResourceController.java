@@ -19,8 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fanteng.core.Condition;
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
+import com.fanteng.exception.ParamErrorException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.entity.SysResource;
+import com.fanteng.util.BeanUtil;
 
 @RestController
 @RequestMapping("/sysResource")
@@ -82,9 +84,34 @@ public class SysResourceController {
 	 * 跳转至后台资源新增或修改页面
 	 */
 	@GetMapping("/gotoInfo")
-	public ModelAndView gotoInfo() {
+	public ModelAndView gotoInfo(String id) {
 		ModelAndView mav = new ModelAndView("/sys/resource/info");
+		mav.addObject("id", id);
 		return mav;
+	}
+
+	/**
+	 * 查看信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/view")
+	public JsonResult view(String id) {
+		SysResource sysResource = sysResourceService.get(id);
+		if (sysResource == null) {
+			throw new ParamErrorException("非法请求");
+		}
+
+		Map<String, Object> data = BeanUtil.toMap(sysResource);
+		String parentName = "";
+		SysResource one = sysResourceService.findOne("id", Operation.EQ, sysResource.getParentId(), "name");
+		if (one != null) {
+			parentName = one.getName();
+		}
+		data.put("parentName", parentName);
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", data);
 	}
 
 	/**
@@ -105,7 +132,7 @@ public class SysResourceController {
 		conditions.add(parentId);
 		conditions.add(sort);
 		conditions.add(createTime);
-		
+
 		List<SysResource> list = sysResourceService.findAll(conditions);
 		List<Object> menu = sysResourceService.getMenu(list, "children");
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);

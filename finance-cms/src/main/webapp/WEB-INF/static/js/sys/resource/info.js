@@ -68,3 +68,19 @@ layui.use(['form', 'layer', 'treeselect'], function() {
 		});
 	});
 });
+
+var info = new Vue({
+	el: '#info',
+	data: {
+		info: {}
+	},
+	created: function() {
+		var id = $('.id').val();
+		if(id) {
+			$.get('/sysResource/view?id=' + id, function(res) {
+				console.log(res.data);
+				info.info = res.data;
+			});
+		}
+	}
+});

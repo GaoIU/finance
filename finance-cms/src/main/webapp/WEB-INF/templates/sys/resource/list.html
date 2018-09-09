@@ -162,7 +162,7 @@
 											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
 											<td>
 												<div class="layui-table-cell laytable-cell-1-7">
-													<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+													<a @click="edit(item.id)" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 													<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
 													<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
 												</div>
@@ -243,7 +243,6 @@
 
 	<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="/static/js/vue.min.js"></script>
-	<script type="text/javascript" src="/static/js/axios.min.js"></script>
 	<script type="text/javascript" src="/static/js/moment.min.js"></script>
 	<script type="text/javascript" src="/static/layui/layui.js"></script>
 	<script type="text/javascript" src="/static/js/global.js"></script>

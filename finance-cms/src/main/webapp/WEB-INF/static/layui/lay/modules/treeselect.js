@@ -101,7 +101,14 @@ layui.define('tree', function (exports) {
                         type: 'text',
                         value: value,
                         id: treeInputId,
-                    }).addClass('layui-input layui-unselect').click(function () { }),
+                    }).addClass('layui-input layui-unselect').click(function() {
+                    	var ul = $(this).find('ul');
+                    	if(ul.hasClass('layui-show')) {
+                    		ul.removeClass('layui-show');
+                    	} else {
+                    		ul.addClass('layui-show');
+                    	}
+                    }),
                     $treeUl = $('<ul>').addClass('layui-anim layui-anim-upbit layui-tree layui-box').attr({
                             id: 'treeSelect-ul-' + tmp,
                         });
@@ -153,12 +160,11 @@ layui.define('tree', function (exports) {
                     if (!ul.hasClass('layui-show')){
                         ul.addClass('layui-show');
                         $(this).addClass(down).removeClass(right);
-                        // $('.layui-treeselect .layui-tree').css('display', 'inline-block');
                     } else {
                         ul.removeClass('layui-show');
                         $(this).addClass(right).removeClass(down);
-                        // $('.layui-treeselect .layui-tree').css('display', 'none');
                     }
+                    $(this).parent().parent().addClass('layui-show');
                 });
                 return init;
             },
@@ -168,6 +174,7 @@ layui.define('tree', function (exports) {
                     $('#' + treeInputId).val(cite);
                     $(elem).attr('value', $(this).parent().attr('lay-index'));
                     $('#treeSelect-div-' + tmp).removeClass('layui-form-selected').addClass('layui-unselect');
+                    $('.layui-treeselect .layui-tree li>i.layui-icon').parent().parent().removeClass('layui-show');
                     if (click) {
                         // 获取当前节点
                         var getThisNode = function(datas) {

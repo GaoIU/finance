@@ -60,6 +60,8 @@
 		
 		<security:intercept-url pattern="/sysResource/getMenu" method="POST" requires-channel="any" access="isAuthenticated()" />
 		
+		<security:intercept-url pattern="/sysResource/view" method="GET" requires-channel="any" access="isAuthenticated()" />
+		
 		<security:intercept-url pattern="/**/" requires-channel="any" access="@myUserDetailsService.hasPermission(request, authentication)" />
 		
 		<security:access-denied-handler error-page="/403"/>
