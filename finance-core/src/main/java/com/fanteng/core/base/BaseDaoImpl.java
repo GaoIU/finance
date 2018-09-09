@@ -22,6 +22,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 
@@ -190,6 +191,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+		
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
 	}
@@ -210,6 +214,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+		
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
 	}
@@ -377,6 +384,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+		
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		criteria.setProjection(Projections.rowCount());
@@ -440,6 +450,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+		
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		criteria.setProjection(Projections.rowCount());
@@ -537,6 +550,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 
 		List<?> list = getTemplate().findByCriteria(criteria);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -575,6 +590,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 
 		List<?> list = getTemplate().findByCriteria(criteria);
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -607,6 +624,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
+		
+		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
