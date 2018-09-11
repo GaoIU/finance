@@ -17,6 +17,39 @@
 		<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
 		<link rel="stylesheet" href="/static/fontIconPicker-2.0.0/themes/grey-theme/jquery.fonticonpicker.grey.min.css" media="all" />
 		<link rel="stylesheet" href="/static/css/public.css" media="all" />
+		
+		<style type="text/css">
+			.parent:hover {
+				color: orangered;
+				cursor: pointer;
+			}
+			.layui-form-select .layui-tree {
+			    display: none;
+			    position: absolute;
+			    left: 0;
+			    top: 42px;
+			    padding: 5px 0;
+			    z-index: 999;
+			    min-width: 100%;
+			    border: 1px solid #d2d2d2;
+			    max-height: 300px;
+			    overflow-y: auto;
+			    background-color: #fff;
+			    border-radius: 2px;
+			    box-shadow: 0 2px 4px rgba(0,0,0,.12);
+			    box-sizing: border-box;
+				line-height: 30px;
+			}
+			.layui-form-select .layui-tree li i {
+				margin-right: 5px;
+			}
+			.layui-form-select .layui-tree li ul {
+				margin-left: 24px;
+			}
+			.layui-form-selected .layui-tree {
+			    display: block;
+			}
+		</style>
 	</head>
 
 	<body class="childrenBody">
@@ -70,7 +103,14 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">上级资源</label>
 				<div class="layui-input-block">
-					<input type="text" name="parentId" id="pidSelect" lay-filter="pidSelect" placeholder="选择父节点" class="layui-input">
+					<div class="layui-unselect layui-form-select parent-selected">
+						<div class="layui-select-title">
+							<input type="hidden" :value="item.parentId" readonly="readonly" class="layui-input parentId">
+					        <input type="text" :value="item.parentName" placeholder="上级资源" readonly="readonly" class="layui-input layui-unselect parentName">
+					        <i class="layui-edge"></i>
+					    </div>
+					    <ul v-html="tree" class="layui-anim layui-anim-upbit layui-tree layui-box"></ul>
+					</div>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
@@ -89,7 +129,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit="" lay-filter="create">立即提交</button>
-					<button @click="getInfo" class="layui-btn layui-btn-primary">重置</button>
+					<button @click="getInfo" type="button" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
 			<input type="hidden" name="id" value="${id!}" class="id" />
