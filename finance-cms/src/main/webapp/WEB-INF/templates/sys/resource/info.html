@@ -24,56 +24,47 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源名称</label>
 				<div class="layui-input-block">
-					<input type="text" class="layui-input" name="name" :value="info.name" lay-verify="required|name" placeholder="请输入资源名称">
+					<input type="text" class="layui-input" name="name" :value="item.name" lay-verify="required|name" placeholder="请输入资源名称">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源编码</label>
 				<div class="layui-input-block">
-					<input type="text" class="layui-input" name="code" :value="info.code" lay-verify="required|code" placeholder="请输入资源编码">
+					<input type="text" class="layui-input" name="code" :value="item.code" lay-verify="required|code" placeholder="请输入资源编码">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源地址</label>
 				<div class="layui-input-block">
-					<textarea name="url" :value="info.url" placeholder="请输入资源地址" class="layui-textarea"></textarea>
+					<textarea name="url" :value="item.url" placeholder="请输入资源地址" class="layui-textarea"></textarea>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">访问方式</label>
 				<div class="layui-input-block">
-					<select name="method" v-model="info.method">
-						<option value="GET">GET</option>
-						<option value="POST">POST</option>
-						<option value="PUT">PUT</option>
-						<option value="DETELE">DETELE</option>
-						<option value="OPTIONS">OPTIONS</option>
-						<option value="HEAD">HEDA</option>
-						<option value="PATCH">PATCH</option>
-						<option value="TRACE">TRACE</option>
+					<select name="method" v-model="meoded">
+						<option v-for="meod in meods" :value="meod.val">{{ meod.name }}</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源类型</label>
 				<div class="layui-input-block">
-					<select name="type">
-						<option value="0">菜单</option>
-						<option value="1">按钮</option>
-						<option value="2">功能</option>
+					<select name="type" v-model="tped">
+						<option v-for="tp in types" :value="tp.val">{{ tp.name }}</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">排序</label>
 				<div class="layui-input-block">
-					<input type="number" class="layui-input" name="sort" placeholder="请输入排序号">
+					<input type="number" name="sort" :value="item.sort" class="layui-input" placeholder="请输入排序号">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">图标</label>
 				<div class="layui-input-block">
-					<input type="text" name="icon" id="icon_picker" placeholder="请选择图标">
+					<input type="text" name="icon" :value="item.icon" id="icon_picker" placeholder="请选择图标">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
@@ -85,24 +76,24 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源描述</label>
 				<div class="layui-input-block">
-					<textarea name="description" placeholder="请输入资源描述" class="layui-textarea"></textarea>
+					<textarea name="description" :value="item.description" placeholder="请输入资源描述" class="layui-textarea"></textarea>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源状态</label>
 				<div class="layui-input-block">
-					<input type="radio" name="status" value="0" title="正常" checked="checked">
-					<input type="radio" name="status" value="1" title="禁用">
+					<input type="radio" name="status" value="0" title="正常" v-model="statused">
+					<input type="radio" name="status" value="1" title="禁用" v-model="statused">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit="" lay-filter="create">立即提交</button>
-					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					<button @click="getInfo" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
 			<input type="hidden" name="id" value="${id!}" class="id" />
-			<input type="hidden" name="createTime" />
+			<input type="hidden" name="createTime" :value="item.createTime" />
 		</form>
 	</body>
 	

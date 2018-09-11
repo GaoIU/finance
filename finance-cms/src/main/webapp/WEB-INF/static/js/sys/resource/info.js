@@ -72,15 +72,60 @@ layui.use(['form', 'layer', 'treeselect'], function() {
 var info = new Vue({
 	el: '#info',
 	data: {
-		info: {}
+		item: '',
+		meods: [{
+			name: 'GET',
+			val: 'GET'
+		}, {
+			name: 'POST',
+			val: 'POST'
+		}, {
+			name: 'PUT',
+			val: 'PUT'
+		}, {
+			name: 'DELETE',
+			val: 'DELETE'
+		}, {
+			name: 'OPTIONS',
+			val: 'OPTIONS'
+		}, {
+			name: 'HEDA',
+			val: 'HEDA'
+		}, {
+			name: 'PATCH',
+			val: 'PATCH'
+		}, {
+			name: 'TRACE',
+			val: 'TRACE'
+		}],
+		meoded: 'GET',
+		types: [{
+			name: '菜单',
+			val: '0'
+		}, {
+			name: '按钮',
+			val: '1'
+		}, {
+			name: '功能',
+			val: '2'
+		}],
+		tped: '0',
+		statused: '0'
 	},
 	created: function() {
-		var id = $('.id').val();
-		if(id) {
-			$.get('/sysResource/view?id=' + id, function(res) {
-				console.log(res.data);
-				info.info = res.data;
-			});
+		this.getInfo();
+	},
+	methods: {
+		getInfo() {
+			var id = $('.id').val();
+			if(id) {
+				$.get('/sysResource/view?id=' + id, function(res) {
+					info.item = res.data;
+					info.meoded = res.data.method;
+					info.tped = res.data.type;
+					info.statused = res.data.status;
+				});
+			}
 		}
 	}
 });

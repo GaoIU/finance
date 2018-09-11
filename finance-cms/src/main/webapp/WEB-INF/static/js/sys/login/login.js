@@ -50,9 +50,9 @@ layui.use("layer", function() {
 						skin: 'msg'
 					});
 					setTimeout(function() {
-						window.parent.location.href = data.data;
+						window.parent.location.href = "/" + data.data;
 						if(self != top) {
-							window.top.location.replace(self.location + data.data.replace('/'));
+							window.top.location.replace(self.location + data.data);
 						}
 					}, 2000);
 				} else {

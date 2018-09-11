@@ -65,7 +65,7 @@ public class AuthenticationController {
 		session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 		session.setAttribute(default_session_key, sysUser);
 
-		jsonResult.setData("/index");
+		jsonResult.setData("index");
 		return jsonResult;
 	}
 

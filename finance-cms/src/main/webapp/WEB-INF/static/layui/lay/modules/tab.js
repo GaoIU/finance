@@ -273,9 +273,9 @@ layui.define(['element', 'common'], function(exports) {
 								case 'closeAll': //全部关闭
 									ELEM.titleBox.children('li').each(function() {
 										var $t = $(this);
-										if($t.index() !== 0) {
-											element.tabDelete(ELEM.tabFilter, $t.attr('lay-id'));
-										}
+										// if($t.index() !== 0) {
+										element.tabDelete(ELEM.tabFilter, $t.attr('lay-id'));
+										// }
 									});
 									break;
 							}
