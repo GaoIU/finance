@@ -75,7 +75,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">访问方式</label>
 				<div class="layui-input-block">
-					<select name="method" v-model="meoded">
+					<select name="method" v-model="item.method">
 						<option v-for="meod in meods" :value="meod.val">{{ meod.name }}</option>
 					</select>
 				</div>
@@ -83,7 +83,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源类型</label>
 				<div class="layui-input-block">
-					<select name="type" v-model="tped">
+					<select name="type" v-model="item.type">
 						<option v-for="tp in types" :value="tp.val">{{ tp.name }}</option>
 					</select>
 				</div>
@@ -122,14 +122,14 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源状态</label>
 				<div class="layui-input-block">
-					<input type="radio" name="status" value="0" title="正常" v-model="statused">
-					<input type="radio" name="status" value="1" title="禁用" v-model="statused">
+					<input type="radio" name="status" value="0" title="正常" v-model="item.status">
+					<input type="radio" name="status" value="1" title="禁用" v-model="item.status">
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit="" lay-filter="create">立即提交</button>
-					<button @click="getInfo" type="button" class="layui-btn layui-btn-primary">重置</button>
+					<button @click="rest" type="button" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
 			<input type="hidden" name="id" value="${id!}" class="id" />

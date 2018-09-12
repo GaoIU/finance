@@ -71,6 +71,49 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	$("table.list").tableresize({
 		resizeTable: false
 	});
+	
+	$('.create').on('click', function() {
+		layer.open({
+			title: '添加后台资源',
+			anim: anim,
+			type: 2,
+			area: ['100%', '100%'],
+			content: '/sysResource/gotoInfo',
+			success: function(index, layero) {
+				setTimeout(function() {
+					layer.tips('点击此处返回后台资源列表', '.layui-layer-setwin .layui-layer-close', {
+						tips: 3
+					});
+				}, 500);
+			}
+		});
+	});
+	
+	$('.delete').on('click', function() {
+		var ids = $('input[name="chooseIds"]:checked');
+		if (ids != null && ids.length) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.confirm('该操作不可逆，是否确认执行？', {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+				var id = "";
+				$.each(ids, function(index, obj) {
+					if(index > 0) {
+						id += ",";
+					}
+					id += $(obj).val();
+				});
+			});
+		} else {
+			layer.msg('您还没有选择要操作的数据', {
+				icon: 0,
+				anim: 6
+			});
+		}
+	});
 });
 
 var pageShow = new Vue({

@@ -2,6 +2,7 @@ package com.fanteng.finance.cms.sys.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.fanteng.exception.ParamErrorException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.entity.SysResource;
 import com.fanteng.util.BeanUtil;
+import com.fanteng.util.StringUtil;
 
 @RestController
 @RequestMapping("/sysResource")
@@ -86,7 +88,9 @@ public class SysResourceController {
 	@GetMapping("/gotoInfo")
 	public ModelAndView gotoInfo(String id) {
 		ModelAndView mav = new ModelAndView("/sys/resource/info");
-		mav.addObject("id", id);
+		if (StringUtil.isNotBlank(id)) {
+			mav.addObject("id", id);
+		}
 		return mav;
 	}
 
@@ -98,29 +102,8 @@ public class SysResourceController {
 	 */
 	@GetMapping("/view")
 	public JsonResult view(String id) {
-		SysResource sysResource = sysResourceService.get(id);
-		if (sysResource == null) {
-			throw new ParamErrorException("非法请求");
-		}
+		Map<String, Object> data = new HashMap<>(0);
 
-		Map<String, Object> data = BeanUtil.toMap(sysResource);
-		String parentName = "";
-		SysResource one = sysResourceService.findOne("id", Operation.EQ, sysResource.getParentId(), "name");
-		if (one != null) {
-			parentName = one.getName();
-		}
-		data.put("parentName", parentName);
-
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", data);
-	}
-
-	/**
-	 * 获取所有资源
-	 * 
-	 * @return
-	 */
-	@PostMapping("/getMenu")
-	public JsonResult getMenu() {
 		List<Condition> conditions = new ArrayList<Condition>(0);
 		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
 		Condition type = new Condition("type", Operation.EQ, SysResource.type_menu);
@@ -135,7 +118,26 @@ public class SysResourceController {
 
 		List<SysResource> list = sysResourceService.findAll(conditions);
 		List<Object> menu = sysResourceService.getMenu(list, "children");
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
+		data.put("menu", menu);
+
+		if (StringUtil.isNotBlank(id)) {
+			SysResource sysResource = sysResourceService.get(id);
+			if (sysResource == null) {
+				throw new ParamErrorException("非法请求");
+			}
+
+			Map<String, Object> info = BeanUtil.toMap(sysResource);
+			String parentName = "";
+			SysResource one = sysResourceService.findOne("id", Operation.EQ, sysResource.getParentId(), "name");
+			if (one != null) {
+				parentName = one.getName();
+			}
+			info.put("parentName", parentName);
+
+			data.put("info", info);
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", data);
 	}
 
 }

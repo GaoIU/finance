@@ -70,7 +70,6 @@ layui.use([ 'form', 'layer', 'upload' ], function() {
 				dataType: 'JSON',
 				async: false,
 				success: function(res) {
-					console.log(res)
 					if(res.code == 200) {
 						if(res.data) {
 							msg = "该手机号已存在";
