@@ -60,4 +60,13 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 */
 	JsonResult queryList(Map<String, Object> params) throws Exception;
 
+	/**
+	 * 验证资源编码
+	 * 
+	 * @param code
+	 * @param sysResourceId
+	 * @return
+	 */
+	boolean checkCode(String code, String sysResourceId);
+
 }

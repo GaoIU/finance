@@ -56,6 +56,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public JsonResult register(SysUser sysUser) throws Exception {
+		String id = sysUser.getId();
 		String password = sysUser.getPassword();
 		if (StringUtil.isEmpty(password)) {
 			throw new ParamErrorException("用户密码不能为空");
@@ -65,17 +66,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			throw new ParamErrorException("用户密码的长度只能在6-16位之间");
 		}
 
-		boolean checkUserName = checkPropertyName("userName", sysUser.getUserName());
+		boolean checkUserName = checkUserName(sysUser.getUserName(), id);
 		if (checkUserName) {
 			throw new ParamErrorException("该账号已被使用");
 		}
 
-		boolean checkNickName = checkPropertyName("nickName", sysUser.getNickName());
+		boolean checkNickName = checkNickName(sysUser.getNickName(), id);
 		if (checkNickName) {
 			throw new ParamErrorException("该昵称已被使用");
 		}
 
-		boolean checkMobile = checkPropertyName("mobile", sysUser.getMobile());
+		boolean checkMobile = checkMobile(sysUser.getMobile(), id);
 		if (checkMobile) {
 			throw new ParamErrorException("该手机号已存在");
 		}
@@ -257,6 +258,72 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			return new JsonResult(HttpStatus.OK, msg, checkPassword);
 		}
 		throw new ParamErrorException("旧密码错误，请重新输入");
+	}
+
+	/**
+	 * 验证手机
+	 * 
+	 * @param mobile
+	 * @param sysUserId
+	 * @return
+	 */
+	@Override
+	public boolean checkMobile(String mobile, String sysUserId) {
+		boolean checkMobile = checkPropertyName("mobile", mobile);
+		if (StringUtil.isNotBlank(sysUserId)) {
+			SysUser sysUser = get(sysUserId);
+			if (sysUser != null) {
+				if (StringUtil.equals(mobile, sysUser.getMobile())) {
+					checkMobile = false;
+				}
+			}
+		}
+
+		return checkMobile;
+	}
+
+	/**
+	 * 验证昵称
+	 * 
+	 * @param nickName
+	 * @param sysUserId
+	 * @return
+	 */
+	@Override
+	public boolean checkNickName(String nickName, String sysUserId) {
+		boolean checkNickName = checkPropertyName("nickName", nickName);
+		if (StringUtil.isNotBlank(sysUserId)) {
+			SysUser sysUser = get(sysUserId);
+			if (sysUser != null) {
+				if (StringUtil.equals(nickName, sysUser.getNickName())) {
+					checkNickName = false;
+				}
+			}
+		}
+
+		return checkNickName;
+	}
+
+	/**
+	 * 验证账户
+	 * 
+	 * @param userName
+	 * @param sysUserId
+	 * @return
+	 */
+	@Override
+	public boolean checkUserName(String userName, String sysUserId) {
+		boolean checkUserName = checkPropertyName("userName", userName);
+		if (StringUtil.isNotBlank(sysUserId)) {
+			SysUser sysUser = get(sysUserId);
+			if (sysUser != null) {
+				if (StringUtil.equals(userName, sysUser.getUserName())) {
+					checkUserName = false;
+				}
+			}
+		}
+
+		return checkUserName;
 	}
 
 }

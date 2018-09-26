@@ -251,6 +251,35 @@ var queryList = new Vue({
 					}, 500);
 				}
 			});
+		},
+		usable(id, status) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			var isusable = false;
+			if (status == 0) {
+				isusable = true;
+			} else {
+				layer.confirm('该操作可能使部分功能不可用，是否确认执行？', {
+					icon: 3,
+					anim: anim,
+					title: '提示'
+				}, function(index) {
+					layer.close(index);
+					isusable = true;
+				});
+			}
+			if (isusable) {
+				queryList.find();
+			}
+		},
+		del(id) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.confirm('该操作不可逆，是否确认执行？', {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+			});
 		}
 	}
 });

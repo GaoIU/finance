@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.JsonResult;
 import com.fanteng.exception.CustomException;
+import com.fanteng.exception.ParamErrorException;
 import com.fanteng.exception.UnauthorizedException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysRoleService;
@@ -113,6 +114,20 @@ public class HomeController {
 	 */
 	@PutMapping("/sysUserInfo")
 	public JsonResult changeSysUser(HttpSession session, @Valid @RequestBody SysUser sysUser) {
+		String id = sysUser.getId();
+		boolean checkUserName = sysUserService.checkUserName(sysUser.getUserName(), id);
+		if (checkUserName) {
+			throw new ParamErrorException("该账号已被使用");
+		}
+		boolean checkNickName = sysUserService.checkNickName(sysUser.getNickName(), id);
+		if (checkNickName) {
+			throw new ParamErrorException("该昵称已被使用");
+		}
+		boolean checkMobile = sysUserService.checkMobile(sysUser.getMobile(), id);
+		if (checkMobile) {
+			throw new ParamErrorException("该手机号已存在");
+		}
+
 		boolean updateIgnore = sysUserService.updateIgnore(sysUser);
 		if (updateIgnore) {
 			sysUser = sysUserService.get(sysUser.getId());

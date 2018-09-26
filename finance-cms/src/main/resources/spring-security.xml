@@ -56,6 +56,8 @@
 		
 		<security:intercept-url pattern="/checkUserName" method="POST" requires-channel="any" access="isAuthenticated()" />
 		
+		<security:intercept-url pattern="/checkCode" method="POST" requires-channel="any" access="isAuthenticated()" />
+		
 		<security:intercept-url pattern="/sysResource/gotoInfo" method="GET" requires-channel="any" access="isAuthenticated()" />
 		
 		<security:intercept-url pattern="/sysResource/view" method="GET" requires-channel="any" access="isAuthenticated()" />

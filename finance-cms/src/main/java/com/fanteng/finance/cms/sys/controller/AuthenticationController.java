@@ -20,10 +20,8 @@ import com.fanteng.core.JsonResult;
 import com.fanteng.exception.UnauthorizedException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysUserService;
-import com.fanteng.finance.entity.SysResource;
 import com.fanteng.finance.entity.SysUser;
 import com.fanteng.util.EncryptUtil;
-import com.fanteng.util.StringUtil;
 
 @RestController
 public class AuthenticationController {
@@ -93,15 +91,7 @@ public class AuthenticationController {
 	 */
 	@PostMapping("/checkMobile")
 	public JsonResult checkMobile(String mobile, String sysUserId) {
-		boolean checkMobile = sysUserService.checkPropertyName("mobile", mobile);
-		if (StringUtil.isNotBlank(sysUserId)) {
-			SysUser sysUser = sysUserService.get(sysUserId);
-			if (sysUser != null) {
-				if (StringUtil.equals(mobile, sysUser.getMobile())) {
-					checkMobile = false;
-				}
-			}
-		}
+		boolean checkMobile = sysUserService.checkMobile(mobile, sysUserId);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkMobile);
 	}
 
@@ -113,15 +103,7 @@ public class AuthenticationController {
 	 */
 	@PostMapping("/checkNickName")
 	public JsonResult checkNickName(String nickName, String sysUserId) {
-		boolean checkNickName = sysUserService.checkPropertyName("nickName", nickName);
-		if (StringUtil.isNotBlank(sysUserId)) {
-			SysUser sysUser = sysUserService.get(sysUserId);
-			if (sysUser != null) {
-				if (StringUtil.equals(nickName, sysUser.getNickName())) {
-					checkNickName = false;
-				}
-			}
-		}
+		boolean checkNickName = sysUserService.checkNickName(nickName, sysUserId);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkNickName);
 	}
 
@@ -132,8 +114,8 @@ public class AuthenticationController {
 	 * @return
 	 */
 	@PostMapping("/checkUserName")
-	public JsonResult checkUserName(@RequestParam(required = false) String userName) {
-		boolean checkUserName = sysUserService.checkPropertyName("userName", userName);
+	public JsonResult checkUserName(String userName, String sysUserId) {
+		boolean checkUserName = sysUserService.checkUserName(userName, sysUserId);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkUserName);
 	}
 
@@ -145,15 +127,8 @@ public class AuthenticationController {
 	 */
 	@PostMapping("/checkCode")
 	public JsonResult checkCode(String code, String sysResourceId) {
-		boolean checkCode = sysResourceService.checkPropertyName("code", code);
-		if (StringUtil.isNotBlank(sysResourceId)) {
-			SysResource sysResource = sysResourceService.get(sysResourceId);
-			if (sysResource != null) {
-				if (StringUtil.equals(code, sysResource.getCode())) {
-					checkCode = false;
-				}
-			}
-		}
+		code = code.toUpperCase();
+		boolean checkCode = sysResourceService.checkCode(code, sysResourceId);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkCode);
 	}
 

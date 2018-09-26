@@ -292,4 +292,26 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		return new JsonResult(HttpStatus.OK, "操作成功", data);
 	}
 
+	/**
+	 * 验证资源编码
+	 * 
+	 * @param code
+	 * @param sysResourceId
+	 * @return
+	 */
+	@Override
+	public boolean checkCode(String code, String sysResourceId) {
+		boolean checkCode = checkPropertyName("code", code);
+		if (StringUtil.isNotBlank(sysResourceId)) {
+			SysResource sysResource = get(sysResourceId);
+			if (sysResource != null) {
+				if (StringUtil.equals(code, sysResource.getCode())) {
+					checkCode = false;
+				}
+			}
+		}
+
+		return checkCode;
+	}
+
 }

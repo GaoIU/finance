@@ -66,4 +66,31 @@ public interface SysUserService extends BaseService<SysUser> {
 	 */
 	JsonResult changePwd(SysUser sysUser, String password, String oldPwd) throws Exception;
 
+	/**
+	 * 验证手机
+	 * 
+	 * @param mobile
+	 * @param sysUserId
+	 * @return
+	 */
+	boolean checkMobile(String mobile, String sysUserId);
+
+	/**
+	 * 验证昵称
+	 * 
+	 * @param nickName
+	 * @param sysUserId
+	 * @return
+	 */
+	boolean checkNickName(String nickName, String sysUserId);
+
+	/**
+	 * 验证账户
+	 * 
+	 * @param userName
+	 * @param sysUserId
+	 * @return
+	 */
+	boolean checkUserName(String userName, String sysUserId);
+
 }
