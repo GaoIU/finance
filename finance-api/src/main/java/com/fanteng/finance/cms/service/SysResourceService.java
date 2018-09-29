@@ -69,4 +69,20 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 */
 	boolean checkCode(String code, String sysResourceId);
 
+	/**
+	 * 启用或者禁用后台资源
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	boolean usable(String id, Short status);
+
+	/**
+	 * 批量删除后台资源
+	 * 
+	 * @param ids
+	 */
+	void del(String[] ids);
+
 }

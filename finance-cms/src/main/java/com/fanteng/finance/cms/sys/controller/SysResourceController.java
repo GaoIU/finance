@@ -7,7 +7,10 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -86,6 +89,27 @@ public class SysResourceController {
 	}
 
 	/**
+	 * 批量删除后台资源
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@DeleteMapping
+	public JsonResult del(String id) {
+		if (StringUtil.isBlank(id)) {
+			throw new ParamErrorException("无效参数");
+		}
+		String[] ids = id.split(",");
+		if (ArrayUtils.isEmpty(ids)) {
+			throw new ParamErrorException("无效参数");
+		}
+
+		sysResourceService.del(ids);
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
+	}
+
+	/**
 	 * 跳转至后台资源列表页面
 	 * 
 	 * @return
@@ -157,6 +181,28 @@ public class SysResourceController {
 		List<Object> menu = sysResourceService.getMenu(list, "children");
 
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
+	}
+
+	/**
+	 * 启用或者禁用后台资源
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@PutMapping("/usable")
+	public JsonResult usable(@RequestBody Map<String, Object> param) {
+		String id = MapUtils.getString(param, "id");
+		Short status = MapUtils.getShort(param, "status");
+		if (StringUtil.isBlank(id) || status == null) {
+			throw new ParamErrorException("无效参数");
+		}
+
+		boolean usable = sysResourceService.usable(id, status);
+		if (usable) {
+			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", usable);
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
 	}
 
 }

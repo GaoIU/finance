@@ -86,8 +86,6 @@ layui.use(['form', 'layer'], function() {
 			type = 'POST';
 		}
 		
-		console.log(JSON.stringify(data.field));
-		
 		$.ajax({
 			url: '/sysResource',
 			type: type,
@@ -96,7 +94,6 @@ layui.use(['form', 'layer'], function() {
 			contentType: 'application/json;charset=UTF-8',
 			async: true,
 			success: function(res) {
-				console.log(res);
 				top.layer.close(index);
 				top.layer.msg(res.msg, {
 					icon: 6,

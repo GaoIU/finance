@@ -107,6 +107,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 					}
 					id += $(obj).val();
 				});
+				dels(id);
 			});
 		} else {
 			layer.msg('您还没有选择要操作的数据', {
@@ -116,6 +117,40 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 		}
 	});
 });
+
+function dels(id) {
+	layer.load();
+	$.ajax({
+		url: '/sysResource?id=' + id,
+		type: 'DELETE',
+		dataType: 'JSON',
+		async: true,
+		success: function(res) {
+			layer.closeAll();
+			top.layer.msg(res.msg, {
+				icon: 6,
+				time: 1500
+			});
+			setTimeout(function() {
+				if(res.code == 200) {
+					$.each($('.oneChoose'), function(index, obj) {
+						var inp = $(obj).prev();
+						$(obj).removeClass('layui-form-checked');
+						$(inp).attr('checked', false);
+					});
+					queryList.find();
+				}
+			}, 2000);
+		},
+		error: function() {
+			layer.closeAll();
+			layer.msg('操作失败', {
+				icon: 5,
+				anim: 6
+			});
+		}
+	});
+}
 
 var pageShow = new Vue({
 	el: '#pageShow',
@@ -257,22 +292,48 @@ var queryList = new Vue({
 		},
 		usable(id, status) {
 			var anim = Math.floor(Math.random() * 6 + 1);
-			var isusable = false;
+			var msg;
 			if (status == 0) {
-				isusable = true;
+				msg = "是否确认启用？";
 			} else {
-				layer.confirm('该操作可能使部分功能不可用，是否确认执行？', {
-					icon: 3,
-					anim: anim,
-					title: '提示'
-				}, function(index) {
-					layer.close(index);
-					isusable = true;
+				msg = "该操作可能使部分功能不可用，是否确认执行？";
+			}
+			layer.confirm(msg, {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+				layer.load();
+				var param = {"id": id, "status": status};
+				$.ajax({
+					url: '/sysResource/usable',
+					type: 'PUT',
+					data: JSON.stringify(param),
+					dataType: 'JSON',
+					contentType: 'application/json;charset=UTF-8',
+					async: true,
+					success: function(res) {
+						layer.closeAll();
+						top.layer.msg(res.msg, {
+							icon: 6,
+							time: 1500
+						});
+						setTimeout(function() {
+							if(res.code == 200) {
+								queryList.find();
+							}
+						}, 2000);
+					},
+					error: function() {
+						layer.closeAll();
+						layer.msg('操作失败', {
+							icon: 5,
+							anim: 6
+						});
+					}
 				});
-			}
-			if (isusable) {
-				queryList.find();
-			}
+			});
 		},
 		del(id) {
 			var anim = Math.floor(Math.random() * 6 + 1);
@@ -282,6 +343,7 @@ var queryList = new Vue({
 				title: '提示'
 			}, function(index) {
 				layer.close(index);
+				dels(id);
 			});
 		}
 	}

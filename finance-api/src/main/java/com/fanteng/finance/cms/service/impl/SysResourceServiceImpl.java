@@ -2,6 +2,7 @@ package com.fanteng.finance.cms.service.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,6 +14,7 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fanteng.core.Condition;
 import com.fanteng.core.HttpStatus;
@@ -20,6 +22,7 @@ import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
 import com.fanteng.core.Page;
 import com.fanteng.core.base.BaseServiceImpl;
+import com.fanteng.exception.ParamErrorException;
 import com.fanteng.finance.cms.dao.SysResourceDao;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysRoleResourceService;
@@ -256,6 +259,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		String beginTime = MapUtils.getString(params, "beginTime");
 		String endTime = MapUtils.getString(params, "endTime");
 		List<Condition> conditions = new ArrayList<Condition>(0);
+		Condition createTimeDesc = new Condition("createTime", Operation.DESC, "createTime");
+		conditions.add(createTimeDesc);
 
 		if (StringUtil.isNotBlank(name)) {
 			Condition condition = new Condition("name", Operation.LIKE_ANY, name);
@@ -312,6 +317,49 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		}
 
 		return checkCode;
+	}
+
+	/**
+	 * 启用或者禁用后台资源
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean usable(String id, Short status) {
+		SysResource sysResource = get(id);
+		if (sysResource == null) {
+			throw new ParamErrorException("非法请求");
+		}
+
+		sysResource.setStatus(status);
+
+		return update(sysResource);
+	}
+
+	/**
+	 * 批量删除后台资源
+	 * 
+	 * @param ids
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void del(String[] ids) {
+		for (String id : ids) {
+			delete(id);
+		}
+
+		List<String> idlist = new ArrayList<>(ids.length);
+		Collections.addAll(idlist, ids);
+
+		List<SysRoleResource> list = sysRoleResourceService.findOnes("sysResourceId", Operation.IN, idlist);
+		if (CollectionUtils.isNotEmpty(list)) {
+			for (SysRoleResource sysRoleResource : list) {
+				sysRoleResourceService.delete(sysRoleResource);
+			}
+		}
 	}
 
 }
