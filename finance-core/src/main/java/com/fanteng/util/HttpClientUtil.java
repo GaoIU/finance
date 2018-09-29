@@ -35,12 +35,12 @@ import org.apache.http.util.EntityUtils;
 
 public class HttpClientUtil {
 
-	private final static HttpClient client = HttpClientBuilder.create().build();
+	private final static HttpClient CLIENT = HttpClientBuilder.create().build();
 
-	private final static int timeout = 5000;
+	private final static int TIMEOUT = 5000;
 
-	private final static RequestConfig REQUEST_CONFIG = RequestConfig.custom().setConnectTimeout(timeout)
-			.setConnectionRequestTimeout(timeout).setSocketTimeout(timeout).build();
+	private final static RequestConfig REQUEST_CONFIG = RequestConfig.custom().setConnectTimeout(TIMEOUT)
+			.setConnectionRequestTimeout(TIMEOUT).setSocketTimeout(TIMEOUT).build();
 
 	/**
 	 * 发送HTTP的GET请求
@@ -56,7 +56,7 @@ public class HttpClientUtil {
 	public static String sendGetByHttp(String url, String charset) throws ClientProtocolException, IOException {
 		HttpGet httpGet = new HttpGet(url);
 		httpGet.setConfig(REQUEST_CONFIG);
-		HttpResponse response = client.execute(httpGet);
+		HttpResponse response = CLIENT.execute(httpGet);
 
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode == 200) {
@@ -90,7 +90,7 @@ public class HttpClientUtil {
 			});
 		}
 
-		HttpResponse response = client.execute(httpGet);
+		HttpResponse response = CLIENT.execute(httpGet);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode == 200) {
 			return EntityUtils.toString(response.getEntity(), charset);
@@ -122,7 +122,7 @@ public class HttpClientUtil {
 		StringEntity se = new StringEntity(json, charset);
 		httpPost.setEntity(se);
 
-		HttpResponse response = client.execute(httpPost);
+		HttpResponse response = CLIENT.execute(httpPost);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode == 200) {
 			return EntityUtils.toString(response.getEntity(), charset);
@@ -160,7 +160,7 @@ public class HttpClientUtil {
 		StringEntity se = new StringEntity(json, charset);
 		httpPost.setEntity(se);
 
-		HttpResponse response = client.execute(httpPost);
+		HttpResponse response = CLIENT.execute(httpPost);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode == 200) {
 			return EntityUtils.toString(response.getEntity(), charset);
@@ -193,7 +193,7 @@ public class HttpClientUtil {
 		});
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps, charset));
 
-		HttpResponse response = client.execute(httpPost);
+		HttpResponse response = CLIENT.execute(httpPost);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode == 200) {
 			return EntityUtils.toString(response.getEntity(), charset);
@@ -232,7 +232,7 @@ public class HttpClientUtil {
 		});
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps, charset));
 
-		HttpResponse response = client.execute(httpPost);
+		HttpResponse response = CLIENT.execute(httpPost);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode == 200) {
 			return EntityUtils.toString(response.getEntity(), charset);

@@ -67,7 +67,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		}
 
 		List<Condition> conditions = new ArrayList<Condition>(0);
-		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
 		conditions.add(status);
 
 		if (hasPermission) {
@@ -136,8 +136,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		}
 
 		List<Condition> conditions = new ArrayList<Condition>(0);
-		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
-		Condition type = new Condition("type", Operation.EQ, SysResource.type_menu);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+		Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
 		Condition parentId = new Condition("parentId", Operation.IS_NULL, null);
 		Condition sort = new Condition("sort", Operation.ASC, "sort");
 		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
@@ -225,8 +225,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	@Override
 	public List<SysResource> getMenuByParentId(String id) {
 		List<Condition> conditions = new ArrayList<Condition>(0);
-		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
-		Condition type = new Condition("type", Operation.EQ, SysResource.type_menu);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+		Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
 		Condition sort = new Condition("sort", Operation.ASC, "sort");
 		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
 		Condition parentId = new Condition("parentId", Operation.EQ, id);

@@ -72,11 +72,11 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 
 		if (trigger == null) {
 			JobDetail jobDetail = null;
-			if (scheduleJob.getConcurrent() == ScheduleJob.concurrent_is) {
+			if (scheduleJob.getConcurrent() == ScheduleJob.CONCURRENT_IS) {
 				Class<QuartzJobFactory> clazz = QuartzJobFactory.class;
 				jobDetail = JobBuilder.newJob(clazz).withIdentity(jobName, jobGroup).build();
 			}
-			if (scheduleJob.getConcurrent() == ScheduleJob.concurrent_not) {
+			if (scheduleJob.getConcurrent() == ScheduleJob.CONCURRENT_NOT) {
 				Class<QuartzJobFactoryDisallowConcurrentExecution> clazz = QuartzJobFactoryDisallowConcurrentExecution.class;
 				jobDetail = JobBuilder.newJob(clazz).withIdentity(jobName, jobGroup).build();
 			}
@@ -87,7 +87,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 
 			scheduler.scheduleJob(jobDetail, trigger);
 
-			if (scheduleJob.getStatus() == ScheduleJob.status_pause) {
+			if (scheduleJob.getStatus() == ScheduleJob.STATUS_PAUSE) {
 				pauseJob(scheduleJob.getId());
 			}
 		} else {
@@ -119,7 +119,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	@Override
 	public void resumeJob(String id) throws Exception {
 		ScheduleJob scheduleJob = get(id);
-		scheduleJob.setStatus(ScheduleJob.status_normal);
+		scheduleJob.setStatus(ScheduleJob.STATUS_NORMAL);
 		update(scheduleJob);
 
 		JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
@@ -168,7 +168,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	public void updateCron(String id, String cronExpression) throws Exception {
 		ScheduleJob scheduleJob = get(id);
 		scheduleJob.setCronExpression(cronExpression);
-		scheduleJob.setStatus(ScheduleJob.status_normal);
+		scheduleJob.setStatus(ScheduleJob.STATUS_NORMAL);
 		update(scheduleJob);
 
 		TriggerKey triggerKey = TriggerKey.triggerKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());

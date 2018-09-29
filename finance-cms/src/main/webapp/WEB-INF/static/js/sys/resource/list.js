@@ -140,13 +140,6 @@ var pageShow = new Vue({
 	},
 	created: function() {
 		this.size = this.pagesizes[1].value;
-		if(this.total <= this.size) {
-			this.pagenumber = 1;
-		} else if((this.total % this.size) == 0) {
-			this.pagenumber = this.total / this.size;
-		} else {
-			this.pagenumber = this.total / this.size + 1;
-		}
 	},
 	methods: {
 		pageRefresh() {
@@ -156,6 +149,18 @@ var pageShow = new Vue({
 			this.size = size;
 			this.current = current;
 			queryList.find();
+		},
+		setPage(page) {
+			this.current = page.current;
+			this.size = page.size;
+			this.total = page.total;
+			if(page.total <= page.size) {
+				this.pagenumber = 1;
+			} else if((page.total % page.size) == 0) {
+				this.pagenumber = page.total / page.size;
+			} else {
+				this.pagenumber = Math.floor(page.total / page.size) + 1;
+			}
 		}
 	}
 });
@@ -185,9 +190,7 @@ var queryList = new Vue({
 			var URL = "/sysResource?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			$.get(URL, function(res) {
 				var json = res.data;
-				pageShow.current = json.page.current;
-				pageShow.size = json.page.size;
-				pageShow.total = json.page.total;
+				pageShow.setPage(json.page);
 				listSearch.condition = json.condition;
 				queryList.items = json.page.list;
 			});

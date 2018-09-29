@@ -22,16 +22,16 @@ public class ScheduleJob implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 定时任务配置状态：0-正常 */
-	public final static short status_normal = 0;
+	public final static short STATUS_NORMAL = 0;
 
 	/** 定时任务配置状态：1-暂停 */
-	public final static short status_pause = 1;
+	public final static short STATUS_PAUSE = 1;
 	
 	/** 定时任务是否并发状态：0-是 */
-	public final static short concurrent_is = 0;
+	public final static short CONCURRENT_IS = 0;
 	
 	/** 定时任务是否并发状态：1-否 */
-	public final static short concurrent_not = 1;
+	public final static short CONCURRENT_NOT = 1;
 
 	@Id
 	private String id;
@@ -40,7 +40,7 @@ public class ScheduleJob implements Serializable {
 	@Column(name = "bean_class")
 	private String beanClass;
 	
-	private short concurrent = concurrent_not;
+	private short concurrent = CONCURRENT_NOT;
 
 	@Column(name = "create_time")
 	private Timestamp createTime;
@@ -63,7 +63,7 @@ public class ScheduleJob implements Serializable {
 
 	private String remark;
 
-	private short status = status_normal;
+	private short status = STATUS_NORMAL;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;

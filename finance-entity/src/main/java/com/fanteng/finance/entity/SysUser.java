@@ -25,10 +25,10 @@ public class SysUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 后台用户状态：0-正常 */
-	public static final short status_normal = 0;
+	public static final short STATUS_NORMAL = 0;
 
 	/** 后台用户状态：1-禁用 */
-	public static final short status_disable = 1;
+	public static final short STATUS_DISABLE = 1;
 
 	@Id
 	private String id;
@@ -55,7 +55,7 @@ public class SysUser implements Serializable {
 	@Transient
 	private String sysRoleIds;
 
-	private Short status = status_normal;
+	private Short status = STATUS_NORMAL;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;

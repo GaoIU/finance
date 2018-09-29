@@ -15,7 +15,7 @@ public class EncryptUtil {
 
 	private static Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
-	private final static Log logger = LogFactory.getLog(EncryptUtil.class);
+	private final static Log LOGGER = LogFactory.getLog(EncryptUtil.class);
 
 	/**
 	 * MD5加密
@@ -78,17 +78,17 @@ public class EncryptUtil {
 	 */
 	public static boolean matchesByBC(CharSequence rawPassword, String encodedPassword) {
 		if (encodedPassword == null || encodedPassword.length() == 0) {
-			logger.warn("Empty encoded password");
+			LOGGER.warn("Empty encoded password");
 			return false;
 		}
 
 		if (rawPassword == null || rawPassword.length() == 0) {
-			logger.warn("Empty encoded password");
+			LOGGER.warn("Empty encoded password");
 			return false;
 		}
 
 		if (!BCRYPT_PATTERN.matcher(encodedPassword).matches()) {
-			logger.warn("Encoded password does not look like BCrypt");
+			LOGGER.warn("Encoded password does not look like BCrypt");
 			return false;
 		}
 

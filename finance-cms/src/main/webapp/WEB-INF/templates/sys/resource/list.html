@@ -219,7 +219,7 @@
 											<div class="separator"></div>
 										</td>
 										<td>
-											<select v-model="size" style="height: 25px; margin-left: 5px; margin-right: 5px;">
+											<select v-model="size" @change="gotoPage(current, size)" style="height: 25px; margin-left: 5px; margin-right: 5px;">
 												<option v-for="item in pagesizes" :value="item.value">{{ item.name }}</option>
 											</select>
 										</td>

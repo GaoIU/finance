@@ -95,11 +95,11 @@ public class ScheduleJobController {
 			throw new ParamErrorException("非法参数");
 		}
 
-		if (status == ScheduleJob.status_pause) {
+		if (status == ScheduleJob.STATUS_PAUSE) {
 			scheduleJobService.pauseJob(id);
 		}
 
-		if (status == ScheduleJob.status_normal) {
+		if (status == ScheduleJob.STATUS_NORMAL) {
 			scheduleJobService.resumeJob(id);
 		}
 		return new JsonResult(HttpStatus.OK, "操作成功");

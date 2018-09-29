@@ -29,7 +29,7 @@
 		<property name="order" value="1" />
 		<property name="locations">
 			<list>
-				<value>classpath:datasource-dev.properties</value>
+				<value>classpath:datasource.properties</value>
 				<value>classpath:resource.properties</value>
 				<value>classpath:redis.properties</value>
 			</list>

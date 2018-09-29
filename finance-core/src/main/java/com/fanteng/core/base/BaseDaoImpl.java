@@ -348,14 +348,16 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
-		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
-
+		
 		criteria.setProjection(Projections.rowCount());
 		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
 		int totle = 0;
 		if (object != null) {
 			totle = ((Number) object).intValue();
 		}
+		criteria.setProjection(null);
+		
+		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		Page page = new Page(current, size, totle, list);
 		return page;
@@ -374,6 +376,14 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
+		
+		criteria.setProjection(Projections.rowCount());
+		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		int totle = 0;
+		if (object != null) {
+			totle = ((Number) object).intValue();
+		}
+		criteria.setProjection(null);
 
 		if (StringUtil.isNotBlank(properties)) {
 			ProjectionList projectionList = Projections.projectionList();
@@ -388,13 +398,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 		
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
-
-		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
-		int totle = 0;
-		if (object != null) {
-			totle = ((Number) object).intValue();
-		}
 
 		Page page = new Page(current, size, totle, list);
 		return page;
@@ -413,14 +416,16 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
-		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
-
+		
 		criteria.setProjection(Projections.rowCount());
 		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
 		int totle = 0;
 		if (object != null) {
 			totle = ((Number) object).intValue();
 		}
+		criteria.setProjection(null);
+		
+		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		Page page = new Page(current, size, totle, list);
 		return page;
@@ -440,6 +445,14 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
+		
+		criteria.setProjection(Projections.rowCount());
+		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
+		int totle = 0;
+		if (object != null) {
+			totle = ((Number) object).intValue();
+		}
+		criteria.setProjection(null);
 
 		if (StringUtil.isNotBlank(properties)) {
 			ProjectionList projectionList = Projections.projectionList();
@@ -454,13 +467,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 		
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
-
-		criteria.setProjection(Projections.rowCount());
-		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
-		int totle = 0;
-		if (object != null) {
-			totle = ((Number) object).intValue();
-		}
 
 		Page page = new Page(current, size, totle, list);
 		return page;

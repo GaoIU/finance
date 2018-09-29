@@ -24,10 +24,10 @@ public class SysRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 后台角色状态：0-正常 */
-	public static final short status_normal = 0;
+	public static final short STATUS_NORMAL = 0;
 
 	/** 后台角色状态：1-禁用 */
-	public static final short status_disable = 1;
+	public static final short STATUS_DISABLE = 1;
 
 	@Id
 	private String id;
@@ -46,7 +46,7 @@ public class SysRole implements Serializable {
 	@Transient
 	private String sysResourceIds;
 
-	private Short status;
+	private Short status = STATUS_NORMAL;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;

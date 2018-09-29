@@ -36,7 +36,7 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 
 	@Value("${sys.user.default.session.key}")
-	private String default_session_key;
+	private String defaultSessionKey;
 
 	/**
 	 * 后台用户登录
@@ -61,7 +61,7 @@ public class AuthenticationController {
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-		session.setAttribute(default_session_key, sysUser);
+		session.setAttribute(defaultSessionKey, sysUser);
 
 		jsonResult.setData("index");
 		return jsonResult;
@@ -75,7 +75,7 @@ public class AuthenticationController {
 	 */
 	@PostMapping("/checkPassword")
 	public JsonResult checkPassword(HttpSession session, @RequestParam(required = false) String password) {
-		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		SysUser sysUser = (SysUser) session.getAttribute(defaultSessionKey);
 		if (sysUser == null) {
 			throw new UnauthorizedException(com.fanteng.core.HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
 		}

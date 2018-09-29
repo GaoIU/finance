@@ -24,19 +24,19 @@ public class SysResource implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** 后台资源状态：0-正常 */
-	public static final short status_normal = 0;
+	public static final short STATUS_NORMAL = 0;
 
 	/** 后台资源状态：1-禁用 */
-	public static final short status_disable = 1;
+	public static final short STATUS_DISABLE = 1;
 
 	/** 后台资源类型：0-菜单 */
-	public static final short type_menu = 0;
+	public static final short TYPE_MENU = 0;
 
 	/** 后台资源类型：1-按钮 */
-	public static final short type_button = 1;
+	public static final short TYPE_BUTTON = 1;
 
 	/** 后台资源类型：2-功能 */
-	public static final short type_function = 2;
+	public static final short TYPE_FUNCTION = 2;
 
 	@Id
 	private String id;
@@ -64,7 +64,7 @@ public class SysResource implements Serializable {
 
 	private Short sort = 0;
 
-	private Short status = status_normal;
+	private Short status = STATUS_NORMAL;
 
 	@NotNull(message = "请选择资源类型")
 	private Short type;

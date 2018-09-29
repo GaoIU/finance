@@ -41,10 +41,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	private SysUserRoleService sysUserRoleService;
 
 	@Value("${sys.user.default.avatar}")
-	private String default_avatar;
+	private String defaultAvatar;
 
 	@Value("${sys.default.server.url}")
-	private String sys_default_server_url;
+	private String sysDefaultServerUrl;
 
 	/**
 	 * 注册后台用户
@@ -83,7 +83,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 
 		password = EncryptUtil.encodeByBC(password);
 		sysUser.setPassword(password);
-		sysUser.setAvatar(default_avatar);
+		sysUser.setAvatar(defaultAvatar);
 		String sysUserId = save(sysUser).toString();
 
 		if (StringUtil.isNotBlank(sysUserId)) {
@@ -125,7 +125,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		SysUser sysUser = findOne("userName", Operation.EQ, userName);
 		if (sysUser != null) {
 			if (EncryptUtil.matchesByBC(password, sysUser.getPassword())) {
-				if (sysUser.getStatus() == SysUser.status_normal) {
+				if (sysUser.getStatus() == SysUser.STATUS_NORMAL) {
 					return new JsonResult(HttpStatus.OK, "登录成功，正在跳转...", sysUser);
 				}
 				throw new CustomException(HttpStatus.FORBIDDEN, "该用户已被禁用，请联系管理员");
@@ -222,10 +222,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	public JsonResult uploadAvatar(MultipartFile avatar, String sysUserId) throws Exception {
 		String path = FastDFSUtil.upload(avatar);
 		if (StringUtil.isNotBlank(path)) {
-			path = sys_default_server_url + path;
+			path = sysDefaultServerUrl + path;
 			SysUser sysUser = get(sysUserId);
 			String oldAvatar = sysUser.getAvatar();
-			String fileId = oldAvatar.replaceAll(sys_default_server_url, oldAvatar);
+			String fileId = oldAvatar.replaceAll(sysDefaultServerUrl, oldAvatar);
 			FastDFSUtil.delete(fileId);
 			sysUser.setAvatar(path);
 			update(sysUser);

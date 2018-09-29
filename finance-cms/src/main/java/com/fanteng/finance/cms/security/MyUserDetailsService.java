@@ -64,7 +64,9 @@ public class MyUserDetailsService implements UserDetailsService {
 	}
 
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-		List<SysResource> resources = sysResourceService.findOnes("url", Operation.EQ, request.getRequestURI());
+		String uri = request.getRequestURI();
+		String method = request.getMethod().toUpperCase();
+		List<SysResource> resources = sysResourceService.findOnes("url", Operation.EQ, uri);
 		if (CollectionUtils.isEmpty(resources)) {
 			throw new ResourceErrorException("无效的访问");
 		}
@@ -82,7 +84,8 @@ public class MyUserDetailsService implements UserDetailsService {
 					continue;
 				}
 
-				if (antPathMatcher.match(request.getRequestURI(), sysResource.getUrl())) {
+				if (antPathMatcher.match(uri, sysResource.getUrl())
+						&& StringUtil.equals(method, sysResource.getMethod())) {
 					hasPermission = true;
 					break;
 				}

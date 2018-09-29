@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,9 +23,6 @@ public class SysUserController {
 
 	@Autowired
 	private SysUserService sysUserService;
-
-	@Value("${sys.user.default.session.key}")
-	private String default_session_key;
 
 	/**
 	 * 跳转至后台用户列表页面

@@ -88,7 +88,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 
 			List<Condition> conditions = new ArrayList<Condition>(0);
 			Condition ids = new Condition("id", Operation.IN, sysRoleIds);
-			Condition status = new Condition("status", Operation.NE, SysRole.status_disable);
+			Condition status = new Condition("status", Operation.NE, SysRole.STATUS_DISABLE);
 			conditions.add(ids);
 			conditions.add(status);
 

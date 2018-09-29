@@ -142,8 +142,8 @@ public class SysResourceController {
 	@GetMapping("/view")
 	public JsonResult view() {
 		List<Condition> conditions = new ArrayList<Condition>(0);
-		Condition status = new Condition("status", Operation.EQ, SysResource.status_normal);
-		Condition type = new Condition("type", Operation.EQ, SysResource.type_menu);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+		Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
 		Condition parentId = new Condition("parentId", Operation.IS_NULL, null);
 		Condition sort = new Condition("sort", Operation.ASC, "sort");
 		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");

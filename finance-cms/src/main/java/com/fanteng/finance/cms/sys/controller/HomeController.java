@@ -34,7 +34,7 @@ import com.fanteng.finance.entity.SysUser;
 public class HomeController {
 
 	@Value("${sys.user.default.session.key}")
-	private String default_session_key;
+	private String defaultSessionKey;
 
 	@Autowired
 	private SysResourceService sysResourceService;
@@ -75,7 +75,7 @@ public class HomeController {
 	 */
 	@PostMapping("/index")
 	public JsonResult getMenu(HttpSession session) {
-		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		SysUser sysUser = (SysUser) session.getAttribute(defaultSessionKey);
 		if (sysUser == null) {
 			throw new UnauthorizedException("登录已过期，请重新登录");
 		}
@@ -94,12 +94,13 @@ public class HomeController {
 	@GetMapping("/sysUserInfo")
 	public ModelAndView sysUserInfo(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		SysUser sysUser = (SysUser) session.getAttribute(defaultSessionKey);
 		if (sysUser == null) {
 			throw new UnauthorizedException("登录已过期，请重新登录");
 		}
 
 		List<SysRole> list = sysRoleService.getSysRolesBySysUserId(sysUser.getId());
+		mav.addObject("sysUser", sysUserService.get(sysUser.getId()));
 		mav.addObject("roles", list);
 		mav.setViewName("/sys/user/userinfo");
 
@@ -131,7 +132,7 @@ public class HomeController {
 		boolean updateIgnore = sysUserService.updateIgnore(sysUser);
 		if (updateIgnore) {
 			sysUser = sysUserService.get(sysUser.getId());
-			session.setAttribute(default_session_key, sysUser);
+			session.setAttribute(defaultSessionKey, sysUser);
 			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", updateIgnore);
 		}
 		throw new CustomException(com.fanteng.core.HttpStatus.INTERNAL_SERVER_ERROR, "操作失败");
@@ -151,7 +152,7 @@ public class HomeController {
 		JsonResult jsonResult = sysUserService.uploadAvatar(avatar, sysUserId);
 		if (jsonResult.getCode() == com.fanteng.core.HttpStatus.OK) {
 			SysUser sysUser = (SysUser) jsonResult.getData();
-			session.setAttribute(default_session_key, sysUser);
+			session.setAttribute(defaultSessionKey, sysUser);
 			jsonResult.setData(sysUser.getAvatar());
 			return jsonResult;
 		}
@@ -166,7 +167,7 @@ public class HomeController {
 	 */
 	@GetMapping("/resetPwd")
 	public ModelAndView resetPwd(HttpSession session) {
-		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		SysUser sysUser = (SysUser) session.getAttribute(defaultSessionKey);
 		if (sysUser == null) {
 			throw new UnauthorizedException("登录已过期，请重新登录");
 		}
@@ -186,7 +187,7 @@ public class HomeController {
 	 */
 	@PostMapping("/resetPwd")
 	public JsonResult changePwd(HttpSession session, String password, String oldPwd) throws Exception {
-		SysUser sysUser = (SysUser) session.getAttribute(default_session_key);
+		SysUser sysUser = (SysUser) session.getAttribute(defaultSessionKey);
 		if (sysUser == null) {
 			throw new UnauthorizedException("登录已过期，请重新登录");
 		}

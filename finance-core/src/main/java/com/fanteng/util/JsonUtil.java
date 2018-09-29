@@ -12,7 +12,7 @@ import com.google.gson.JsonParser;
 
 public class JsonUtil {
 
-	private final static Gson gson = new Gson();
+	private final static Gson GSON = new Gson();
 
 	/**
 	 * Object转JSON
@@ -24,7 +24,7 @@ public class JsonUtil {
 		if (null == obj) {
 			return null;
 		}
-		return gson.toJson(obj);
+		return GSON.toJson(obj);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class JsonUtil {
 		if (StringUtil.isEmpty(json)) {
 			return null;
 		}
-		return gson.fromJson(json, cla);
+		return GSON.fromJson(json, cla);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class JsonUtil {
 		JsonParser parsers = new JsonParser();
 		JsonArray jsonArrays = parsers.parse(json).getAsJsonArray();
 		for (JsonElement jsonElement : jsonArrays) {
-			Map<?, ?> fromJson = gson.fromJson(jsonElement, Map.class);
+			Map<?, ?> fromJson = GSON.fromJson(jsonElement, Map.class);
 
 			Map<String, Object> map = new HashMap<>(0);
 			fromJson.forEach((k, v) -> {
