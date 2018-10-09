@@ -1,6 +1,7 @@
 layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	layForm = layui.form;
 	laydate = layui.laydate;
+	layer = layui.layer;
 	
 	var anim = Math.floor(Math.random() * 6 + 1);
 	var color;
@@ -74,14 +75,14 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	
 	$('.create').on('click', function() {
 		layer.open({
-			title: '添加后台资源',
+			title: '添加后台角色',
 			anim: anim,
 			type: 2,
 			area: ['100%', '100%'],
-			content: '/sysResource/gotoInfo',
+			content: '/sysRole/gotoInfo',
 			success: function(index, layero) {
 				setTimeout(function() {
-					layer.tips('点击此处返回后台资源列表', '.layui-layer-setwin .layui-layer-close', {
+					layer.tips('点击此处返回后台角色列表', '.layui-layer-setwin .layui-layer-close', {
 						tips: 3
 					});
 				}, 500);
@@ -116,6 +117,40 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	});
 });
 
+function dels(id) {
+	layer.load();
+	$.ajax({
+		url: '/sysResource?id=' + id,
+		type: 'DELETE',
+		dataType: 'JSON',
+		async: true,
+		success: function(res) {
+			layer.closeAll();
+			top.layer.msg(res.msg, {
+				icon: 6,
+				time: 1500
+			});
+			setTimeout(function() {
+				if(res.code == 200) {
+					$.each($('.oneChoose'), function(index, obj) {
+						var inp = $(obj).prev();
+						$(obj).removeClass('layui-form-checked');
+						$(inp).attr('checked', false);
+					});
+					queryList.find();
+				}
+			}, 2000);
+		},
+		error: function() {
+			layer.closeAll();
+			layer.msg('操作失败', {
+				icon: 5,
+				anim: 6
+			});
+		}
+	});
+}
+
 var pageShow = new Vue({
 	el: '#pageShow',
 	data: {
@@ -139,13 +174,6 @@ var pageShow = new Vue({
 	},
 	created: function() {
 		this.size = this.pagesizes[1].value;
-		if(this.total <= this.size) {
-			this.pagenumber = 1;
-		} else if((this.total % this.size) == 0) {
-			this.pagenumber = this.total / this.size;
-		} else {
-			this.pagenumber = this.total / this.size + 1;
-		}
 	},
 	methods: {
 		pageRefresh() {
@@ -155,6 +183,18 @@ var pageShow = new Vue({
 			this.size = size;
 			this.current = current;
 			queryList.find();
+		},
+		setPage(page) {
+			this.current = page.current;
+			this.size = page.size;
+			this.total = page.total;
+			if(page.total <= page.size) {
+				this.pagenumber = 1;
+			} else if((page.total % page.size) == 0) {
+				this.pagenumber = page.total / page.size;
+			} else {
+				this.pagenumber = Math.floor(page.total / page.size) + 1;
+			}
 		}
 	}
 });
@@ -184,9 +224,7 @@ var queryList = new Vue({
 			var URL = "/sysRole?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			$.get(URL, function(res) {
 				var json = res.data;
-				pageShow.current = json.page.current;
-				pageShow.size = json.page.size;
-				pageShow.total = json.page.total;
+				pageShow.setPage(json.page);
 				listSearch.condition = json.condition;
 				queryList.items = json.page.list;
 			});

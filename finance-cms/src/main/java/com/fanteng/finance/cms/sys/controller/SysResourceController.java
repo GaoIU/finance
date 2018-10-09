@@ -158,7 +158,21 @@ public class SysResourceController {
 	}
 
 	/**
-	 * 查看信息
+	 * 验证后台资源编码是否存在
+	 * 
+	 * @param code
+	 * @param sysResourceId
+	 * @return
+	 */
+	@PostMapping("/checkCode")
+	public JsonResult checkCode(String code, String sysResourceId) {
+		code = code.toUpperCase();
+		boolean checkCode = sysResourceService.checkCode(code, sysResourceId);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkCode);
+	}
+
+	/**
+	 * 查看树菜单信息
 	 * 
 	 * @param id
 	 * @return
@@ -178,7 +192,7 @@ public class SysResourceController {
 		conditions.add(createTime);
 
 		List<SysResource> list = sysResourceService.findAll(conditions);
-		List<Object> menu = sysResourceService.getMenu(list, "children");
+		List<Object> menu = sysResourceService.getMenu(list, "children", false);
 
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", menu);
 	}

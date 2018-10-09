@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fanteng.core.JsonResult;
 import com.fanteng.exception.UnauthorizedException;
-import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysUserService;
 import com.fanteng.finance.entity.SysUser;
 import com.fanteng.util.EncryptUtil;
@@ -28,9 +27,6 @@ public class AuthenticationController {
 
 	@Autowired
 	private SysUserService sysUserService;
-
-	@Autowired
-	private SysResourceService sysResourceService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -117,19 +113,6 @@ public class AuthenticationController {
 	public JsonResult checkUserName(String userName, String sysUserId) {
 		boolean checkUserName = sysUserService.checkUserName(userName, sysUserId);
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkUserName);
-	}
-
-	/**
-	 * 验证后台资源编码是否存在
-	 * 
-	 * @param code
-	 * @return
-	 */
-	@PostMapping("/checkCode")
-	public JsonResult checkCode(String code, String sysResourceId) {
-		code = code.toUpperCase();
-		boolean checkCode = sysResourceService.checkCode(code, sysResourceId);
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkCode);
 	}
 
 }

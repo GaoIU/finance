@@ -1,7 +1,6 @@
 layui.use(['form', 'layer'], function() {
 	form = layui.form;
 	layer = parent.layer === undefined ? layui.layer : top.layer;
-	treeselect = layui.treeselect;
 	
 	$.get("/sysResource/view", function(res) {
 		var json = res.data;
@@ -57,7 +56,7 @@ layui.use(['form', 'layer'], function() {
 			
 			var msg;
 			$.ajax({
-				url: '/checkCode',
+				url: '/sysResource/checkCode',
 				type: 'POST',
 				data: {
 					"code": value,
@@ -121,31 +120,25 @@ layui.use(['form', 'layer'], function() {
 
 function getMenu(data, menu) {
 	$.each(data, function(index, obj) {
+		var type;
+		if(obj.type == 0) {
+			type = "    <font style='color: green;'>[菜单]</font>";
+		} else if(obj.type == 1) {
+			type = "    <font style='color: orange;'>[按钮]</font>";
+		} else {
+			type = "    <font style='color: blue;'>[功能]</font>";
+		}
 		menu += "<li>";
 		if(obj.children.length) {
 			menu += "<i class='parent fa fa-hand-o-right'></i>";
-			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + "</cite></a>";
+			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + type + "</cite></a>";
 			menu += "<ul>";
-			menu = menuChild(obj.children, menu);
+			menu = getMenu(obj.children, menu);
 			menu += "</ul>";
 		} else {
-			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + "</cite></a>";
+			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + type + "</cite></a>";
 		}
 		menu += "</li>";
-	});
-	
-	return menu;
-}
-
-function menuChild(data, menu) {
-	$.each(data, function(index, obj) {
-		if(obj.children.length) {
-			getMenu(obj.children, menu);
-		} else {
-			menu += "<li>";
-			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + "</cite></a>";
-			menu += "</li>";
-		}
 	});
 	
 	return menu;

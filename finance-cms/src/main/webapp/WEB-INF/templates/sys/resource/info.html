@@ -131,7 +131,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">资源状态</label>
 				<div class="layui-input-block">
-					<input type="radio" name="status" value="0" title="正常"  <#if !info?? || info.status == 0>checked="checked"</#if>>
+					<input type="radio" name="status" value="0" title="正常" <#if !info?? || info.status == 0>checked="checked"</#if>>
 					<input type="radio" name="status" value="1" title="禁用" <#if info?? && info.status == 1>checked="checked"</#if>>
 				</div>
 			</div>
@@ -148,7 +148,6 @@
 	<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="/static/fontIconPicker-2.0.0/jquery.fonticonpicker.min.js"></script>
 	<script type="text/javascript" src="/static/js/vue.min.js"></script>
-	<script type="text/javascript" src="/static/js/moment.min.js"></script>
 	<script type="text/javascript" src="/static/layui/layui.js"></script>
 	<script type="text/javascript" src="/static/js/global.js"></script>
 	<script type="text/javascript" src="/static/js/sys/resource/info.js"></script>
