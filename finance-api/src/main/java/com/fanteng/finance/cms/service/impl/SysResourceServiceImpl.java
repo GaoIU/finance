@@ -184,15 +184,16 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	 * 
 	 * @param list
 	 * @param childName
+	 * @param isMenu
 	 * @return
 	 */
 	@Override
-	public List<Object> getMenu(List<SysResource> list, String childName) {
+	public List<Object> getMenu(List<SysResource> list, String childName, boolean isMenu) {
 		List<Object> menu = new ArrayList<>(0);
 		for (SysResource sysResource : list) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>(0);
 			map = BeanUtil.toMap(sysResource);
-			map.put(childName, menuChild(sysResource.getId(), childName));
+			map.put(childName, menuChild(sysResource.getId(), childName, isMenu));
 			menu.add(map);
 		}
 		return menu;
@@ -203,16 +204,17 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	 * 
 	 * @param id
 	 * @param childName
+	 * @param isMenu
 	 * @return
 	 */
-	private List<?> menuChild(String id, String childName) {
+	private List<?> menuChild(String id, String childName, boolean isMenu) {
 		List<Object> list = new ArrayList<>(0);
 
-		List<SysResource> menu = getMenuByParentId(id);
+		List<SysResource> menu = getMenuByParentId(id, isMenu);
 		for (SysResource sysResource : menu) {
 			Map<String, Object> child = new LinkedHashMap<String, Object>(0);
 			child = BeanUtil.toMap(sysResource);
-			child.put(childName, menuChild(sysResource.getId(), childName));
+			child.put(childName, getMenu(getMenuByParentId(sysResource.getId(), isMenu), childName, isMenu));
 			list.add(child);
 		}
 
@@ -235,6 +237,30 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		Condition parentId = new Condition("parentId", Operation.EQ, id);
 		conditions.add(status);
 		conditions.add(type);
+		conditions.add(sort);
+		conditions.add(createTime);
+		conditions.add(parentId);
+		return findAll(conditions);
+	}
+
+	/**
+	 * 根据父级ID查询菜单
+	 * 
+	 * @param id
+	 * @param isMenu
+	 * @return
+	 */
+	private List<SysResource> getMenuByParentId(String id, boolean isMenu) {
+		List<Condition> conditions = new ArrayList<Condition>(0);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+		Condition sort = new Condition("sort", Operation.ASC, "sort");
+		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
+		Condition parentId = new Condition("parentId", Operation.EQ, id);
+		if (isMenu) {
+			Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
+			conditions.add(type);
+		}
+		conditions.add(status);
 		conditions.add(sort);
 		conditions.add(createTime);
 		conditions.add(parentId);
@@ -360,6 +386,65 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 				sysRoleResourceService.delete(sysRoleResource);
 			}
 		}
+	}
+
+	/**
+	 * 获取权限
+	 * 
+	 * @param list
+	 * @return
+	 */
+	@Override
+	public List<Object> getPermission(List<SysResource> list) {
+		List<Object> menu = new ArrayList<>(0);
+		for (SysResource sysResource : list) {
+			Map<String, Object> map = new LinkedHashMap<String, Object>(0);
+			map = BeanUtil.toMap(sysResource);
+			map.put("children", menuChild(sysResource.getId()));
+			menu.add(map);
+		}
+		return menu;
+	}
+
+	/**
+	 * 获取权限子集
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private List<?> menuChild(String id) {
+		List<Object> list = new ArrayList<>(0);
+
+		List<SysResource> menu = getPermissionByParentId(id);
+		for (SysResource sysResource : menu) {
+			Map<String, Object> child = new LinkedHashMap<String, Object>(0);
+			child = BeanUtil.toMap(sysResource);
+			child.put("children", getPermission(getPermissionByParentId(sysResource.getId())));
+			list.add(child);
+		}
+
+		return list;
+	}
+
+	/**
+	 * 根据父级ID获取权限
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private List<SysResource> getPermissionByParentId(String id) {
+		List<Condition> conditions = new ArrayList<Condition>(0);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+		Condition sort = new Condition("sort", Operation.ASC, "sort");
+		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
+		Condition parentId = new Condition("parentId", Operation.EQ, id);
+		Condition type = new Condition("type", Operation.NE, SysResource.TYPE_FUNCTION);
+		conditions.add(type);
+		conditions.add(status);
+		conditions.add(sort);
+		conditions.add(createTime);
+		conditions.add(parentId);
+		return findAll(conditions);
 	}
 
 }

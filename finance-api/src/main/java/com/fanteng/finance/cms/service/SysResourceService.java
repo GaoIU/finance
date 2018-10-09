@@ -39,9 +39,10 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 * 
 	 * @param list
 	 * @param childName
+	 * @param isMenu
 	 * @return
 	 */
-	List<Object> getMenu(List<SysResource> list, String childName);
+	List<Object> getMenu(List<SysResource> list, String childName, boolean isMenu);
 
 	/**
 	 * 根据父级ID查询菜单
@@ -84,5 +85,13 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 * @param ids
 	 */
 	void del(String[] ids);
+
+	/**
+	 * 获取权限
+	 * 
+	 * @param list
+	 * @return
+	 */
+	List<Object> getPermission(List<SysResource> list);
 
 }

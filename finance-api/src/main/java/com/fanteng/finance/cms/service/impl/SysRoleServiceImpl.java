@@ -146,4 +146,44 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 		return new JsonResult(HttpStatus.OK, "操作成功", data);
 	}
 
+	/**
+	 * 验证角色编码
+	 * 
+	 * @param code
+	 * @param sysRoleId
+	 * @return
+	 */
+	@Override
+	public boolean checkCode(String code, String sysRoleId) {
+		boolean checkCode = checkPropertyName("code", code);
+		if (StringUtil.isNotBlank(sysRoleId)) {
+			SysRole sysRole = get(sysRoleId);
+			if (sysRole != null) {
+				if (StringUtil.equals(code, sysRole.getCode())) {
+					checkCode = false;
+				}
+			}
+		}
+
+		return checkCode;
+	}
+
+	/**
+	 * 验证属性字段是否存在
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	@Override
+	public boolean checkPropertyName(String propertyName, Object value) {
+		SysRole sysRole = findOne(propertyName, Operation.EQ, value);
+
+		if (sysRole != null) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

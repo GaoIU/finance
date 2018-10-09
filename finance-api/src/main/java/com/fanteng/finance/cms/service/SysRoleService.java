@@ -35,4 +35,22 @@ public interface SysRoleService extends BaseService<SysRole> {
 	 */
 	JsonResult queryList(Map<String, Object> params) throws Exception;
 
+	/**
+	 * 验证角色编码
+	 * 
+	 * @param code
+	 * @param sysRoleId
+	 * @return
+	 */
+	boolean checkCode(String code, String sysRoleId);
+
+	/**
+	 * 验证属性字段是否存在
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	boolean checkPropertyName(String propertyName, Object value);
+
 }
