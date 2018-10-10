@@ -399,8 +399,11 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		List<Object> menu = new ArrayList<>(0);
 		for (SysResource sysResource : list) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>(0);
-			map = BeanUtil.toMap(sysResource);
-			map.put("children", menuChild(sysResource.getId()));
+			map = BeanUtil.toMapIncludes(sysResource, "id, name, parentId");
+			if (map.get("parentId") == null) {
+				map.put("parentId", "0");
+			}
+			map.put("list", menuChild(sysResource.getId()));
 			menu.add(map);
 		}
 		return menu;
@@ -419,7 +422,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		for (SysResource sysResource : menu) {
 			Map<String, Object> child = new LinkedHashMap<String, Object>(0);
 			child = BeanUtil.toMap(sysResource);
-			child.put("children", getPermission(getPermissionByParentId(sysResource.getId())));
+			child.put("list", getPermission(getPermissionByParentId(sysResource.getId())));
 			list.add(child);
 		}
 
@@ -445,6 +448,23 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		conditions.add(createTime);
 		conditions.add(parentId);
 		return findAll(conditions);
+	}
+
+	/**
+	 * 根据角色ID获取所属资源ID
+	 * 
+	 * @param sysRoleId
+	 * @return
+	 */
+	@Override
+	public List<String> getIdsBySysRoleId(String sysRoleId) {
+		List<SysRoleResource> list = sysRoleResourceService.findOnes("sysRoleId", Operation.EQ, sysRoleId);
+
+		List<String> ids = new ArrayList<>(0);
+		for (SysRoleResource sysRoleResource : list) {
+			ids.add(sysRoleResource.getSysResourceId());
+		}
+		return ids;
 	}
 
 }
