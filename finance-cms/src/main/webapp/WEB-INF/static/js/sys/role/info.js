@@ -1,11 +1,31 @@
-layui.use(['form', 'layer'], function() {
+layui.use(['form', 'layer', 'authtree'], function() {
 	form = layui.form;
+	authtree = layui.authtree;
 	layer = parent.layer === undefined ? layui.layer : top.layer;
 	
 	$.post("/sysRole/getPermission", {
 		"sysRoleId": $('.id').val()
 	}, function(res) {
-		var json = res.data;
+		var json = res.data.permission;
+		var ids = res.data.ids;
+		
+		var permission = authtree.listConvert(json, {
+			primaryKey: 'id',
+			parentKey: 'parentId',
+			startPid: '0',
+			nameKey: 'name',
+			valueKey: 'id',
+			checkedKey: ids
+		});
+		
+		console.log(permission);
+		
+		authtree.render('#LAY-auth-tree-index', permission, {
+			inputname: 'sysResourceIds',
+			openchecked: true,
+			autowidth: true,
+			openall: true
+		});
 	});
 	
 	form.verify({
