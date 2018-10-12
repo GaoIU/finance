@@ -90,9 +90,10 @@ public interface SysResourceService extends BaseService<SysResource> {
 	 * 获取权限
 	 * 
 	 * @param list
+	 * @param ids
 	 * @return
 	 */
-	List<Object> getPermission(List<SysResource> list);
+	List<Object> getPermission(List<SysResource> list, List<String> ids);
 
 	/**
 	 * 根据角色ID获取所属资源ID

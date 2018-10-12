@@ -392,18 +392,26 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	 * 获取权限
 	 * 
 	 * @param list
+	 * @param ids
 	 * @return
 	 */
 	@Override
-	public List<Object> getPermission(List<SysResource> list) {
+	public List<Object> getPermission(List<SysResource> list, List<String> ids) {
 		List<Object> menu = new ArrayList<>(0);
 		for (SysResource sysResource : list) {
+			String sysResourceId = sysResource.getId();
 			Map<String, Object> map = new LinkedHashMap<String, Object>(0);
 			map = BeanUtil.toMapIncludes(sysResource, "id, name, parentId");
-			if (map.get("parentId") == null) {
-				map.put("parentId", "0");
+			map.put("checked", false);
+			if (CollectionUtils.isNotEmpty(ids)) {
+				for (String id : ids) {
+					if (StringUtil.equals(sysResourceId, id)) {
+						map.put("checked", true);
+					}
+				}
 			}
-			map.put("list", menuChild(sysResource.getId()));
+			map.put("list", menuChild(sysResourceId, ids));
+
 			menu.add(map);
 		}
 		return menu;
@@ -415,14 +423,23 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 	 * @param id
 	 * @return
 	 */
-	private List<?> menuChild(String id) {
+	private List<?> menuChild(String id, List<String> ids) {
 		List<Object> list = new ArrayList<>(0);
 
 		List<SysResource> menu = getPermissionByParentId(id);
 		for (SysResource sysResource : menu) {
+			String sysResourceId = sysResource.getId();
 			Map<String, Object> child = new LinkedHashMap<String, Object>(0);
-			child = BeanUtil.toMap(sysResource);
-			child.put("list", getPermission(getPermissionByParentId(sysResource.getId())));
+			child = BeanUtil.toMapIncludes(sysResource, "id, name, parentId");
+			child.put("checked", false);
+			if (CollectionUtils.isNotEmpty(ids)) {
+				for (String role : ids) {
+					if (StringUtil.equals(sysResourceId, role)) {
+						child.put("checked", true);
+					}
+				}
+			}
+			child.put("list", getPermission(getPermissionByParentId(sysResource.getId()), ids));
 			list.add(child);
 		}
 
