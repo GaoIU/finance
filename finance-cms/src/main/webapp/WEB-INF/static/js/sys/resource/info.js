@@ -128,14 +128,15 @@ function getMenu(data, menu) {
 		} else {
 			type = "    <font style='color: blue;'>[功能]</font>";
 		}
-		menu += "<li>";
 		if(obj.children.length) {
+			menu += "<li>";
 			menu += "<i class='parent fa fa-hand-o-right'></i>";
 			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + type + "</cite></a>";
 			menu += "<ul>";
 			menu = getMenu(obj.children, menu);
 			menu += "</ul>";
 		} else {
+			menu += "<li style='margin-left: 20px;'>";
 			menu += "<a href='javascript:;' lay-filter='" + obj.id + "'><i class='" + obj.icon + "'></i><cite>" + obj.name + type + "</cite></a>";
 		}
 		menu += "</li>";

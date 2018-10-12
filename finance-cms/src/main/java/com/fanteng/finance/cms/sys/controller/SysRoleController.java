@@ -1,7 +1,6 @@
 package com.fanteng.finance.cms.sys.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -120,17 +119,13 @@ public class SysRoleController {
 		conditions.add(createTime);
 
 		List<SysResource> list = sysResourceService.findAll(conditions);
-		List<Object> permission = sysResourceService.getPermission(list);
 		List<String> ids = new ArrayList<>(0);
 		if (StringUtil.isNotBlank(sysRoleId)) {
 			ids = sysResourceService.getIdsBySysRoleId(sysRoleId);
 		}
+		List<Object> permission = sysResourceService.getPermission(list, ids);
 
-		Map<String, Object> data = new HashMap<>(0);
-		data.put("permission", permission);
-		data.put("ids", ids);
-
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", data);
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", permission);
 	}
 
 }
