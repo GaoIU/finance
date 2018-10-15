@@ -59,7 +59,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 
 				if (ArrayUtils.isNotEmpty(sysResourceIds)) {
 					for (String sysResourceId : sysResourceIds) {
-						SysRoleResource sysRoleResource = new SysRoleResource(sysResourceId, sysRoleId);
+						SysRoleResource sysRoleResource = new SysRoleResource(sysResourceId.trim(), sysRoleId);
 						sysRoleResourceService.save(sysRoleResource);
 					}
 				}
