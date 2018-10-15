@@ -113,9 +113,9 @@ layui.use(['form', 'layer'], function() {
 				});
 			}
 		});
+		
+		return false;
 	});
-	
-	return false;
 });
 
 function getMenu(data, menu) {
