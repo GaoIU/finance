@@ -21,6 +21,10 @@ public interface BaseService<T> {
 
 	boolean updateIgnore(T entity);
 
+	boolean updateIgnoreByFiters(T entity, String fiters);
+
+	boolean updateIgnoreByIncludes(T entity, String includes);
+
 	boolean checkUpdate(Serializable id, Timestamp updateTime);
 
 	boolean delete(T entity);
@@ -48,15 +52,15 @@ public interface BaseService<T> {
 	int getCount(Class<T> entityClass);
 
 	T findOne(String propertyName, Operation operation, Object value);
-	
+
 	T findOne(String propertyName, Operation operation, Object value, String properties);
 
 	T findOne(List<Condition> conditions);
-	
+
 	T findOne(List<Condition> conditions, String properties);
 
 	List<T> findOnes(String propertyName, Operation operation, Object value);
-	
+
 	List<T> findOnes(String propertyName, Operation operation, Object value, String properties);
 
 	List<T> queryAll(String sql, Map<String, Object> param);

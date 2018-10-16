@@ -45,6 +45,18 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 		return baseDao.updateIgnore(entity);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean updateIgnoreByFiters(T entity, String fiters) {
+		return baseDao.updateIgnoreByFiters(entity, fiters);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean updateIgnoreByIncludes(T entity, String includes) {
+		return baseDao.updateIgnoreByIncludes(entity, includes);
+	}
+
 	@Override
 	public boolean checkUpdate(Serializable id, Timestamp updateTime) {
 		return baseDao.checkUpdate(id, updateTime);

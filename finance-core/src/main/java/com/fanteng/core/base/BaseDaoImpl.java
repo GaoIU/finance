@@ -142,6 +142,66 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public boolean updateIgnoreByFiters(T entity, String fiters) {
+		String className = entity.getClass().getName();
+		ReflectionKit.setMethodValue(entity, "updateTime", new Timestamp(System.currentTimeMillis()));
+		Map<String, Object> map = BeanUtil.toMapFiters(entity, fiters);
+		StringBuffer sb = new StringBuffer("update " + className + " t set");
+		map.forEach((k, v) -> {
+			if (!StringUtil.equals("id", k) && StringUtil.isNotEmpty(v)) {
+				sb.append(" t." + k + " = :" + k + ",");
+			}
+		});
+
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append(" where t.id = :id");
+
+		Query<?> query = getSession().createQuery(sb.toString());
+		map.forEach((k, v) -> {
+			if (StringUtil.isNotEmpty(v)) {
+				query.setParameter(k, v);
+			}
+		});
+
+		int execute = query.executeUpdate();
+		if (execute > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean updateIgnoreByIncludes(T entity, String includes) {
+		String className = entity.getClass().getName();
+		ReflectionKit.setMethodValue(entity, "updateTime", new Timestamp(System.currentTimeMillis()));
+		Map<String, Object> map = BeanUtil.toMapIncludes(entity, includes);
+		StringBuffer sb = new StringBuffer("update " + className + " t set");
+		map.forEach((k, v) -> {
+			if (!StringUtil.equals("id", k) && StringUtil.isNotEmpty(v)) {
+				sb.append(" t." + k + " = :" + k + ",");
+			}
+		});
+
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append(" where t.id = :id");
+
+		Query<?> query = getSession().createQuery(sb.toString());
+		map.forEach((k, v) -> {
+			if (StringUtil.isNotEmpty(v)) {
+				query.setParameter(k, v);
+			}
+		});
+
+		int execute = query.executeUpdate();
+		if (execute > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean checkUpdate(Serializable id, Timestamp updateTime) {
 		T t = get(id);
 		if (t != null) {
@@ -191,9 +251,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
-		
+
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
 	}
@@ -214,9 +274,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
-		
+
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
 		return list;
 	}
@@ -348,7 +408,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
-		
+
 		criteria.setProjection(Projections.rowCount());
 		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
 		int totle = 0;
@@ -356,7 +416,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			totle = ((Number) object).intValue();
 		}
 		criteria.setProjection(null);
-		
+
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		Page page = new Page(current, size, totle, list);
@@ -376,7 +436,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
-		
+
 		criteria.setProjection(Projections.rowCount());
 		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
 		int totle = 0;
@@ -394,9 +454,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
-		
+
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		Page page = new Page(current, size, totle, list);
@@ -416,7 +476,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
-		
+
 		criteria.setProjection(Projections.rowCount());
 		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
 		int totle = 0;
@@ -424,7 +484,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			totle = ((Number) object).intValue();
 		}
 		criteria.setProjection(null);
-		
+
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		Page page = new Page(current, size, totle, list);
@@ -445,7 +505,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (Condition condition : conditions) {
 			addCondition(criteria, condition);
 		}
-		
+
 		criteria.setProjection(Projections.rowCount());
 		Object object = criteria.getExecutableCriteria(getSession()).uniqueResult();
 		int totle = 0;
@@ -463,9 +523,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
-		
+
 		List<?> list = getTemplate().findByCriteria(criteria, (current - 1) * size, size);
 
 		Page page = new Page(current, size, totle, list);
@@ -556,7 +616,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 
 		List<?> list = getTemplate().findByCriteria(criteria);
@@ -596,7 +656,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 
 		List<?> list = getTemplate().findByCriteria(criteria);
@@ -630,7 +690,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			criteria.setProjection(projectionList);
 		}
-		
+
 		criteria.setResultTransformer(Transformers.aliasToBean(clazz));
 
 		List<T> list = (List<T>) getTemplate().findByCriteria(criteria);
