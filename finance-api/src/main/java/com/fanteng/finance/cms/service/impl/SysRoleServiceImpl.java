@@ -2,6 +2,7 @@ package com.fanteng.finance.cms.service.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,11 @@ import com.fanteng.core.Operation;
 import com.fanteng.core.Page;
 import com.fanteng.core.base.BaseServiceImpl;
 import com.fanteng.finance.cms.dao.SysRoleDao;
+import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysRoleResourceService;
 import com.fanteng.finance.cms.service.SysRoleService;
 import com.fanteng.finance.cms.service.SysUserRoleService;
+import com.fanteng.finance.entity.SysResource;
 import com.fanteng.finance.entity.SysRole;
 import com.fanteng.finance.entity.SysRoleResource;
 import com.fanteng.finance.entity.SysUserRole;
@@ -39,6 +42,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
 
+	@Autowired
+	private SysResourceService sysResourceService;
+
 	/**
 	 * 添加后台角色
 	 * 
@@ -50,15 +56,20 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 	@Override
 	public JsonResult register(SysRole sysRole) throws Exception {
 		String code = sysRole.getCode().toUpperCase();
+		boolean checkCode = checkCode(code, sysRole.getId());
+		if (checkCode) {
+			return new JsonResult(HttpStatus.BAD_REQUEST, "该角色编码已被使用");
+		}
 		sysRole.setCode(code);
 		String sysRoleId = save(sysRole).toString();
 
 		if (StringUtil.isNotBlank(sysRoleId)) {
 			if (StringUtil.isNotBlank(sysRole.getSysResourceIds())) {
 				String[] sysResourceIds = sysRole.getSysResourceIds().split(",");
+				List<String> ids = getSysResourceIds(sysResourceIds);
 
-				if (ArrayUtils.isNotEmpty(sysResourceIds)) {
-					for (String sysResourceId : sysResourceIds) {
+				if (CollectionUtils.isNotEmpty(ids)) {
+					for (String sysResourceId : ids) {
 						SysRoleResource sysRoleResource = new SysRoleResource(sysResourceId.trim(), sysRoleId);
 						sysRoleResourceService.save(sysRoleResource);
 					}
@@ -69,6 +80,35 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 		}
 
 		return new JsonResult(HttpStatus.INTERNAL_SERVER_ERROR, "操作失败");
+	}
+
+	/**
+	 * 获取功能权限
+	 * 
+	 * @param sysResourceIds
+	 * @return
+	 */
+	private List<String> getSysResourceIds(String[] sysResourceIds) {
+		List<String> idlist = new ArrayList<>(sysResourceIds.length);
+		if (ArrayUtils.isNotEmpty(sysResourceIds)) {
+			Collections.addAll(idlist, sysResourceIds);
+
+			List<Condition> conditions = new ArrayList<>(0);
+			Condition parentId = new Condition("parentId", Operation.IN, idlist);
+			Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_FUNCTION);
+			Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+			conditions.add(parentId);
+			conditions.add(type);
+			conditions.add(status);
+
+			List<SysResource> list = sysResourceService.findAll("id", conditions);
+			if (CollectionUtils.isNotEmpty(list)) {
+				for (SysResource sysResource : list) {
+					idlist.add(sysResource.getId());
+				}
+			}
+		}
+		return idlist;
 	}
 
 	/**
@@ -184,6 +224,71 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 		}
 
 		return false;
+	}
+
+	/**
+	 * 修改后台角色
+	 * 
+	 * @param sysRole
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult edit(SysRole sysRole) {
+		boolean b = updateIgnoreByFiters(sysRole, "sysResourceIds");
+		if (b) {
+			List<SysRoleResource> list = sysRoleResourceService.findOnes("sysRoleId", Operation.EQ, sysRole.getId());
+			if (CollectionUtils.isNotEmpty(list)) {
+				for (SysRoleResource sysRoleResource : list) {
+					sysRoleResourceService.delete(sysRoleResource);
+				}
+			}
+
+			if (StringUtil.isNotBlank(sysRole.getSysResourceIds())) {
+				String[] ids = sysRole.getSysResourceIds().split(",");
+				List<String> idlist = getSysResourceIds(ids);
+
+				for (String sysResourceId : idlist) {
+					SysRoleResource sysRoleResource = new SysRoleResource(sysResourceId.trim(), sysRole.getId());
+					sysRoleResourceService.save(sysRoleResource);
+				}
+			}
+		}
+
+		return new JsonResult(HttpStatus.OK, "操作成功");
+	}
+
+	/**
+	 * 删除后台角色
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult del(String[] ids) {
+		for (String id : ids) {
+			delete(id.trim());
+		}
+
+		List<String> idlist = new ArrayList<>(ids.length);
+		Collections.addAll(idlist, ids);
+
+		List<SysRoleResource> srrs = sysRoleResourceService.findOnes("sysRoleId", Operation.IN, idlist);
+		if (CollectionUtils.isNotEmpty(srrs)) {
+			for (SysRoleResource sysRoleResource : srrs) {
+				sysRoleResourceService.delete(sysRoleResource);
+			}
+		}
+
+		List<SysUserRole> surs = sysUserRoleService.findOnes("sysRoleId", Operation.IN, idlist);
+		if (CollectionUtils.isNotEmpty(surs)) {
+			for (SysUserRole sysUserRole : surs) {
+				sysUserRoleService.delete(sysUserRole);
+			}
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
 	}
 
 }

@@ -53,4 +53,20 @@ public interface SysRoleService extends BaseService<SysRole> {
 	 */
 	boolean checkPropertyName(String propertyName, Object value);
 
+	/**
+	 * 修改后台角色
+	 * 
+	 * @param sysRole
+	 * @return
+	 */
+	JsonResult edit(SysRole sysRole);
+
+	/**
+	 * 删除后台角色
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	JsonResult del(String[] ids);
+
 }
