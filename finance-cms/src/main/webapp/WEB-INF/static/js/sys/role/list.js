@@ -107,6 +107,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 					}
 					id += $(obj).val();
 				});
+				dels(id);
 			});
 		} else {
 			layer.msg('您还没有选择要操作的数据', {
@@ -120,7 +121,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 function dels(id) {
 	layer.load();
 	$.ajax({
-		url: '/sysResource?id=' + id,
+		url: '/sysRole?id=' + id,
 		type: 'DELETE',
 		dataType: 'JSON',
 		async: true,
@@ -270,6 +271,106 @@ var queryList = new Vue({
 					$(obj).addClass('layui-form-checked');
 					$(inp).attr('checked', true);
 				}
+			});
+		},
+		edit(id, code) {
+			if(code == 'ADMINISTRATOR') {
+				layer.msg('超级管理员不可被修改', {
+					icon: 5,
+					anim: 6
+				});
+				
+				return false;
+			}
+			
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.open({
+				title: '修改后台角色',
+				anim: anim,
+				type: 2,
+				area: ['100%', '100%'],
+				content: '/sysRole/gotoInfo?id=' + id,
+				success: function(index, layero) {
+					setTimeout(function() {
+						layer.tips('点击此处返回后台角色列表', '.layui-layer-setwin .layui-layer-close', {
+							tips: 3
+						});
+					}, 500);
+				}
+			});
+		},
+		usable(id, code, status) {
+			if(code == 'ADMINISTRATOR') {
+				layer.msg('超级管理员不可被禁用', {
+					icon: 5,
+					anim: 6
+				});
+				
+				return false;
+			}
+			
+			var anim = Math.floor(Math.random() * 6 + 1);
+			var msg;
+			if (status == 0) {
+				msg = "是否确认启用？";
+			} else {
+				msg = "该操作可能使部分功能不可用，是否确认执行？";
+			}
+			layer.confirm(msg, {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+				layer.load();
+				var param = {"id": id, "status": status};
+				$.ajax({
+					url: '/sysRole/usable',
+					type: 'PUT',
+					data: JSON.stringify(param),
+					dataType: 'JSON',
+					contentType: 'application/json;charset=UTF-8',
+					async: true,
+					success: function(res) {
+						layer.closeAll();
+						top.layer.msg(res.msg, {
+							icon: 6,
+							time: 1500
+						});
+						setTimeout(function() {
+							if(res.code == 200) {
+								queryList.find();
+							}
+						}, 2000);
+					},
+					error: function() {
+						layer.closeAll();
+						layer.msg('操作失败', {
+							icon: 5,
+							anim: 6
+						});
+					}
+				});
+			});
+		},
+		del(id, code) {
+			if(code == 'ADMINISTRATOR') {
+				layer.msg('超级管理员不可被修改', {
+					icon: 5,
+					anim: 6
+				});
+				
+				return false;
+			}
+			
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.confirm('该操作不可逆，是否确认执行？', {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+				dels(id);
 			});
 		}
 	}

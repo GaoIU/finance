@@ -80,27 +80,34 @@ layui.use(['form', 'layer'], function() {
 	});
 	
 	form.on("submit(create)", function(data) {
-		var index = top.layer.load();
-		var type;
-		if(data.field.id) {
-			type = 'PUT';
-		} else {
-			type = 'POST';
-		}
-		
 		var boxs = $("#LAY-auth-tree-index").find('.box-title');
 		var sysResourceIds = "";
 		$.each(boxs, function(index, obj) {
-			var icon = $(obj).find('i').eq(0);
-			if($(obj).hasClass('layui-form-checked') && icon.hasClass('layui-icon-ok')) {
+			if($(obj).hasClass('layui-form-checked')) {
 				if(index != 0 && sysResourceIds.length) {
 					sysResourceIds += ",";
 				}
 				sysResourceIds += $(obj).attr('lay-filter');
 			}
 		});
+		
+		if(!sysResourceIds.length) {
+			layer.msg('请选择权限范围', {
+				icon: 5,
+				anim: 6
+			});
+			return false;
+		}
+		
+		var index = top.layer.load();
+		
 		data.field['sysResourceIds'] = sysResourceIds;
-		console.log(data.field);
+		var type;
+		if(data.field.id) {
+			type = 'PUT';
+		} else {
+			type = 'POST';
+		}
 		
 		$.ajax({
 			url: '/sysRole',
@@ -152,11 +159,16 @@ function authtree(tree, menu) {
 			} else if(i < obj.list.length) {
 				icon = "layui-icon-add-1";
 			} else {
-				icon = "layui-icon-ok";
+				i = checkChild(obj.list);
+				if(i > 0) {
+					icon = "layui-icon-add-1";
+				} else {
+					icon = "layui-icon-ok";
+				}
 			}
 		}
-
-		if(obj.checked) {
+		
+		if(obj.checked && !obj.list.length) {
 			icon = "layui-icon-ok";
 		}
 
@@ -179,6 +191,35 @@ function authtree(tree, menu) {
 	});
 
 	return menu;
+}
+
+function checkChild(child) {
+	var i = 0;
+	var j = 0;
+	$.each(child, function(index, item) {
+		if(item.list.length) {
+			i = checkMenu(item.list, 0);
+		}
+		
+		if(i > 0) {
+			j += i;
+		}
+	});
+
+	return j;
+}
+
+function checkMenu(menu, i) {
+	$.each(menu, function(index, item) {
+		if(!item.checked) {
+			i++;
+		}
+		if(i == 0 && item.list.length) {
+			checkMenu(item.list, i);
+		}
+	});
+	
+	return i;
 }
 
 function checkedAll(li) {

@@ -6,9 +6,13 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fanteng.core.Condition;
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
+import com.fanteng.exception.CustomException;
 import com.fanteng.exception.ParamErrorException;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysRoleService;
@@ -35,6 +40,9 @@ public class SysRoleController {
 	@Autowired
 	private SysResourceService sysResourceService;
 
+	@Value("${sys.role.admin.code}")
+	private String ADMINISTRATOR;
+
 	/**
 	 * 添加后台角色
 	 * 
@@ -45,6 +53,53 @@ public class SysRoleController {
 	@PostMapping
 	public JsonResult register(@Valid @RequestBody SysRole sysRole) throws Exception {
 		return sysRoleService.register(sysRole);
+	}
+
+	/**
+	 * 修改后台角色
+	 * 
+	 * @param sysRole
+	 * @return
+	 */
+	@PutMapping
+	public JsonResult edit(@Valid @RequestBody SysRole sysRole) {
+		String code = sysRole.getCode().toUpperCase();
+		boolean checkCode = sysRoleService.checkCode(code, sysRole.getId());
+		if (checkCode) {
+			return new JsonResult(com.fanteng.core.HttpStatus.BAD_REQUEST, "该角色编码已被使用");
+		}
+
+		if (StringUtil.equals(ADMINISTRATOR, code)) {
+			return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "超级管理员不可被修改");
+		}
+
+		return sysRoleService.edit(sysRole);
+	}
+
+	/**
+	 * 删除后台角色
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping
+	public JsonResult del(String id) {
+		if (StringUtil.isBlank(id)) {
+			throw new ParamErrorException("无效参数");
+		}
+		String[] ids = id.split(",");
+		if (ArrayUtils.isEmpty(ids)) {
+			throw new ParamErrorException("无效参数");
+		}
+
+		for (String sysRoleId : ids) {
+			SysRole sysRole = sysRoleService.get(sysRoleId);
+			if (sysRole != null && StringUtil.equals(ADMINISTRATOR, sysRole.getCode())) {
+				throw new CustomException(com.fanteng.core.HttpStatus.ACCEPTED, "超级管理员不可被删除");
+			}
+		}
+
+		return sysRoleService.del(ids);
 	}
 
 	/**
@@ -85,6 +140,10 @@ public class SysRoleController {
 				throw new ParamErrorException("非法请求");
 			}
 
+			if (StringUtil.equals(ADMINISTRATOR, sysRole.getCode())) {
+				throw new CustomException(com.fanteng.core.HttpStatus.ACCEPTED, "超级管理员不可被修改");
+			}
+
 			mav.addObject("info", sysRole);
 		}
 		return mav;
@@ -104,6 +163,12 @@ public class SysRoleController {
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", checkCode);
 	}
 
+	/**
+	 * 获取角色权限
+	 * 
+	 * @param sysRoleId
+	 * @return
+	 */
 	@PostMapping("/getPermission")
 	public JsonResult getPermission(String sysRoleId) {
 		List<Condition> conditions = new ArrayList<Condition>(0);

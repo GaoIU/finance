@@ -131,7 +131,8 @@
 									<template v-if="items.length">
 										<tr v-for="item in items">
 											<td>
-												<input name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
+												<input v-if="item.code != 'ADMINISTRATOR'" name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
+												<input v-else name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" disabled="disabled" />
 												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 											</td>
 											<td><span :title="item.name">{{ item.name }}</span></td>
@@ -141,9 +142,10 @@
 											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
 											<td>
 												<div class="layui-table-cell laytable-cell-1-7">
-													<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-													<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
-													<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+													<a @click="edit(item.id, item.code)" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+													<a v-if="item.status === 0" @click="usable(item.id, item.code, 1)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
+													<a v-else @click="usable(item.id, item.code, 0)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">启用</a>
+													<a @click="del(item.id, item.code)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
 												</div>
 											</td>
 										</tr>
