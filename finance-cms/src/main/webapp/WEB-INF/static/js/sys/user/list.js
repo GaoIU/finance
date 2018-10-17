@@ -74,14 +74,14 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	
 	$('.create').on('click', function() {
 		layer.open({
-			title: '添加后台资源',
+			title: '添加后台用户',
 			anim: anim,
 			type: 2,
 			area: ['100%', '100%'],
-			content: '/sysResource/gotoInfo',
+			content: '/sysUser/gotoInfo',
 			success: function(index, layero) {
 				setTimeout(function() {
-					layer.tips('点击此处返回后台资源列表', '.layui-layer-setwin .layui-layer-close', {
+					layer.tips('点击此处返回后台用户列表', '.layui-layer-setwin .layui-layer-close', {
 						tips: 3
 					});
 				}, 500);
@@ -105,6 +105,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 						id += ",";
 					}
 					id += $(obj).val();
+					dels(id);
 				});
 			});
 		} else {
@@ -115,6 +116,40 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 		}
 	});
 });
+
+function dels(id) {
+	layer.load();
+	$.ajax({
+		url: '/sysUser?id=' + id,
+		type: 'DELETE',
+		dataType: 'JSON',
+		async: true,
+		success: function(res) {
+			layer.closeAll();
+			top.layer.msg(res.msg, {
+				icon: 6,
+				time: 1500
+			});
+			setTimeout(function() {
+				if(res.code == 200) {
+					$.each($('.oneChoose'), function(index, obj) {
+						var inp = $(obj).prev();
+						$(obj).removeClass('layui-form-checked');
+						$(inp).attr('checked', false);
+					});
+					queryList.find();
+				}
+			}, 2000);
+		},
+		error: function() {
+			layer.closeAll();
+			layer.msg('操作失败', {
+				icon: 5,
+				anim: 6
+			});
+		}
+	});
+}
 
 var pageShow = new Vue({
 	el: '#pageShow',
@@ -232,6 +267,79 @@ var queryList = new Vue({
 					$(obj).addClass('layui-form-checked');
 					$(inp).attr('checked', true);
 				}
+			});
+		},
+		edit(id) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.open({
+				title: '修改后台用户',
+				anim: anim,
+				type: 2,
+				area: ['100%', '100%'],
+				content: '/sysUser/gotoInfo?id=' + id,
+				success: function(index, layero) {
+					setTimeout(function() {
+						layer.tips('点击此处返回后台用户列表', '.layui-layer-setwin .layui-layer-close', {
+							tips: 3
+						});
+					}, 500);
+				}
+			});
+		},
+		usable(id, status) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			var msg;
+			if (status == 0) {
+				msg = "是否确认启用？";
+			} else {
+				msg = "该操作会使该用户不可用，是否确认执行？";
+			}
+			layer.confirm(msg, {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+				layer.load();
+				var param = {"id": id, "status": status};
+				$.ajax({
+					url: '/sysUser/usable',
+					type: 'PUT',
+					data: JSON.stringify(param),
+					dataType: 'JSON',
+					contentType: 'application/json;charset=UTF-8',
+					async: true,
+					success: function(res) {
+						layer.closeAll();
+						top.layer.msg(res.msg, {
+							icon: 6,
+							time: 1500
+						});
+						setTimeout(function() {
+							if(res.code == 200) {
+								queryList.find();
+							}
+						}, 2000);
+					},
+					error: function() {
+						layer.closeAll();
+						layer.msg('操作失败', {
+							icon: 5,
+							anim: 6
+						});
+					}
+				});
+			});
+		},
+		del(id) {
+			var anim = Math.floor(Math.random() * 6 + 1);
+			layer.confirm('该操作不可逆，是否确认执行？', {
+				icon: 3,
+				anim: anim,
+				title: '提示'
+			}, function(index) {
+				layer.close(index);
+				dels(id);
 			});
 		}
 	}

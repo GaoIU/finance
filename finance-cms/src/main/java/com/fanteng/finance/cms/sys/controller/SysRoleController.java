@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -191,6 +192,28 @@ public class SysRoleController {
 		List<Object> permission = sysResourceService.getPermission(list, ids);
 
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", permission);
+	}
+
+	/**
+	 * 启用或者禁用后台角色
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@PutMapping("/usable")
+	public JsonResult usable(@RequestBody Map<String, Object> param) {
+		String id = MapUtils.getString(param, "id");
+		Short status = MapUtils.getShort(param, "status");
+		if (StringUtil.isBlank(id) || status == null) {
+			throw new ParamErrorException("无效参数");
+		}
+
+		boolean usable = sysRoleService.usable(id, status);
+		if (usable) {
+			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", usable);
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
 	}
 
 }

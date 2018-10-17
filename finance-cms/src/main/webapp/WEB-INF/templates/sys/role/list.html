@@ -131,8 +131,8 @@
 									<template v-if="items.length">
 										<tr v-for="item in items">
 											<td>
-												<input v-if="item.code != 'ADMINISTRATOR'" name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
-												<input v-else name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" disabled="disabled" />
+												<input v-if="item.code === 'ADMINISTRATOR'" name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" disabled="disabled" />
+												<input v-else name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
 												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 											</td>
 											<td><span :title="item.name">{{ item.name }}</span></td>

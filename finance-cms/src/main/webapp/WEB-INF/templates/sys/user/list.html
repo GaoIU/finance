@@ -151,9 +151,10 @@
 											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
 											<td>
 												<div class="layui-table-cell laytable-cell-1-7">
-													<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-													<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
-													<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+													<a @click="edit(item.id)" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+													<a v-if="item.status === 0" @click="usable(item.id, 1)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
+													<a v-else @click="usable(item.id, 0)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">启用</a>
+													<a @click="del(item.id)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
 												</div>
 											</td>
 										</tr>
