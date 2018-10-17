@@ -93,4 +93,29 @@ public interface SysUserService extends BaseService<SysUser> {
 	 */
 	boolean checkUserName(String userName, String sysUserId);
 
+	/**
+	 * 启用或者禁用后台用户
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	boolean usable(String id, Short status);
+
+	/**
+	 * 修改后台用户
+	 * 
+	 * @param sysUser
+	 * @return
+	 */
+	JsonResult edit(SysUser sysUser);
+
+	/**
+	 * 删除后台用户
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	JsonResult del(String[] ids);
+
 }

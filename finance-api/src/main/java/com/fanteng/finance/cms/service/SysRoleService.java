@@ -69,4 +69,13 @@ public interface SysRoleService extends BaseService<SysRole> {
 	 */
 	JsonResult del(String[] ids);
 
+	/**
+	 * 启用或者禁用后台角色
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	boolean usable(String id, Short status);
+
 }

@@ -21,6 +21,7 @@ import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
 import com.fanteng.core.Page;
 import com.fanteng.core.base.BaseServiceImpl;
+import com.fanteng.exception.ParamErrorException;
 import com.fanteng.finance.cms.dao.SysRoleDao;
 import com.fanteng.finance.cms.service.SysResourceService;
 import com.fanteng.finance.cms.service.SysRoleResourceService;
@@ -128,7 +129,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 
 			List<Condition> conditions = new ArrayList<Condition>(0);
 			Condition ids = new Condition("id", Operation.IN, sysRoleIds);
-			Condition status = new Condition("status", Operation.NE, SysRole.STATUS_DISABLE);
+			Condition status = new Condition("status", Operation.EQ, SysRole.STATUS_NORMAL);
 			conditions.add(ids);
 			conditions.add(status);
 
@@ -289,6 +290,26 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleDao, SysRole> imp
 		}
 
 		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
+	}
+
+	/**
+	 * 启用或者禁用后台角色
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean usable(String id, Short status) {
+		SysRole sysRole = get(id);
+		if (sysRole == null) {
+			throw new ParamErrorException("非法请求");
+		}
+
+		sysRole.setStatus(status);
+
+		return update(sysRole);
 	}
 
 }

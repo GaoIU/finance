@@ -154,18 +154,17 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 			return findAll(conditions);
 		}
 
-		List<SysUserRole> sysUserRoles = sysUserRoleService.findOnes("sysUserId", Operation.EQ, sysUserId);
-		if (CollectionUtils.isNotEmpty(sysUserRoles)) {
+		if (CollectionUtils.isNotEmpty(sysRoles)) {
 			List<String> sysRoleIds = new ArrayList<String>(0);
-			for (SysUserRole sysUserRole : sysUserRoles) {
-				sysRoleIds.add(sysUserRole.getSysRoleId());
+			for (SysRole sysRole : sysRoles) {
+				sysRoleIds.add(sysRole.getId());
 			}
 
-			List<SysRoleResource> sysRoleResourceIds = sysRoleResourceService.findOnes("sysRoleId", Operation.IN,
+			List<SysRoleResource> sysRoleResources = sysRoleResourceService.findOnes("sysRoleId", Operation.IN,
 					sysRoleIds);
-			if (CollectionUtils.isNotEmpty(sysRoleResourceIds)) {
+			if (CollectionUtils.isNotEmpty(sysRoleResources)) {
 				List<String> sysResourceIds = new ArrayList<String>(0);
-				for (SysRoleResource sysRoleResource : sysRoleResourceIds) {
+				for (SysRoleResource sysRoleResource : sysRoleResources) {
 					sysResourceIds.add(sysRoleResource.getSysResourceId());
 				}
 
@@ -256,10 +255,12 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 		Condition sort = new Condition("sort", Operation.ASC, "sort");
 		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
 		Condition parentId = new Condition("parentId", Operation.EQ, id);
+
 		if (isMenu) {
 			Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
 			conditions.add(type);
 		}
+
 		conditions.add(status);
 		conditions.add(sort);
 		conditions.add(createTime);
@@ -482,6 +483,82 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 			ids.add(sysRoleResource.getSysResourceId());
 		}
 		return ids;
+	}
+
+	/**
+	 * 获取树形菜单
+	 * 
+	 * @param list
+	 * @param sysUserId
+	 * @return
+	 */
+	@Override
+	public List<Object> getMenu(List<SysResource> list, String sysUserId) {
+		boolean hasPermission = false;
+
+		List<SysRole> sysRoles = sysRoleService.getSysRolesBySysUserId(sysUserId);
+		for (SysRole sysRole : sysRoles) {
+			if (StringUtil.equals(ADMINISTRATOR, sysRole.getCode())) {
+				hasPermission = true;
+				break;
+			}
+		}
+
+		List<Condition> conditions = new ArrayList<Condition>(0);
+		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+		Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
+		conditions.add(status);
+		conditions.add(type);
+
+		List<String> sysResourceIds = new ArrayList<String>(0);
+		List<SysRoleResource> sysRoleResources = null;
+
+		if (hasPermission) {
+			for (SysResource ids : findAll("id")) {
+				sysResourceIds.add(ids.getId());
+			}
+		} else {
+			List<String> roleIds = new ArrayList<>(0);
+			for (SysRole sysRole : sysRoles) {
+				roleIds.add(sysRole.getId());
+			}
+			sysRoleResources = sysRoleResourceService.findOnes("sysRoleId", Operation.IN, roleIds);
+		}
+
+		if (CollectionUtils.isNotEmpty(sysRoleResources)) {
+			for (SysRoleResource sysRoleResource : sysRoleResources) {
+				sysResourceIds.add(sysRoleResource.getSysResourceId());
+			}
+		}
+
+		return getTree(list, sysResourceIds);
+	}
+
+	private List<Object> getTree(List<SysResource> list, List<String> sysResourceIds) {
+		List<Object> menu = new ArrayList<>(0);
+		for (SysResource sysResource : list) {
+			Map<String, Object> map = new LinkedHashMap<String, Object>(0);
+			map = BeanUtil.toMap(sysResource);
+
+			List<Condition> conditions = new ArrayList<Condition>(0);
+			Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
+			Condition sort = new Condition("sort", Operation.ASC, "sort");
+			Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
+			Condition parentId = new Condition("parentId", Operation.EQ, sysResource.getId());
+			Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
+
+			conditions.add(status);
+			conditions.add(sort);
+			conditions.add(createTime);
+			conditions.add(parentId);
+			conditions.add(type);
+			conditions.add(new Condition("id", Operation.IN, sysResourceIds));
+
+			map.put("childList", getTree(findAll(conditions), sysResourceIds));
+			menu.add(map);
+		}
+
+		return menu;
 	}
 
 }

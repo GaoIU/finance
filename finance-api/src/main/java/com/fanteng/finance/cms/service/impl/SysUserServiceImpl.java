@@ -2,11 +2,13 @@ package com.fanteng.finance.cms.service.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,14 +59,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 	@Override
 	public JsonResult register(SysUser sysUser) throws Exception {
 		String id = sysUser.getId();
-		String password = sysUser.getPassword();
-		if (StringUtil.isEmpty(password)) {
-			throw new ParamErrorException("用户密码不能为空");
-		}
-
-		if (password.length() < 6 || password.length() > 16) {
-			throw new ParamErrorException("用户密码的长度只能在6-16位之间");
-		}
 
 		boolean checkUserName = checkUserName(sysUser.getUserName(), id);
 		if (checkUserName) {
@@ -81,7 +75,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			throw new ParamErrorException("该手机号已存在");
 		}
 
-		password = EncryptUtil.encodeByBC(password);
+		String password = EncryptUtil.encodeByBC("123456");
 		sysUser.setPassword(password);
 		sysUser.setAvatar(defaultAvatar);
 		String sysUserId = save(sysUser).toString();
@@ -324,6 +318,81 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		}
 
 		return checkUserName;
+	}
+
+	/**
+	 * 启用或者禁用后台用户
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean usable(String id, Short status) {
+		SysUser sysUser = get(id);
+		if (sysUser == null) {
+			throw new ParamErrorException("非法请求");
+		}
+
+		sysUser.setStatus(status);
+
+		return update(sysUser);
+	}
+
+	/**
+	 * 修改后台用户
+	 * 
+	 * @param sysUser
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult edit(SysUser sysUser) {
+		boolean b = updateIgnoreByFiters(sysUser, "sysRoleIds");
+		if (b) {
+			List<SysUserRole> list = sysUserRoleService.findOnes("sysUserId", Operation.EQ, sysUser.getId());
+			if (CollectionUtils.isNotEmpty(list)) {
+				for (SysUserRole sysUserRole : list) {
+					sysUserRoleService.delete(sysUserRole);
+				}
+			}
+
+			if (StringUtil.isNotBlank(sysUser.getSysRoleIds())) {
+				String[] ids = sysUser.getSysRoleIds().split(",");
+				for (String id : ids) {
+					SysUserRole sysUserRole = new SysUserRole(id.trim(), sysUser.getId());
+					sysUserRoleService.save(sysUserRole);
+				}
+			}
+		}
+
+		return new JsonResult(HttpStatus.OK, "操作成功");
+	}
+
+	/**
+	 * 删除后台用户
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult del(String[] ids) {
+		for (String id : ids) {
+			delete(id.trim());
+		}
+
+		List<String> idlist = new ArrayList<>(ids.length);
+		Collections.addAll(idlist, ids);
+		List<SysUserRole> list = sysUserRoleService.findOnes("sysUserId", Operation.IN, idlist);
+		if (CollectionUtils.isNotEmpty(list)) {
+			for (SysUserRole sysUserRole : list) {
+				sysUserRoleService.delete(sysUserRole);
+			}
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
 	}
 
 }
