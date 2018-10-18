@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
@@ -31,13 +32,25 @@ public class ScheduleJobController {
 	private ScheduleJobService scheduleJobService;
 
 	/**
+	 * 跳转至定时任务列表页面
+	 * 
+	 * @return
+	 */
+	@GetMapping("/gotoList")
+	public ModelAndView gotoList() {
+		ModelAndView mav = new ModelAndView("/scheduleJob/list");
+		return mav;
+	}
+
+	/**
 	 * 获取定时任务列表
 	 * 
 	 * @param param
 	 * @return
+	 * @throws Exception
 	 */
 	@GetMapping
-	public JsonResult queryList(@RequestParam(required = false) Map<String, Object> param) {
+	public JsonResult queryList(@RequestParam(required = false) Map<String, Object> param) throws Exception {
 		return scheduleJobService.queryList(param);
 	}
 

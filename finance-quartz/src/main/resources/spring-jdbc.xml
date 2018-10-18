@@ -28,7 +28,7 @@
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:datasource.properties</value>
+				<value>classpath:datasource-dev.properties</value>
 			</list>
 		</property>
 	</bean>

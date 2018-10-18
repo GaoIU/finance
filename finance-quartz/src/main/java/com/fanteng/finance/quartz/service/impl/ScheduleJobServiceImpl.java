@@ -1,7 +1,9 @@
 package com.fanteng.finance.quartz.service.impl;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ import com.fanteng.finance.quartz.dao.ScheduleJobDao;
 import com.fanteng.finance.quartz.service.ScheduleJobService;
 import com.fanteng.finance.quartz.util.QuartzJobFactory;
 import com.fanteng.finance.quartz.util.QuartzJobFactoryDisallowConcurrentExecution;
+import com.fanteng.util.DateUtil;
 import com.fanteng.util.StringUtil;
 
 @Service
@@ -210,16 +213,39 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	 * 
 	 * @param param
 	 * @return
+	 * @throws Exception
 	 */
 	@Override
-	public JsonResult queryList(Map<String, Object> param) {
+	public JsonResult queryList(Map<String, Object> param) throws Exception {
 		Integer current = MapUtils.getInteger(param, "current");
 		Integer size = MapUtils.getInteger(param, "size");
 		String jobName = MapUtils.getString(param, "jobName");
+		String jobGroup = MapUtils.getString(param, "jobGroup");
+		Short status = MapUtils.getShort(param, "status");
+		String beginTime = MapUtils.getString(param, "beginTime");
+		String endTime = MapUtils.getString(param, "endTime");
 
 		List<Condition> conditions = new ArrayList<Condition>(0);
 		if (StringUtil.isNotBlank(jobName)) {
 			Condition condition = new Condition("jobName", Operation.LIKE_ANY, jobName);
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(jobGroup)) {
+			Condition condition = new Condition("jobGroup", Operation.LIKE_ANY, jobGroup);
+			conditions.add(condition);
+		}
+		if (status != null) {
+			Condition condition = new Condition("status", Operation.EQ, status);
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(beginTime)) {
+			Date begin = DateUtil.toDate(beginTime, "yyyy-MM-dd");
+			Condition condition = new Condition("createTime", Operation.GE, new Timestamp(begin.getTime()));
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(endTime)) {
+			Date end = DateUtil.toDate(endTime, "yyyy-MM-dd");
+			Condition condition = new Condition("createTime", Operation.LE, new Timestamp(end.getTime()));
 			conditions.add(condition);
 		}
 

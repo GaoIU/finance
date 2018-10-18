@@ -71,8 +71,9 @@ public interface ScheduleJobService extends BaseService<ScheduleJob> {
 	 * 
 	 * @param param
 	 * @return
+	 * @throws Exception
 	 */
-	JsonResult queryList(Map<String, Object> param);
+	JsonResult queryList(Map<String, Object> param) throws Exception;
 
 	/**
 	 * 添加一个定时任务
