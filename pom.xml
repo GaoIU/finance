@@ -12,7 +12,6 @@
 		<module>/finance-core</module>
 		<module>/finance-entity</module>
 		<module>/finance-quartz</module>
-		<module>/finance-api</module>
 	</modules>
 
 	<properties>

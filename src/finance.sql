@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 17/10/2018 17:52:56
+ Date: 18/10/2018 17:51:37
 */
 
 SET NAMES utf8mb4;
@@ -390,7 +390,7 @@ INSERT INTO `sys_resource` VALUES ('a86045834b024551b419ef9c5ba508bf', '后台�
 INSERT INTO `sys_resource` VALUES ('b34f49a564ed4999801c694562db30ae', '后台用户新增或修改页面', 'SYS_USER_INFO', '/sysUser/gotoInfo', 'GET', 2, 1, 'fa fa-info-circle', 'bde09fdf52e24ef1850575b5b9afd292', '跳转至后台用户新增或修改页面', 0, '2018-10-17 11:38:18', NULL);
 INSERT INTO `sys_resource` VALUES ('bde09fdf52e24ef1850575b5b9afd292', '后台用户管理', 'SYS_USER', '/sysUser/gotoList', 'GET', 0, 0, 'fa fa-user', 'eebaad47f58547f2b541f89b59dff980', '后台用户管理，由开发人员维护', 0, '2018-07-22 12:12:41', NULL);
 INSERT INTO `sys_resource` VALUES ('c221c9a353c141a3aa41cab0751d8b84', '后台资源删除', 'SYS_RESOURCE_DELETE', '/sysResource', 'DELETE', 1, 3, 'fa fa-remove', '172e6d5275534507aeed3b294880b622', '后台资源删除权限', 0, '2018-10-08 15:50:07', NULL);
-INSERT INTO `sys_resource` VALUES ('c6daf6c28ce8470191d22b4258363d09', '后台资源修改', 'SYS_RESOURCE_EDIT', '/sysResource', 'PUT', 1, 2, 'fa fa-edit', '172e6d5275534507aeed3b294880b622', '后台资源修改权限', 0, '2018-10-08 15:48:37', NULL);
+INSERT INTO `sys_resource` VALUES ('c6daf6c28ce8470191d22b4258363d09', '后台资源修改', 'SYS_RESOURCE_UPDATE', '/sysResource', 'PUT', 1, 2, 'fa fa-edit', '172e6d5275534507aeed3b294880b622', '后台资源修改权限', 0, '2018-10-08 15:48:37', '2018-10-18 13:42:14');
 INSERT INTO `sys_resource` VALUES ('cac138901c3d4f22a515876840ce517b', '后台角色新增', 'SYS_ROLE_SAVE', '/sysRole', 'POST', 1, 1, 'fa fa-plus-circle', 'eb95e80d781146589f3d420f5aa71136', '后台角色新增权限', 0, '2018-10-16 10:27:31', NULL);
 INSERT INTO `sys_resource` VALUES ('d4bcfb18749f44549db6f938685805d4', '后台资源新增或修改页面', 'SYS_RESOURCE_INFO', '/sysResource/gotoInfo', 'GET', 2, 5, 'fa fa-info-circle', '172e6d5275534507aeed3b294880b622', '跳转至后台资源新增或修改页面', 0, '2018-10-09 15:17:37', '2018-10-09 16:42:54');
 INSERT INTO `sys_resource` VALUES ('d72db9034bc044ad81acd6cef2e63be1', '后台角色列表', 'SYS_ROLE_LIST', '/sysRole', 'GET', 1, 0, 'fa fa-key', 'eb95e80d781146589f3d420f5aa71136', '后台角色页面', 0, '2018-09-04 21:47:02', '2018-10-10 10:02:12');
@@ -398,6 +398,7 @@ INSERT INTO `sys_resource` VALUES ('dc092418c0b142ee945fbb443a23e741', '后台�
 INSERT INTO `sys_resource` VALUES ('e6215cecf00a45ef8e331734386ca1eb', '后台资源启用/禁用', 'SYS_RESOURCE_USABLE', '/sysResource/usable', 'PUT', 1, 4, 'fa fa-ban', '172e6d5275534507aeed3b294880b622', '后台资源启用/禁用权限', 0, '2018-10-17 15:35:35', NULL);
 INSERT INTO `sys_resource` VALUES ('eb95e80d781146589f3d420f5aa71136', '后台角色管理', 'SYS_ROLE', '/sysRole/gotoList', 'GET', 0, 1, 'fa fa-key', 'eebaad47f58547f2b541f89b59dff980', '后台角色管理，由开发人员维护', 0, '2018-07-22 12:17:32', NULL);
 INSERT INTO `sys_resource` VALUES ('eebaad47f58547f2b541f89b59dff980', '系统管理', 'SYS_MANAGE', NULL, 'GET', 0, 0, 'fa fa-gears', NULL, '后台系统管理，由开发人员维护', 0, '2018-07-22 12:05:22', NULL);
+INSERT INTO `sys_resource` VALUES ('ef044654ebca4d58a466e8e701bea5e3', '定时任务管理', 'QUARTZ_JOB', '/quartz/scheduleJob/gotoList', 'GET', 0, 3, 'fa fa-cc-jcb', 'eebaad47f58547f2b541f89b59dff980', '定时任务管理页面', 0, '2018-10-18 17:35:01', '2018-10-18 17:43:34');
 INSERT INTO `sys_resource` VALUES ('f41c9cb3a8e041a7b596ebf08882cdf4', '验证后台资源代码', 'SYS_RESOURCE_CODE', '/sysResource/checkCode', 'POST', 2, 6, 'fa fa-anchor', '172e6d5275534507aeed3b294880b622', '验证后台资源代码是否唯一', 0, '2018-10-09 15:20:02', '2018-10-09 17:36:27');
 INSERT INTO `sys_resource` VALUES ('fce787f79ca649769a7f0aafeb5ea165', '后台资源列表', 'SYS_RESOURCE_LIST', '/sysResource', 'GET', 1, 0, 'fa fa-file-text', '172e6d5275534507aeed3b294880b622', '后台资源页面', 0, '2018-09-04 21:45:05', '2018-10-10 10:01:47');
 
@@ -418,7 +419,7 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('2c9d8c5a193a44ffbb962b56696c555e', '后台资源管理查看', 'SYS_RESOURCE_VIEW', 0, '2018-10-16 16:31:08', '2018-10-17 15:49:32');
+INSERT INTO `sys_role` VALUES ('2c9d8c5a193a44ffbb962b56696c555e', '后台资源管理查看', 'SYS_RESOURCE_VIEW', 0, '2018-10-16 16:31:08', '2018-10-18 15:11:20');
 INSERT INTO `sys_role` VALUES ('d1a9814e21e94c7684dd0703b0c74fe3', '超级管理员', 'ADMINISTRATOR', 0, '2018-07-02 23:22:45', NULL);
 
 -- ----------------------------
@@ -436,12 +437,12 @@ CREATE TABLE `sys_role_resource`  (
 -- ----------------------------
 -- Records of sys_role_resource
 -- ----------------------------
-INSERT INTO `sys_role_resource` VALUES ('18241f91816d4593af984f02ccbcbdea', '2c9d8c5a193a44ffbb962b56696c555e', 'f41c9cb3a8e041a7b596ebf08882cdf4', '2018-10-16 16:31:08');
-INSERT INTO `sys_role_resource` VALUES ('5dce5f31a48a457f9215630bdfed5a2b', '2c9d8c5a193a44ffbb962b56696c555e', 'eebaad47f58547f2b541f89b59dff980', '2018-10-16 16:31:08');
-INSERT INTO `sys_role_resource` VALUES ('7ea4aa508f8244bba17cb8970aa50818', '2c9d8c5a193a44ffbb962b56696c555e', '07cc93688ffb48a598f2e1f3bc5bf24c', '2018-10-16 16:31:08');
-INSERT INTO `sys_role_resource` VALUES ('7ebe024b6967408fb4178917d862e8cf', '2c9d8c5a193a44ffbb962b56696c555e', 'd4bcfb18749f44549db6f938685805d4', '2018-10-16 16:31:08');
-INSERT INTO `sys_role_resource` VALUES ('aa622b42a0f747fdbeddd37a15f53566', '2c9d8c5a193a44ffbb962b56696c555e', '172e6d5275534507aeed3b294880b622', '2018-10-16 16:31:08');
-INSERT INTO `sys_role_resource` VALUES ('e3256af2959e44379ee6e2a4da954bcc', '2c9d8c5a193a44ffbb962b56696c555e', 'fce787f79ca649769a7f0aafeb5ea165', '2018-10-16 16:31:08');
+INSERT INTO `sys_role_resource` VALUES ('28e3b7698d0841448c3aa011239a7ca8', '2c9d8c5a193a44ffbb962b56696c555e', '172e6d5275534507aeed3b294880b622', '2018-10-18 15:11:20');
+INSERT INTO `sys_role_resource` VALUES ('3d8a4520ab6a47eab5d1e2e713c66d7e', '2c9d8c5a193a44ffbb962b56696c555e', 'eebaad47f58547f2b541f89b59dff980', '2018-10-18 15:11:20');
+INSERT INTO `sys_role_resource` VALUES ('66480a2864884596865b5ca322e389aa', '2c9d8c5a193a44ffbb962b56696c555e', '07cc93688ffb48a598f2e1f3bc5bf24c', '2018-10-18 15:11:20');
+INSERT INTO `sys_role_resource` VALUES ('8638d7c589f34eb79c58c4b247100ac4', '2c9d8c5a193a44ffbb962b56696c555e', 'f41c9cb3a8e041a7b596ebf08882cdf4', '2018-10-18 15:11:20');
+INSERT INTO `sys_role_resource` VALUES ('9386f27d0714463b91c581a9ede42b1f', '2c9d8c5a193a44ffbb962b56696c555e', 'd4bcfb18749f44549db6f938685805d4', '2018-10-18 15:11:20');
+INSERT INTO `sys_role_resource` VALUES ('e480ad3c0b954316bbffbb98f7c13e7c', '2c9d8c5a193a44ffbb962b56696c555e', 'fce787f79ca649769a7f0aafeb5ea165', '2018-10-18 15:11:20');
 
 -- ----------------------------
 -- Table structure for sys_user
