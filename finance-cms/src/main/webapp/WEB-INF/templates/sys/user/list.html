@@ -1,3 +1,4 @@
+<#assign sc=JspTaglibs["/WEB-INF/static/tag/security.tld"] />
 <!DOCTYPE html>
 <html>
 
@@ -32,12 +33,17 @@
 					<div class="action">
 						<b></b>
 						<div class="layui-btn-group ">
+							<@sc.authorize access="hasAuthority('SYS_USER_SAVE@POST')">
 							<a class="layui-btn layui-btn-primary layui-btn-sm create" href="javascript:;">
 								<i class="fa fa-plus-circle"></i> 新增
 							</a>
+							</@sc.authorize>
+							
+							<@sc.authorize access="hasAuthority('SYS_USER_DELETE@DELETE')">
 							<a class="layui-btn layui-btn-primary layui-btn-sm delete" href="javascript:;">
 								<i class="fa fa-trash"></i> 批量删除
 							</a>
+							</@sc.authorize>
 						</div>
 					</div>
 				</div>
@@ -126,7 +132,9 @@
 										<th>手机号</th>
 										<th>注册时间</th>
 										<th>状态</th>
+										<@sc.authorize access="hasAnyAuthority('SYS_USER_UPDATE@PUT','SYS_USER_USABLE@PUT','SYS_USER_DELETE@DELETE')">
 										<th class="item_action">操作</th>
+										</@sc.authorize>
 									</tr>
 								</thead>
 
@@ -149,14 +157,24 @@
 											<td><span :title="item.createTime">{{ item.createTime | datetime }}</span></td>
 											<td v-if="item.status === 0"><span title="正常" style="color: green;">正常</span></td>
 											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
+											<@sc.authorize access="hasAnyAuthority('SYS_USER_UPDATE@PUT','SYS_USER_USABLE@PUT','SYS_USER_DELETE@DELETE')">
 											<td>
 												<div class="layui-table-cell laytable-cell-1-7">
+													<@sc.authorize access="hasAuthority('SYS_USER_UPDATE@PUT')">
 													<a @click="edit(item.id)" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+													</@sc.authorize>
+													
+													<@sc.authorize access="hasAuthority('SYS_USER_USABLE@PUT')">
 													<a v-if="item.status === 0" @click="usable(item.id, 1)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
 													<a v-else @click="usable(item.id, 0)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">启用</a>
+													</@sc.authorize>
+													
+													<@sc.authorize access="hasAuthority('SYS_USER_DELETE@DELETE')">
 													<a @click="del(item.id)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+													</@sc.authorize>
 												</div>
 											</td>
+											</@sc.authorize>
 										</tr>
 									</template>
 									<template v-else>

@@ -141,9 +141,14 @@ function dels(id) {
 				}
 			}, 2000);
 		},
-		error: function() {
-			layer.closeAll();
-			layer.msg('操作失败', {
+		error: function(jqXHR, textStatus, errorThrown) {
+			var msg = '操作失败';
+			if(jqXHR.status == 405) {
+				msg = '无权访问';
+			}
+			
+			top.layer.close(index);
+			layer.msg(msg, {
 				icon: 5,
 				anim: 6
 			});

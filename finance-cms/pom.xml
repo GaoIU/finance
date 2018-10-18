@@ -18,7 +18,7 @@
 		<!-- 引入entity工程 begin -->
 		<dependency>
 			<groupId>com.fanteng</groupId>
-			<artifactId>finance-api</artifactId>
+			<artifactId>finance-entity</artifactId>
 			<version>${com.fanteng.finance.version}</version>
 		</dependency>
 		<!-- 引入entity工程 end -->

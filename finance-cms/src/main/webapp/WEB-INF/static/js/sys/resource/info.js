@@ -105,9 +105,14 @@ layui.use(['form', 'layer'], function() {
 					}
 				}, 2000);
 			},
-			error: function() {
+			error: function(jqXHR, textStatus, errorThrown) {
+				var msg = '操作失败';
+				if(jqXHR.status == 405) {
+					msg = '无权访问';
+				}
+				
 				top.layer.close(index);
-				layer.msg('操作失败', {
+				layer.msg(msg, {
 					icon: 5,
 					anim: 6
 				});

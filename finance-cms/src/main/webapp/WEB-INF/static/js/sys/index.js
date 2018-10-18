@@ -206,7 +206,6 @@ var gloMenu = new Vue({
 	created: function() {
 		$.post('/index', function(res) {
 			var json = res.data;
-			console.log(json);
 			var menu = getMenu(json, "");
 			gloMenu.html = menu;
 		});
