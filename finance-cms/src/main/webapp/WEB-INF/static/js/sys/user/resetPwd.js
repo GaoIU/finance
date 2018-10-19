@@ -1,6 +1,6 @@
 layui.use(['form', 'layer'], function() {
 	form = layui.form;
-	layer = layui.layer;
+	layer = parent.layer === undefined ? layui.layer : top.layer;
 
 	form.verify({
 		oldPwd: function(value, item) {

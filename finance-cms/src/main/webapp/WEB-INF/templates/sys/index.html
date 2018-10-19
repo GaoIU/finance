@@ -143,6 +143,20 @@
     		<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     		<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     	<![endif]-->
+    <script type="text/javascript">
+    	var winWidth = $(window).width();
+		var heiHeght = $(window).height();
+	    var layer;
+	    $(function() {
+	    	layui.use('layer', function() {
+	    		layer = layui.layer;
+	    		
+	    		layer.config({
+	                zIndex:10000
+	            });
+	    	});
+	    });
+    </script>
 	<script type="text/javascript" src="/static/js/sys/index.js"></script>
 
 </html>

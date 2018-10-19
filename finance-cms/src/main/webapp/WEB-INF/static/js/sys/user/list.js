@@ -1,6 +1,7 @@
 layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	layForm = layui.form;
 	laydate = layui.laydate;
+	layer = layui.layer;
 	
 	var anim = Math.floor(Math.random() * 6 + 1);
 	var color;

@@ -141,7 +141,8 @@
 											<td>
 												<input v-if="item.code === 'ADMINISTRATOR'" name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" disabled="disabled" />
 												<input v-else name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
-												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+												<div v-if="item.code === 'ADMINISTRATOR'" class="layui-unselect layui-form-checkbox layui-checkbox-disbaled layui-disabled oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+												<div v-else @click="oneChoose($event)" class="layui-unselect layui-form-checkbox oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 											</td>
 											<td><span :title="item.name">{{ item.name }}</span></td>
 											<td><span :title="item.code">{{ item.code }}</span></td>

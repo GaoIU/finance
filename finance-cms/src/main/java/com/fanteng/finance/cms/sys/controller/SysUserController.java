@@ -129,7 +129,7 @@ public class SysUserController {
 	}
 
 	/**
-	 * 跳转至后台用户列表页面
+	 * 跳转至后台用户新增或修改页面
 	 * 
 	 * @param id
 	 * @return

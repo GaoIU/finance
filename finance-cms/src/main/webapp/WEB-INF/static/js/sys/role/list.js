@@ -269,7 +269,7 @@ var queryList = new Vue({
 			}
 			$.each($('.oneChoose'), function(index, obj) {
 				var inp = $(obj).prev();
-				if(ischecked) {
+				if(ischecked && !$(obj).hasClass('layui-checkbox-disbaled')) {
 					$(obj).removeClass('layui-form-checked');
 					$(inp).attr('checked', false);
 				} else {

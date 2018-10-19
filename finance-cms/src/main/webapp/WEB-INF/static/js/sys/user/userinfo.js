@@ -1,6 +1,6 @@
 layui.use([ 'form', 'layer', 'upload' ], function() {
 	form = layui.form;
-	layer = layui.layer;
+	layer = parent.layer === undefined ? layui.layer : top.layer;
 	upload = layui.upload;
 	
 	upload.render({
