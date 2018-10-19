@@ -78,7 +78,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 			anim: anim,
 			type: 2,
 			area: ['100%', '100%'],
-			content: '/quartz/scheduleJob/gotoInfo',
+			content: '/scheduleJob/gotoInfo',
 			success: function(index, layero) {
 				setTimeout(function() {
 					layer.tips('点击此处返回定时任务列表', '.layui-layer-setwin .layui-layer-close', {
@@ -120,7 +120,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 function dels(id) {
 	layer.load();
 	$.ajax({
-		url: '/quartz/scheduleJob?id=' + id,
+		url: '/scheduleJob?id=' + id,
 		type: 'DELETE',
 		dataType: 'JSON',
 		async: true,
@@ -216,7 +216,7 @@ var queryList = new Vue({
 	},
 	methods: {
 		find() {
-			var URL = "/quartz/scheduleJob?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
+			var URL = "/scheduleJob?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			$.get(URL, function(res) {
 				var json = res.data;
 				console.log(json);
@@ -277,7 +277,7 @@ var queryList = new Vue({
 				anim: anim,
 				type: 2,
 				area: ['100%', '100%'],
-				content: '/quartz/scheduleJob/gotoInfo?id=' + id,
+				content: '/scheduleJob/gotoInfo?id=' + id,
 				success: function(index, layero) {
 					setTimeout(function() {
 						layer.tips('点击此处返回定时任务列表', '.layui-layer-setwin .layui-layer-close', {
@@ -293,7 +293,7 @@ var queryList = new Vue({
 			if (status == 0) {
 				msg = "是否确认启用？";
 			} else {
-				msg = "该操作会使该用户不可用，是否确认执行？";
+				msg = "是否确认暂停？";
 			}
 			layer.confirm(msg, {
 				icon: 3,
@@ -304,7 +304,7 @@ var queryList = new Vue({
 				layer.load();
 				var param = {"id": id, "status": status};
 				$.ajax({
-					url: '/quartz/scheduleJob/usable',
+					url: '/scheduleJob/usable',
 					type: 'PUT',
 					data: JSON.stringify(param),
 					dataType: 'JSON',

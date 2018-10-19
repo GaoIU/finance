@@ -55,6 +55,27 @@ public class ScheduleJobController {
 	}
 
 	/**
+	 * 跳转至定时任务新增或修改页面
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/gotoInfo")
+	public ModelAndView gotoInfo(String id) {
+		ModelAndView mav = new ModelAndView("/scheduleJob/info");
+
+		if (StringUtil.isNotBlank(id)) {
+			ScheduleJob scheduleJob = scheduleJobService.get(id);
+			if (scheduleJob == null) {
+				throw new ParamErrorException("非法请求");
+			}
+
+			mav.addObject("info", scheduleJob);
+		}
+		return mav;
+	}
+
+	/**
 	 * 新增一个定时任务
 	 * 
 	 * @param scheduleJob

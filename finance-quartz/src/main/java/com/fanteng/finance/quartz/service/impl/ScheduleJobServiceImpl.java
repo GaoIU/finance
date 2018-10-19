@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -250,7 +251,11 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 		}
 
 		Page page = findPage(current, size, conditions);
-		return new JsonResult(HttpStatus.OK, "操作成功", page);
+		Map<String, Object> data = new HashMap<>(0);
+		data.put("page", page);
+		data.put("condition", param);
+
+		return new JsonResult(HttpStatus.OK, "操作成功", data);
 	}
 
 	/**
