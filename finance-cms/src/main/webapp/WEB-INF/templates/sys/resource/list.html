@@ -134,7 +134,7 @@
 								<thead>
 									<tr>
 										<th>
-											<div @click="allChoose($event)" class="layui-unselect layui-form-checkbox allChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+											<div @click="allChoose($event)" class="layui-unselect layui-form-checkbox all-choose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 										</th>
 										<th>资源名称</th>
 										<th>资源代码</th>
@@ -155,7 +155,7 @@
 										<tr v-for="item in items">
 											<td>
 												<input name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
-												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox one-choose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 											</td>
 											<td><span :title="item.name">{{ item.name }}</span></td>
 											<td><span :title="item.code">{{ item.code }}</span></td>

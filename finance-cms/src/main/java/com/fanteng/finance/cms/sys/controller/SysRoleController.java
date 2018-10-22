@@ -208,7 +208,17 @@ public class SysRoleController {
 			throw new ParamErrorException("无效参数");
 		}
 
-		boolean usable = sysRoleService.usable(id, status);
+		SysRole sysRole = sysRoleService.get(id);
+		if (sysRole == null) {
+			throw new ParamErrorException("非法请求");
+		}
+
+		if (StringUtil.equals(ADMINISTRATOR, sysRole.getCode())) {
+			throw new CustomException(com.fanteng.core.HttpStatus.ACCEPTED, "超级管理员不可被修改");
+		}
+
+		sysRole.setStatus(status);
+		boolean usable = sysRoleService.update(sysRole);
 		if (usable) {
 			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", usable);
 		}

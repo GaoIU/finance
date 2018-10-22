@@ -133,7 +133,7 @@ function dels(id) {
 			});
 			setTimeout(function() {
 				if(res.code == 200) {
-					$.each($('.oneChoose'), function(index, obj) {
+					$.each($('.one-choose'), function(index, obj) {
 						var inp = $(obj).prev();
 						$(obj).removeClass('layui-form-checked');
 						$(inp).attr('checked', false);
@@ -241,20 +241,20 @@ var queryList = new Vue({
 	    	if($(divbox).hasClass('layui-form-checked')) {
 	    		$(divbox).removeClass('layui-form-checked');
 	    		$(checkbox).attr('checked', false);
-	    		$('.allChoose').removeClass('layui-form-checked');
+	    		$('.all-choose').removeClass('layui-form-checked');
 	    	} else {
 	    		$(divbox).addClass('layui-form-checked');
 	    		$(checkbox).attr('checked', true);
 	    		var ischecked = true;
-	    		$.each($('.oneChoose'), function(index, obj) {
-	    			if(!$(obj).hasClass('layui-form-checked')) {
+	    		$.each($('.one-choose'), function(index, obj) {
+	    			if(!$(obj).hasClass('layui-form-checked') && !$(obj).hasClass('layui-checkbox-disbaled')) {
 	    				ischecked = false;
 	    			}
 	    		});
 	    		if(ischecked) {
-	    			$('.allChoose').addClass('layui-form-checked');
+	    			$('.all-choose').addClass('layui-form-checked');
 	    		} else {
-	    			$('.allChoose').removeClass('layui-form-checked');
+	    			$('.all-choose').removeClass('layui-form-checked');
 	    		}
 	    	}
 		},
@@ -267,14 +267,16 @@ var queryList = new Vue({
 			} else {
 				$(divbox).addClass('layui-form-checked');
 			}
-			$.each($('.oneChoose'), function(index, obj) {
+			$.each($('.one-choose'), function(index, obj) {
 				var inp = $(obj).prev();
-				if(ischecked && !$(obj).hasClass('layui-checkbox-disbaled')) {
+				if(ischecked) {
 					$(obj).removeClass('layui-form-checked');
 					$(inp).attr('checked', false);
 				} else {
-					$(obj).addClass('layui-form-checked');
-					$(inp).attr('checked', true);
+					if(!$(obj).hasClass('layui-checkbox-disbaled')) {
+						$(obj).addClass('layui-form-checked');
+						$(inp).attr('checked', true);
+					}
 				}
 			});
 		},
@@ -360,7 +362,7 @@ var queryList = new Vue({
 		},
 		del(id, code) {
 			if(code == 'ADMINISTRATOR') {
-				layer.msg('超级管理员不可被修改', {
+				layer.msg('超级管理员不可被删除', {
 					icon: 5,
 					anim: 6
 				});

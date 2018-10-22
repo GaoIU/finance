@@ -133,7 +133,7 @@ function dels(id) {
 			});
 			setTimeout(function() {
 				if(res.code == 200) {
-					$.each($('.oneChoose'), function(index, obj) {
+					$.each($('.one-choose'), function(index, obj) {
 						var inp = $(obj).prev();
 						$(obj).removeClass('layui-form-checked');
 						$(inp).attr('checked', false);
@@ -238,20 +238,20 @@ var queryList = new Vue({
 	    	if($(divbox).hasClass('layui-form-checked')) {
 	    		$(divbox).removeClass('layui-form-checked');
 	    		$(checkbox).attr('checked', false);
-	    		$('.allChoose').removeClass('layui-form-checked');
+	    		$('.all-choose').removeClass('layui-form-checked');
 	    	} else {
 	    		$(divbox).addClass('layui-form-checked');
 	    		$(checkbox).attr('checked', true);
 	    		var ischecked = true;
-	    		$.each($('.oneChoose'), function(index, obj) {
+	    		$.each($('.one-choose'), function(index, obj) {
 	    			if(!$(obj).hasClass('layui-form-checked')) {
 	    				ischecked = false;
 	    			}
 	    		});
 	    		if(ischecked) {
-	    			$('.allChoose').addClass('layui-form-checked');
+	    			$('.all-choose').addClass('layui-form-checked');
 	    		} else {
-	    			$('.allChoose').removeClass('layui-form-checked');
+	    			$('.all-choose').removeClass('layui-form-checked');
 	    		}
 	    	}
 		},
@@ -264,7 +264,7 @@ var queryList = new Vue({
 			} else {
 				$(divbox).addClass('layui-form-checked');
 			}
-			$.each($('.oneChoose'), function(index, obj) {
+			$.each($('.one-choose'), function(index, obj) {
 				var inp = $(obj).prev();
 				if(ischecked) {
 					$(obj).removeClass('layui-form-checked');
