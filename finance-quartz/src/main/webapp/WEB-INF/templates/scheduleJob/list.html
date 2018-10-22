@@ -117,7 +117,7 @@
 								<thead>
 									<tr>
 										<th>
-											<div @click="allChoose($event)" class="layui-unselect layui-form-checkbox allChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+											<div @click="allChoose($event)" class="layui-unselect layui-form-checkbox all-choose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 										</th>
 										<th>任务名</th>
 										<th>任务组</th>
@@ -137,7 +137,7 @@
 										<tr v-for="item in items">
 											<td>
 												<input name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
-												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox oneChoose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
+												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox one-choose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
 											</td>
 											<td><span :title="item.jobName">{{ item.jobName }}</span></td>
 											<td><span :title="item.jobGroup">{{ item.jobGroup }}</span></td>
@@ -153,10 +153,6 @@
 											<td>
 												<div class="layui-table-cell laytable-cell-1-7">
 													<a @click="edit(item.id)" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-													<a v-if="item.concurrent === 0" @click="usable(item.id, 1)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">解除并发</a>
-													<a v-else @click="usable(item.id, 0)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">并发</a>
-													<a v-if="item.status === 0" @click="usable(item.id, 1)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">暂停</a>
-													<a v-else @click="usable(item.id, 0)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">启用</a>
 													<a @click="del(item.id)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
 												</div>
 											</td>

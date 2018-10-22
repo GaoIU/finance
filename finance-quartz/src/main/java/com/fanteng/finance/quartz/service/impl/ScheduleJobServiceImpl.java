@@ -283,8 +283,15 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean updateJob(ScheduleJob scheduleJob) throws Exception {
-		boolean b = update(scheduleJob);
-		updateCron(scheduleJob.getId(), scheduleJob.getCronExpression());
+		boolean b = updateIgnore(scheduleJob);
+
+		TriggerKey triggerKey = TriggerKey.triggerKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+		scheduler.pauseTrigger(triggerKey);
+		scheduler.unscheduleJob(triggerKey);
+		JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+		scheduler.deleteJob(jobKey);
+		addJob(scheduleJob);
+
 		return b;
 	}
 
@@ -298,8 +305,12 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean delJob(String id) throws Exception {
-		removeJob(id);
-		return delete(id);
+		String[] ids = id.split(",");
+		for (String jobId : ids) {
+			removeJob(jobId.trim());
+			delete(id);
+		}
+		return true;
 	}
 
 }

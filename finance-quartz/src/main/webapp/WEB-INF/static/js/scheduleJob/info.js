@@ -13,7 +13,7 @@ layui.use(['form', 'layer'], function() {
 		}
 		
 		$.ajax({
-			url: '/quartz/scheduleJob',
+			url: '/scheduleJob',
 			type: type,
 			data: JSON.stringify(data.field),
 			dataType: 'JSON',

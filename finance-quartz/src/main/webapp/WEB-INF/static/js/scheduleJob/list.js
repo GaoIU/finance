@@ -132,7 +132,7 @@ function dels(id) {
 			});
 			setTimeout(function() {
 				if(res.code == 200) {
-					$.each($('.oneChoose'), function(index, obj) {
+					$.each($('.one-choose'), function(index, obj) {
 						var inp = $(obj).prev();
 						$(obj).removeClass('layui-form-checked');
 						$(inp).attr('checked', false);
@@ -233,20 +233,20 @@ var queryList = new Vue({
 	    	if($(divbox).hasClass('layui-form-checked')) {
 	    		$(divbox).removeClass('layui-form-checked');
 	    		$(checkbox).attr('checked', false);
-	    		$('.allChoose').removeClass('layui-form-checked');
+	    		$('.all-choose').removeClass('layui-form-checked');
 	    	} else {
 	    		$(divbox).addClass('layui-form-checked');
 	    		$(checkbox).attr('checked', true);
 	    		var ischecked = true;
-	    		$.each($('.oneChoose'), function(index, obj) {
+	    		$.each($('.one-choose'), function(index, obj) {
 	    			if(!$(obj).hasClass('layui-form-checked')) {
 	    				ischecked = false;
 	    			}
 	    		});
 	    		if(ischecked) {
-	    			$('.allChoose').addClass('layui-form-checked');
+	    			$('.all-choose').addClass('layui-form-checked');
 	    		} else {
-	    			$('.allChoose').removeClass('layui-form-checked');
+	    			$('.all-choose').removeClass('layui-form-checked');
 	    		}
 	    	}
 		},
@@ -259,7 +259,7 @@ var queryList = new Vue({
 			} else {
 				$(divbox).addClass('layui-form-checked');
 			}
-			$.each($('.oneChoose'), function(index, obj) {
+			$.each($('.one-choose'), function(index, obj) {
 				var inp = $(obj).prev();
 				if(ischecked) {
 					$(obj).removeClass('layui-form-checked');
@@ -285,51 +285,6 @@ var queryList = new Vue({
 						});
 					}, 500);
 				}
-			});
-		},
-		usable(id, status) {
-			var anim = Math.floor(Math.random() * 6 + 1);
-			var msg;
-			if (status == 0) {
-				msg = "是否确认启用？";
-			} else {
-				msg = "是否确认暂停？";
-			}
-			layer.confirm(msg, {
-				icon: 3,
-				anim: anim,
-				title: '提示'
-			}, function(index) {
-				layer.close(index);
-				layer.load();
-				var param = {"id": id, "status": status};
-				$.ajax({
-					url: '/scheduleJob/usable',
-					type: 'PUT',
-					data: JSON.stringify(param),
-					dataType: 'JSON',
-					contentType: 'application/json;charset=UTF-8',
-					async: true,
-					success: function(res) {
-						layer.closeAll();
-						top.layer.msg(res.msg, {
-							icon: 6,
-							time: 1500
-						});
-						setTimeout(function() {
-							if(res.code == 200) {
-								queryList.find();
-							}
-						}, 2000);
-					},
-					error: function() {
-						layer.closeAll();
-						layer.msg('操作失败', {
-							icon: 5,
-							anim: 6
-						});
-					}
-				});
 			});
 		},
 		del(id) {

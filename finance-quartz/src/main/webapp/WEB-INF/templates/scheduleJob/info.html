@@ -40,7 +40,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">类路径</label>
 				<div class="layui-input-block">
-					<input type="text" class="layui-input" name="beanClass" value="${(info.beanClass)!}" lay-verify="required" placeholder="请输入类路径">
+					<textarea name="beanClass" placeholder="请输入类路径" class="layui-textarea" lay-verify="required">${(info.beanClass)!}</textarea>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
@@ -52,7 +52,7 @@
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">备注</label>
 				<div class="layui-input-block">
-					<input type="text" class="layui-input" name="remark" value="${(info.remark)!}" lay-verify="required" placeholder="请输入备注">
+					<textarea name="remark" placeholder="请输入备注" class="layui-textarea" lay-verify="required">${(info.remark)!}</textarea>
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
@@ -83,6 +83,6 @@
 	<script type="text/javascript" src="/static/js/vue.min.js"></script>
 	<script type="text/javascript" src="/static/layui/layui.js"></script>
 	<script type="text/javascript" src="/static/js/global.js"></script>
-	<script type="text/javascript" src="/static/js/sys/user/info.js"></script>
+	<script type="text/javascript" src="/static/js/scheduleJob/info.js"></script>
 
 </html>

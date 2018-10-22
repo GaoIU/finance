@@ -8,7 +8,6 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -108,8 +107,8 @@ public class ScheduleJobController {
 	 * @return
 	 * @throws Exception
 	 */
-	@DeleteMapping("/{id}")
-	public JsonResult delJob(@PathVariable String id) throws Exception {
+	@DeleteMapping
+	public JsonResult delJob(String id) throws Exception {
 		scheduleJobService.delJob(id);
 		return new JsonResult(HttpStatus.OK, "操作成功");
 	}
