@@ -13,7 +13,7 @@ layui.use(['form', 'layer'], function() {
 		}
 		
 		$.ajax({
-			url: '/scheduleJob',
+			url: 'http://192.168.1.29:8081/scheduleJob',
 			type: type,
 			data: JSON.stringify(data.field),
 			dataType: 'JSON',

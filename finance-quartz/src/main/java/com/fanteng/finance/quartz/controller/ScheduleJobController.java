@@ -31,17 +31,6 @@ public class ScheduleJobController {
 	private ScheduleJobService scheduleJobService;
 
 	/**
-	 * 跳转至定时任务列表页面
-	 * 
-	 * @return
-	 */
-	@GetMapping("/gotoList")
-	public ModelAndView gotoList() {
-		ModelAndView mav = new ModelAndView("/scheduleJob/list");
-		return mav;
-	}
-
-	/**
 	 * 获取定时任务列表
 	 * 
 	 * @param param

@@ -1,6 +1,7 @@
 layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	layForm = layui.form;
 	laydate = layui.laydate;
+	layer = layui.layer;
 	
 	var anim = Math.floor(Math.random() * 6 + 1);
 	var color;
@@ -78,7 +79,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 			anim: anim,
 			type: 2,
 			area: ['100%', '100%'],
-			content: '/scheduleJob/gotoInfo',
+			content: 'http://192.168.1.29:8081/scheduleJob/gotoInfo',
 			success: function(index, layero) {
 				setTimeout(function() {
 					layer.tips('点击此处返回定时任务列表', '.layui-layer-setwin .layui-layer-close', {
@@ -120,7 +121,7 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 function dels(id) {
 	layer.load();
 	$.ajax({
-		url: '/scheduleJob?id=' + id,
+		url: 'http://192.168.1.29:8081/scheduleJob?id=' + id,
 		type: 'DELETE',
 		dataType: 'JSON',
 		async: true,
@@ -216,10 +217,9 @@ var queryList = new Vue({
 	},
 	methods: {
 		find() {
-			var URL = "/scheduleJob?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
+			var URL = "http://192.168.1.29:8081/scheduleJob?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			$.get(URL, function(res) {
 				var json = res.data;
-				console.log(json);
 				pageShow.current = json.page.current;
 				pageShow.size = json.page.size;
 				pageShow.total = json.page.total;
@@ -277,7 +277,7 @@ var queryList = new Vue({
 				anim: anim,
 				type: 2,
 				area: ['100%', '100%'],
-				content: '/scheduleJob/gotoInfo?id=' + id,
+				content: 'http://192.168.1.29:8081/scheduleJob/gotoInfo?id=' + id,
 				success: function(index, layero) {
 					setTimeout(function() {
 						layer.tips('点击此处返回定时任务列表', '.layui-layer-setwin .layui-layer-close', {
