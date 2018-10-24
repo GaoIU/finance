@@ -8,6 +8,12 @@
 		<welcome-file>/</welcome-file>
 	</welcome-file-list>
 
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring-jdbc.xml,classpath:spring-security.xml,classpath:spring-redis.xml</param-value>
+	</context-param>
+
+
 	<listener>
 		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
@@ -23,12 +29,10 @@
 	<listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
-
-
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring-jdbc.xml,classpath:spring-security.xml,classpath:spring-redis.xml</param-value>
-	</context-param>
+	
+	<listener>
+		<listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+	</listener>
 
 
 	<servlet>
@@ -37,6 +41,10 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:spring-mvc.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>logbackConfigLocation</param-name>
+			<param-value>classpath:logback.xml</param-value>
 		</init-param>
 
 		<load-on-startup>1</load-on-startup>
@@ -84,8 +92,8 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	
+
+
 	<filter>
 		<filter-name>hiddenHttpMethodFilter</filter-name>
 		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
@@ -94,8 +102,8 @@
 		<filter-name>hiddenHttpMethodFilter</filter-name>
 		<servlet-name>springMVC</servlet-name>
 	</filter-mapping>
-	
-	
+
+
 	<filter>
 		<filter-name>httpPutFormContentFilter</filter-name>
 		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>

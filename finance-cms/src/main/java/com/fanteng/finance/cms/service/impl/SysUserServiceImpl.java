@@ -219,7 +219,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			path = sysDefaultServerUrl + path;
 			SysUser sysUser = get(sysUserId);
 			String oldAvatar = sysUser.getAvatar();
-			String fileId = oldAvatar.replaceAll(sysDefaultServerUrl, oldAvatar);
+			String fileId = oldAvatar.replaceAll(sysDefaultServerUrl, "");
 			FastDFSUtil.delete(fileId);
 			sysUser.setAvatar(path);
 			update(sysUser);
@@ -244,7 +244,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		if (checkPassword) {
 			password = EncryptUtil.encodeByBC(password);
 			sysUser.setPassword(password);
-			checkPassword = update(sysUser);
+			checkPassword = updateIgnore(sysUser);
 			String msg = "操作成功";
 			if (!checkPassword) {
 				msg = "操作失败";

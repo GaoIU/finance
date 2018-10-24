@@ -2,10 +2,6 @@ var Tab;
 layui.use(['element', 'tab'], function() {
 	var element = layui.element;
 
-	layer.config({
-		zIndex: 10000
-	});
-
 	Tab = layui.tab({
 		elem: '.layui-tab',
 		maxSetting: {
