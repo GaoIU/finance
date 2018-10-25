@@ -59,7 +59,8 @@ public class RSAUtil {
 	 * @throws Exception
 	 */
 	public static PublicKey toPublicKey(String publicKey) throws Exception {
-		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getBytes());
+		byte[] bytes = EncryptUtil.matchesByBase64(publicKey.getBytes());
+		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(bytes);
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		return keyFactory.generatePublic(x509EncodedKeySpec);
 	}
@@ -72,7 +73,8 @@ public class RSAUtil {
 	 * @throws Exception
 	 */
 	public static PrivateKey toPrivateKey(String privateKey) throws Exception {
-		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getBytes());
+		byte[] bytes = EncryptUtil.matchesByBase64(privateKey.getBytes());
+		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(bytes);
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		return keyFactory.generatePrivate(pkcs8EncodedKeySpec);
 	}
@@ -93,6 +95,21 @@ public class RSAUtil {
 	}
 
 	/**
+	 * 公钥加密
+	 * 
+	 * @param content
+	 * @param publicKey
+	 * @return
+	 * @throws Exception
+	 */
+	public static String encoderByPublicKey(String content, String publicKey) throws Exception {
+		Cipher cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.ENCRYPT_MODE, toPublicKey(publicKey));
+		byte[] bytes = cipher.doFinal(content.getBytes());
+		return new String(EncryptUtil.encoderByBase64(bytes));
+	}
+
+	/**
 	 * 私钥解密
 	 * 
 	 * @param content
@@ -105,6 +122,21 @@ public class RSAUtil {
 		cipher.init(Cipher.DECRYPT_MODE, privateKey);
 		byte[] bytes = cipher.doFinal(content);
 		return bytes;
+	}
+
+	/**
+	 * 私钥解密
+	 * 
+	 * @param content
+	 * @param privateKey
+	 * @return
+	 * @throws Exception
+	 */
+	public static String matchesByPrivateKey(String content, String privateKey) throws Exception {
+		Cipher cipher = Cipher.getInstance("RSA");
+		cipher.init(Cipher.DECRYPT_MODE, toPrivateKey(privateKey));
+		byte[] bytes = cipher.doFinal(EncryptUtil.matchesByBase64(content.getBytes()));
+		return new String(bytes);
 	}
 
 }

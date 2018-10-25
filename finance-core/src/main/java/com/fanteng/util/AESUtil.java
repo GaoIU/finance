@@ -49,6 +49,22 @@ public class AESUtil {
 	}
 
 	/**
+	 * 加密
+	 * 
+	 * @param source
+	 * @param aesKey
+	 * @return
+	 * @throws Exception
+	 */
+	public static String encoder(String source, String aesKey) throws Exception {
+		SecretKey loadAESKey = loadAESKey(aesKey);
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(Cipher.ENCRYPT_MODE, loadAESKey);
+		byte[] bytes = cipher.doFinal(source.getBytes());
+		return new String(EncryptUtil.encoderByBase64(bytes));
+	}
+
+	/**
 	 * 解密
 	 * 
 	 * @param source
@@ -60,6 +76,21 @@ public class AESUtil {
 		Cipher cipher = Cipher.getInstance("AES");
 		cipher.init(Cipher.DECRYPT_MODE, key);
 		return cipher.doFinal(source);
+	}
+
+	/**
+	 * 解密
+	 * 
+	 * @param source
+	 * @param aesKey
+	 * @return
+	 * @throws Exception
+	 */
+	public static String matches(String source, String aesKey) throws Exception {
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(Cipher.DECRYPT_MODE, loadAESKey(aesKey));
+		byte[] bytes = cipher.doFinal(EncryptUtil.matchesByBase64(source.getBytes()));
+		return new String(bytes);
 	}
 
 }
