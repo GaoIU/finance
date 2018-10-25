@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 本地数据库
+ Source Server         : 虚拟机
  Source Server Type    : MySQL
  Source Server Version : 80012
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 18/10/2018 17:51:37
+ Date: 25/10/2018 17:58:54
 */
 
 SET NAMES utf8mb4;
@@ -348,7 +348,7 @@ CREATE TABLE `schedule_job`  (
 -- ----------------------------
 -- Records of schedule_job
 -- ----------------------------
-INSERT INTO `schedule_job` VALUES ('015c939a44214243af0b1084ba75fcd8', 'test', 'testGroup', 'excute', 'com.fanteng.finance.quartz.task.TestTask', '0/10 * * * * ?', 1, '测试', 0, '2018-06-30 02:16:12', NULL);
+INSERT INTO `schedule_job` VALUES ('015c939a44214243af0b1084ba75fcd8', 'test', 'testGroup', 'excute', 'com.fanteng.finance.quartz.task.TestTask', '0/30 * * * * ?', 1, '测试', 0, '2018-06-30 02:16:12', '2018-10-24 14:21:40');
 
 -- ----------------------------
 -- Table structure for sys_resource
@@ -398,7 +398,7 @@ INSERT INTO `sys_resource` VALUES ('dc092418c0b142ee945fbb443a23e741', '后台�
 INSERT INTO `sys_resource` VALUES ('e6215cecf00a45ef8e331734386ca1eb', '后台资源启用/禁用', 'SYS_RESOURCE_USABLE', '/sysResource/usable', 'PUT', 1, 4, 'fa fa-ban', '172e6d5275534507aeed3b294880b622', '后台资源启用/禁用权限', 0, '2018-10-17 15:35:35', NULL);
 INSERT INTO `sys_resource` VALUES ('eb95e80d781146589f3d420f5aa71136', '后台角色管理', 'SYS_ROLE', '/sysRole/gotoList', 'GET', 0, 1, 'fa fa-key', 'eebaad47f58547f2b541f89b59dff980', '后台角色管理，由开发人员维护', 0, '2018-07-22 12:17:32', NULL);
 INSERT INTO `sys_resource` VALUES ('eebaad47f58547f2b541f89b59dff980', '系统管理', 'SYS_MANAGE', NULL, 'GET', 0, 0, 'fa fa-gears', NULL, '后台系统管理，由开发人员维护', 0, '2018-07-22 12:05:22', NULL);
-INSERT INTO `sys_resource` VALUES ('ef044654ebca4d58a466e8e701bea5e3', '定时任务管理', 'QUARTZ_JOB', '/quartz/scheduleJob/gotoList', 'GET', 0, 3, 'fa fa-cc-jcb', 'eebaad47f58547f2b541f89b59dff980', '定时任务管理页面', 0, '2018-10-18 17:35:01', '2018-10-18 17:43:34');
+INSERT INTO `sys_resource` VALUES ('ef044654ebca4d58a466e8e701bea5e3', '定时任务管理', 'QUARTZ_JOB', '/quartz', 'GET', 0, 3, 'fa fa-cc-jcb', 'eebaad47f58547f2b541f89b59dff980', '定时任务管理页面', 0, '2018-10-18 17:35:01', '2018-10-24 14:17:21');
 INSERT INTO `sys_resource` VALUES ('f41c9cb3a8e041a7b596ebf08882cdf4', '验证后台资源代码', 'SYS_RESOURCE_CODE', '/sysResource/checkCode', 'POST', 2, 6, 'fa fa-anchor', '172e6d5275534507aeed3b294880b622', '验证后台资源代码是否唯一', 0, '2018-10-09 15:20:02', '2018-10-09 17:36:27');
 INSERT INTO `sys_resource` VALUES ('fce787f79ca649769a7f0aafeb5ea165', '后台资源列表', 'SYS_RESOURCE_LIST', '/sysResource', 'GET', 1, 0, 'fa fa-file-text', '172e6d5275534507aeed3b294880b622', '后台资源页面', 0, '2018-09-04 21:45:05', '2018-10-10 10:01:47');
 
@@ -419,7 +419,7 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('2c9d8c5a193a44ffbb962b56696c555e', '后台资源管理查看', 'SYS_RESOURCE_VIEW', 0, '2018-10-16 16:31:08', '2018-10-18 15:11:20');
+INSERT INTO `sys_role` VALUES ('2c9d8c5a193a44ffbb962b56696c555e', '后台资源管理查看', 'SYS_RESOURCE_VIEW', 0, '2018-10-16 16:31:08', '2018-10-24 17:21:19');
 INSERT INTO `sys_role` VALUES ('d1a9814e21e94c7684dd0703b0c74fe3', '超级管理员', 'ADMINISTRATOR', 0, '2018-07-02 23:22:45', NULL);
 
 -- ----------------------------
@@ -465,8 +465,8 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('44bfcab8d4a040868c047a9494807b7d', '아이유', '哈哈', 'gemini', '$2a$10$SImUFd9zncI4HDgNI3v3peHM.72sQkN2c2xQQ.oy5h0OK1H24Q0Vm', '17357103526', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539682975555&di=6c56c48fb1da3db0d3ca42d75230f96d&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180709%2F0d689e50c9f04cf6ab0631303aef5900.gif', 0, '2018-10-17 16:16:12', '2018-10-17 16:21:25');
-INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '小雅', 'Gemini', 'admin', '$2a$10$B7aO5TVsnFmID7pUhJk95.VAXUf1sm79SI6PHSW/WyPbPCxGREOFC', '18779141750', 'http://img.idol001.com/origin/2017/03/04/7a34c37577fdf173114f8b4a1ebfcd8d1488625417.gif', 0, '2018-07-02 23:24:42', '2018-10-17 16:02:53');
+INSERT INTO `sys_user` VALUES ('44bfcab8d4a040868c047a9494807b7d', '아이유', '哈哈', 'gemini', '$2a$10$SImUFd9zncI4HDgNI3v3peHM.72sQkN2c2xQQ.oy5h0OK1H24Q0Vm', '17357103526', 'http://192.168.1.29/group1/M00/00/00/fwAAAVvP4xiAMyCfADigTlftgu0011.gif', 0, '2018-10-17 16:16:12', '2018-10-17 16:21:25');
+INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '小雅', 'Gemini', 'admin', '$2a$10$B7aO5TVsnFmID7pUhJk95.VAXUf1sm79SI6PHSW/WyPbPCxGREOFC', '18779141750', 'http://192.168.1.29/group1/M00/00/00/fwAAAVvP6zmAGrOcABOnzW9uiS8787.gif', 0, '2018-07-02 23:24:42', '2018-10-17 16:02:53');
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -593,6 +593,6 @@ CREATE TABLE `user_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uc_userInfo`(`invitation_code`, `mobile`, `id_card`, `bank_no`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
