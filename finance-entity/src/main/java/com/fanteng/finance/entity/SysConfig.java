@@ -10,43 +10,49 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
- * The persistent class for the system_config database table.
+ * The persistent class for the sys_config database table.
  * 
  */
 @Entity
-@Table(name = "system_config")
-@NamedQuery(name = "SystemConfig.findAll", query = "SELECT s FROM SystemConfig s")
-public class SystemConfig implements Serializable {
+@Table(name = "sys_config")
+@NamedQuery(name = "SysConfig.findAll", query = "SELECT s FROM SysConfig s")
+public class SysConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	/** 系统参数配置状态：0-正常 */
+	public static final short STATUS_NORMAL = 0;
+
+	/** 系统参数配置状态：1-禁用 */
+	public static final short STATUS_DISABLE = 1;
 
 	@Id
 	private String id;
+
+	@NotBlank(message = "配置编码不能为空")
+	@Length(min = 1, max = 16, message = "配置编码长度不能大于16位")
+	private String code;
+
+	@NotBlank(message = "配置内容不能为空")
+	@Lob
+	private String content;
 
 	@Column(name = "create_time")
 	private Timestamp createTime;
 
 	private String description;
 
-	private String key;
-
 	private String name;
 
-	@Column(name = "operate_id")
-	private String operateId;
-
-	@Column(name = "operate_name")
-	private String operateName;
-
-	private short status;
+	private Short status = STATUS_NORMAL;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
 
-	@Lob
-	private String value;
-
-	public SystemConfig() {
+	public SysConfig() {
 	}
 
 	public String getId() {
@@ -55,6 +61,22 @@ public class SystemConfig implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getContent() {
+		return this.content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Timestamp getCreateTime() {
@@ -73,14 +95,6 @@ public class SystemConfig implements Serializable {
 		this.description = description;
 	}
 
-	public String getKey() {
-		return this.key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
 	public String getName() {
 		return this.name;
 	}
@@ -89,27 +103,11 @@ public class SystemConfig implements Serializable {
 		this.name = name;
 	}
 
-	public String getOperateId() {
-		return this.operateId;
-	}
-
-	public void setOperateId(String operateId) {
-		this.operateId = operateId;
-	}
-
-	public String getOperateName() {
-		return this.operateName;
-	}
-
-	public void setOperateName(String operateName) {
-		this.operateName = operateName;
-	}
-
-	public short getStatus() {
+	public Short getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(short status) {
+	public void setStatus(Short status) {
 		this.status = status;
 	}
 
@@ -119,14 +117,6 @@ public class SystemConfig implements Serializable {
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
-	}
-
-	public String getValue() {
-		return this.value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 }
