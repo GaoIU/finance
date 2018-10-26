@@ -34,9 +34,14 @@ public class SignatureFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		String userAgent = req.getHeader("User-Agent");
+		if (StringUtil.isBlank(userAgent)) {
+			error(res);
+			return;
+		}
+
 		if (StringUtil.isClient(userAgent)) {
-			HttpServletResponse res = (HttpServletResponse) response;
 			String signature = req.getHeader("Signature");
 			if (StringUtil.isBlank(signature)) {
 				error(res);
