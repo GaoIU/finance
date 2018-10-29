@@ -61,7 +61,7 @@ layui.use(['element', 'tab'], function() {
 	});
 	
 	$('#gloMenu').on('click', 'a', function() {
-		var href = $(this).attr('href');
+		var href = $(this).attr('data-href');
 		var title = $(this).attr('data-title') || $(this).attr('title');
 		if(!title) title = $(this).text();
 		var icon = $(this).attr('data-icon') || $(this).find('i.fa').attr('data-icon');
@@ -221,8 +221,8 @@ function getMenu(data, menu) {
 			menu += "<span style='display: block;'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite><i data-icon='" + obj.icon + "' class='fa fa-angle-right animated' style='float: right; margin-top: 10px;'></i></span>";
 			menu += "<span style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></span>";
 		} else {
-			menu += "<a href='" + url + "' style='display: block;' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
-			menu += "<a href='" + url + "' style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+			menu += "<a data-href='" + url + "' style='display: block;' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+			menu += "<a data-href='" + url + "' style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
 		}
 		
 		menu += "</div>";
@@ -249,10 +249,10 @@ function menuChild(childList, menu) {
 			if(obj.url != null) {
 				url = obj.url;
 			}
-			menu += "<a href='" + url + "' data-url='" + url + "' data-icon='" + obj.icon + "' data-title='" + obj.name + "' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated'></i><cite>" + obj.name + "</cite></a>";
+			menu += "<a data-href='" + url + "' data-url='" + url + "' data-icon='" + obj.icon + "' data-title='" + obj.name + "' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated'></i><cite>" + obj.name + "</cite></a>";
 			menu += "</li>";
 			menu += "<li class='s'>";
-			menu += "<a href='" + url + "' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i class='" + obj.icon + "' style='margin-left: 0; margin-right: 0;'></i></a>";
+			menu += "<a data-href='" + url + "' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i class='" + obj.icon + "' style='margin-left: 0; margin-right: 0;'></i></a>";
 			menu += "</li>";
 		} else {
 			menu = getMenu(obj.childList, menu);

@@ -63,6 +63,7 @@ background: -webkit-linear-gradient(left , rgb(247,248,248) 1% , rgb(173,211,237
 #gloLeft{ position: absolute;left: 0;top: 50px;width: 210px; z-index: 990;background:#f5f7f9; border-right: 1px solid #ddd;}
 #gloMenu{ padding: 6px;border-bottom: 1px solid #ddd;border-radius: 0  0 8px 8px;position: relative;z-index: 991;padding-top: 12px;}
 #gloMenu>li{ margin-bottom: 4px;}
+#gloMenu>li:hover{ cursor: pointer;}
 #gloMenu>li.open{ background:rgba(0,0,0,0.07);border-radius: 3px;}
 #gloLeft ul li .navT{ border-bottom:1px solid transparent}
 #gloLeft ul li .navT a,#gloLeft ul li .navT span{ display: block;height: 40px;line-height: 40px; color: #393D49; text-decoration: none;padding: 0 10px;overflow: hidden;border-radius: 3px;font-size: 14px;}
