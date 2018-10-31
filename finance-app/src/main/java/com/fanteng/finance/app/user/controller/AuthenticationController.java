@@ -4,14 +4,28 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fanteng.core.JsonResult;
+
 @RestController
+@RequestMapping("/signIn")
 public class AuthenticationController {
 
-	@PostMapping("/hello")
-	public Map<String, Object> hello(@RequestBody Map<String, Object> params) {
-		return params;
+	@PostMapping
+	public JsonResult signIn(@RequestBody Map<String, Object> params) {
+		return null;
+	}
+
+	@PostMapping("/code")
+	public JsonResult signInCode(@RequestBody Map<String, Object> params) {
+		return null;
+	}
+
+	@PostMapping("/token")
+	public JsonResult signInToken() {
+		return null;
 	}
 
 }

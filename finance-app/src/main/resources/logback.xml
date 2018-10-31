@@ -1,58 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<configuration>
-    <contextName>logback-quartz</contextName>
-
+<!-- 
+	scan：当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+	
+	scanPeriod：设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+	
+	debug：当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
+ -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<!-- 用来设置上下文名称，每个logger都关联到logger上下文，默认上下文名称为default。但可以使用<contextName>设置成其他名字，用于区分不同应用程序的记录。一旦设置，不能修改。 -->
+	<contextName>app</contextName>
+	
     <!-- 彩色日志格式 -->
-    <property name="CONSOLE_LOG_PATTERN"
-              value="%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %cyan(%contextName) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{50}) - %cyan(%msg%n)" />
-
-    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <!--格式化输出：%d表示日期，%contextName表示日志名字, %thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{50} - %msg%n</pattern>-->
-        </layout>
-    </appender>
-
-    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
-            <FileNamePattern>/logs/quartz-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
-            <!--只保留最近15天的日志-->
-            <maxHistory>15</maxHistory>
-            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
-            <totalSizeCap>1GB</totalSizeCap>
-            <!--日志文件最大的大小-->
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <MaxFileSize>10MB</MaxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <!--日志输出编码格式化-->
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <charset>UTF-8</charset>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{50} - %msg%n</pattern>
+    <property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %easyHighlight(%5.5level) %magenta(%pid) --- [%15.15thread] %cyan(%-40.40logger{39} [%4.4line]) : %msg%n" />
+    
+    <!-- show parameters for hibernate sql 专为 Hibernate 定制 -->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE" />
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="DEBUG" />
+    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
+    
+    <!-- myibatis log configure -->
+    <!-- <logger name="com.apache.ibatis" level="TRACE"/>
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/> -->
+    
+    <!-- Console 输出设置 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+        	<layout class="com.fanteng.core.logback.LogbackLayoutBase">
+        		<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        		<charset>utf8</charset>
+        	</layout>
         </encoder>
     </appender>
     
-    <!-- 生产环境配置采用文件日志保存 -->
-    <logger name="com.finance" level="DEBUG">
-        <appender-ref ref="FILE"/>
-    </logger>
-
-    <!--测试环境采用控制台输出日志 -->
-    <!-- 设置mapper打印DEBUG日志，然而sql语句就自动会打印出来 -->
-    <!-- <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
-        <appender-ref ref="consoleAppender" />
-    </logger> -->
+    <!-- logs文件 -->
+	<appender name="FILEOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 滚动策略，按照时间滚动 TimeBasedRollingPolicy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        	<!-- 日志文件输出的文件名 -->
+	      	<fileNamePattern>logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+	      	<!-- 只保留最近15天的日志 -->
+	      	<maxHistory>15</maxHistory>
+	      	<!-- 用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+            <!-- 日志文件最大的大小 -->
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            	<MaxFileSize>10MB</MaxFileSize>
+            </triggeringPolicy>
+	    </rollingPolicy>
+	    
+	    <!-- 日志输出编码格式化 -->
+	    <encoder>
+	       <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+	    </encoder>
+    </appender>
     
-    <!-- 设置控制台只打印error级别日志 -->
-    <!-- <logger name="com.finance.**.controller" level="ERROR" additivity="false">
-        <appender-ref ref="consoleAppender" />
-    </logger> -->
-
+    <!-- 日志输出级别 -->
     <root level="INFO">
-        <appender-ref ref="consoleAppender" />
+        <!-- 这里就会依次根据以下,分别处理这个info日志 -->
+        <appender-ref ref="STDOUT" />	<!-- 给控制台输出 -->
+        
+        <!-- <appender-ref ref="FILEOUT" /> -->	<!-- 给logs产生文件输出 -->
+        
+        <!-- <appender-ref ref="ASYNCOUT" /> -->	<!-- 给专门的类  一会写到数据库 -->
     </root>
 </configuration>
