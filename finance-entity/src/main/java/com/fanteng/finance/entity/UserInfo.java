@@ -23,6 +23,8 @@ import org.hibernate.validator.constraints.NotBlank;
 @NamedQuery(name = "UserInfo.findAll", query = "SELECT u FROM UserInfo u")
 public class UserInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String AUTHENTICATION_HEADER = "Client-UUID";
 
 	/** 用户状态：0-正常 */
 	public static final short STATUS_NORMAL = 0;
