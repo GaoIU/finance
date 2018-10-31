@@ -32,7 +32,7 @@ public class SignatureProperties {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String params = "{\"userName\": \"18779141750\", \"password\": \"123456\"}";
+		String params = "{}";
 		String data = AESUtil.encoder(params, AES_KEY);
 		System.out.println("请求参数：" + data);
 

@@ -23,4 +23,23 @@ public interface UserInfoService extends BaseService<UserInfo> {
 	 */
 	boolean checkProperty(String property, Object value);
 
+	/**
+	 * 用户账号密码登录
+	 * 
+	 * @param userName
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
+	JsonResult signIn(String userName, String password) throws Exception;
+
+	/**
+	 * 用户短信验证码登录
+	 * 
+	 * @param userName
+	 * @param code
+	 * @return
+	 */
+	JsonResult signInCode(String userName, String code);
+
 }

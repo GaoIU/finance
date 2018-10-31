@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,11 @@ public class UserInfoController {
 	@PostMapping
 	public JsonResult register(@Valid @RequestBody UserInfo userInfo) {
 		return userInfoService.register(userInfo);
+	}
+
+	@PutMapping
+	public String hello() {
+		return "hello word!";
 	}
 
 }

@@ -61,10 +61,10 @@
     <!-- 日志输出级别 -->
     <root level="INFO">
         <!-- 这里就会依次根据以下,分别处理这个info日志 -->
-        <appender-ref ref="STDOUT" />	<!-- 给控制台输出 -->
+		<appender-ref ref="STDOUT" />	<!-- 给控制台输出 -->
         
-        <!-- <appender-ref ref="FILEOUT" /> -->	<!-- 给logs产生文件输出 -->
+		<!-- <appender-ref ref="FILEOUT" /> -->	<!-- 给logs产生文件输出 -->
         
-        <!-- <appender-ref ref="ASYNCOUT" /> -->	<!-- 给专门的类  一会写到数据库 -->
+		<!-- <appender-ref ref="ASYNCOUT" /> -->	<!-- 给专门的类  一会写到数据库 -->
     </root>
 </configuration>
