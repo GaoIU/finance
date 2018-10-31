@@ -49,6 +49,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 	 * 
 	 * @throws Exception
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@PostConstruct
 	public void init() throws Exception {
 		List<ScheduleJob> list = findAll();
@@ -92,7 +93,8 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
 			scheduler.scheduleJob(jobDetail, trigger);
 
 			if (scheduleJob.getStatus() == ScheduleJob.STATUS_PAUSE) {
-				pauseJob(scheduleJob.getId());
+				JobKey jobKey = JobKey.jobKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+				scheduler.pauseJob(jobKey);
 			}
 		} else {
 			trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(schedBuilder).build();
