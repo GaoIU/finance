@@ -3,7 +3,7 @@ $(document).ready(function() {
     function(ev) {
 
         var title = $(this).attr('data-title') ? $(this).attr('data-title') : $(this).text();
-        var href = $(this).attr('href');
+        var href = $(this).attr('data-href');
         var icon = $(this).attr('data-icon') ? $(this).attr('data-icon') : $(this).find('i').attr('data-icon');
 
         if (parent && parent.Tab) {

@@ -35,6 +35,7 @@ public class SysConfigServiceImpl extends BaseServiceImpl<SysConfigDao, SysConfi
 	@Autowired
 	private RedisClient redisClient;
 
+	@Transactional(rollbackFor = Exception.class)
 	@PostConstruct
 	public void init() {
 		List<SysConfig> list = findOnes("status", Operation.EQ, SysConfig.STATUS_NORMAL);

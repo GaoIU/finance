@@ -1739,3 +1739,7 @@ body .cke_dialog_ui_input_file {
 	padding-top: 15px;
 	color: #9E9E9E;
 }
+
+.new_tab:hover {
+	cursor: pointer;
+}
