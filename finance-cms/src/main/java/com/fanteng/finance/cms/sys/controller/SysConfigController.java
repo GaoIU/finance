@@ -92,12 +92,10 @@ public class SysConfigController {
 	 */
 	@PostMapping
 	public JsonResult register(@Valid @RequestBody SysConfig sysConfig) {
-		String code = sysConfig.getCode().toUpperCase();
-		boolean checkCode = sysConfigService.checkCode(code, sysConfig.getId());
+		boolean checkCode = sysConfigService.checkCode(sysConfig.getCode(), sysConfig.getId());
 		if (checkCode) {
 			return new JsonResult(com.fanteng.core.HttpStatus.BAD_REQUEST, "该配置编码已被使用");
 		}
-		sysConfig.setCode(code);
 
 		return sysConfigService.register(sysConfig);
 	}
@@ -110,12 +108,10 @@ public class SysConfigController {
 	 */
 	@PutMapping
 	public JsonResult edit(@Valid @RequestBody SysConfig sysConfig) {
-		String code = sysConfig.getCode().toUpperCase();
-		boolean checkCode = sysConfigService.checkCode(code, sysConfig.getId());
+		boolean checkCode = sysConfigService.checkCode(sysConfig.getCode(), sysConfig.getId());
 		if (checkCode) {
 			return new JsonResult(com.fanteng.core.HttpStatus.BAD_REQUEST, "该配置编码已被使用");
 		}
-		sysConfig.setCode(code);
 
 		return sysConfigService.edit(sysConfig);
 	}
