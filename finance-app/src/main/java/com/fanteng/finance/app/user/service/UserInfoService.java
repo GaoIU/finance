@@ -11,8 +11,9 @@ public interface UserInfoService extends BaseService<UserInfo> {
 	 * 
 	 * @param userInfo
 	 * @return
+	 * @throws Exception
 	 */
-	JsonResult register(UserInfo userInfo);
+	JsonResult register(UserInfo userInfo) throws Exception;
 
 	/**
 	 * 验证属性字段是否存在

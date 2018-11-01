@@ -1,8 +1,10 @@
 package com.fanteng.finance.app.user.service.impl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.Operation;
+import com.fanteng.core.RedisClient;
 import com.fanteng.core.base.BaseServiceImpl;
 import com.fanteng.exception.ParamErrorException;
+import com.fanteng.finance.app.properties.RedisCommonKeyProperties;
 import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.user.dao.UserInfoDao;
+import com.fanteng.finance.app.user.service.LogUserAccountService;
+import com.fanteng.finance.app.user.service.UserAccountService;
 import com.fanteng.finance.app.user.service.UserInfoService;
+import com.fanteng.finance.entity.LogUserAccount;
+import com.fanteng.finance.entity.UserAccount;
 import com.fanteng.finance.entity.UserInfo;
 import com.fanteng.util.EncryptUtil;
 import com.fanteng.util.RSAUtil;
@@ -26,15 +34,25 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoDao, UserInfo> 
 	@Value("${default.avatar}")
 	private String defaultAvatar;
 
+	@Autowired
+	private RedisClient redisClient;
+
+	@Autowired
+	private UserAccountService userAccountService;
+
+	@Autowired
+	private LogUserAccountService logUserAccountService;
+
 	/**
 	 * 用户注册
 	 * 
 	 * @param userInfo
 	 * @return
+	 * @throws Exception
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public JsonResult register(UserInfo userInfo) {
+	public JsonResult register(UserInfo userInfo) throws Exception {
 		String password = userInfo.getPassword();
 		if (StringUtil.isBlank(password) || password.length() < 6 || password.length() > 16) {
 			throw new ParamErrorException("密码不能为空且长度只能在6-16位之间");
@@ -45,15 +63,32 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoDao, UserInfo> 
 			throw new ParamErrorException("该账号已存在");
 		}
 
-		password = EncryptUtil.encodeByBC(password);
-		userInfo.setPassword(password);
+		userInfo.setPassword(EncryptUtil.encodeByBC(password));
 		userInfo.setMobile(userInfo.getUserName());
 		userInfo.setAvatar(defaultAvatar);
 		userInfo.setNickName(RandomStringUtils.randomAlphanumeric(8));
 
-		Serializable save = save(userInfo);
-		if (save != null) {
-			return new JsonResult(HttpStatus.OK, "操作成功");
+		Serializable userId = save(userInfo);
+		if (userId != null) {
+			UserAccount userAccount = new UserAccount();
+			userAccount.setUserId(userId.toString());
+
+			String userRegisterSwitch = redisClient.get(RedisCommonKeyProperties.USER_REGISTER_SWITCH);
+			if (StringUtil.isNotBlank(userRegisterSwitch) && Boolean.valueOf(userRegisterSwitch)) {
+				String registerAmount = redisClient.get(RedisCommonKeyProperties.USER_REGISTER_AMOUNT);
+				Double userRegisterAmount = StringUtil.isBlank(registerAmount) ? 0.00 : Double.valueOf(registerAmount);
+				userAccount.setAmount(BigDecimal.valueOf(userRegisterAmount));
+				userAccount.setAvailableAmount(BigDecimal.valueOf(userRegisterAmount));
+			}
+
+			Serializable userAccountId = userAccountService.save(userAccount);
+			if (userAccountId != null) {
+				LogUserAccount logUserAccount = new LogUserAccount(userAccount.getAmount(),
+						LogUserAccount.OPERATION_TYPE_REGISTER, userAccountId.toString(), userId.toString());
+				logUserAccountService.save(logUserAccount);
+
+				return new JsonResult(HttpStatus.OK, "注册成功");
+			}
 		}
 
 		return new JsonResult(HttpStatus.ACCEPTED, "操作失败");

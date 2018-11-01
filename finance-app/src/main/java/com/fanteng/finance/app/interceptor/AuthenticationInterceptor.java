@@ -15,7 +15,7 @@ import com.fanteng.util.StringUtil;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-	private static final String[] EXCLUDE_FITER_URL = { "/signIn" };
+	private static final String[] EXCLUDE_FITER_URL = { "/signIn", "/register" };
 
 	private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
