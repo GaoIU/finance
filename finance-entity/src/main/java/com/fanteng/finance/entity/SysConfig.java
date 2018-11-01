@@ -33,7 +33,7 @@ public class SysConfig implements Serializable {
 	private String id;
 
 	@NotBlank(message = "配置编码不能为空")
-	@Length(min = 1, max = 16, message = "配置编码长度不能大于16位")
+	@Length(min = 1, max = 32, message = "配置编码长度不能大于32位")
 	private String code;
 
 	@NotBlank(message = "配置内容不能为空")
