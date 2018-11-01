@@ -133,6 +133,7 @@ function dels(id) {
 			});
 			setTimeout(function() {
 				if(res.code == 200) {
+					$('.all-choose').removeClass('layui-form-checked');
 					$.each($('.one-choose'), function(index, obj) {
 						var inp = $(obj).prev();
 						$(obj).removeClass('layui-form-checked');

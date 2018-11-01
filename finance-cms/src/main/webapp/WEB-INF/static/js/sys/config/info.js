@@ -5,7 +5,7 @@ layui.use(['form', 'layer'], function() {
 	form.verify({
 		code: function(value, item) {
 			if(value.length > 32) {
-				return "配置编码长度不能大于16位";
+				return "配置编码长度不能大于32位";
 			}
 			
 			var msg;
