@@ -11,11 +11,46 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 31/10/2018 18:03:50
+ Date: 01/11/2018 18:11:36
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for log_user_account
+-- ----------------------------
+DROP TABLE IF EXISTS `log_user_account`;
+CREATE TABLE `log_user_account`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '开发主键',
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户ID',
+  `user_account_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户账户ID',
+  `operation_type` smallint(6) NULL DEFAULT 0 COMMENT '操作类型：0-注册奖励，1-充值，2-充值奖励，3-提现，4-转入BTC房间，5-转出BTC房间，6-转入A股房间，7-转出A股房间，8-收取BTC过夜费，9-收取A股过夜费',
+  `amount` decimal(10, 0) NULL DEFAULT 0 COMMENT '发生金额',
+  `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户账户记录表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for recharge_order
+-- ----------------------------
+DROP TABLE IF EXISTS `recharge_order`;
+CREATE TABLE `recharge_order`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '开发主键',
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户ID',
+  `order_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '订单号',
+  `amount` decimal(10, 0) NULL DEFAULT 0 COMMENT '订单金额',
+  `operate_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '充值方式ID',
+  `type` smallint(6) NULL DEFAULT 1 COMMENT '充值方式：1-支付宝，2-微信，3-银行卡',
+  `status` smallint(6) NULL DEFAULT 0 COMMENT '充值状态：0-审核中，1-审核通过，2-审核拒绝',
+  `sys_user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人员ID',
+  `sys_user_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人员姓名',
+  `audit_note` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核备注',
+  `audit_time` timestamp(0) NULL DEFAULT NULL COMMENT '审核时间',
+  `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '充值订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for schedule_job
@@ -48,7 +83,7 @@ DROP TABLE IF EXISTS `sys_config`;
 CREATE TABLE `sys_config`  (
   `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '开发主键',
   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '名称',
-  `code` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '编码',
+  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '编码',
   `content` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL COMMENT '内容',
   `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '描述',
   `status` smallint(6) NULL DEFAULT 0 COMMENT '配置状态：0-正常，1-禁用',
@@ -60,9 +95,9 @@ CREATE TABLE `sys_config`  (
 -- ----------------------------
 -- Records of sys_config
 -- ----------------------------
-INSERT INTO `sys_config` VALUES ('7b6b726944df4a6da9cd642b16b178fc', '最大充值金额', 'MAX_PAY_MONEY', '100000', '对冲宝最大充值金额限制', 0, '2018-10-29 10:11:43', '2018-10-31 10:58:43');
-INSERT INTO `sys_config` VALUES ('8c1c72f06cf14fd0afd623c4a8535f3c', '测试', 'TEST', '测试redis缓存', '这是一个测试数据', 1, '2018-10-29 10:13:32', '2018-10-30 11:30:18');
-INSERT INTO `sys_config` VALUES ('cd152a8e200a4b309eb9c036fe987374', '想要睡觉', '20181101', '略略略', '猪儿虫不好好工作', 0, '2018-10-31 10:56:51', NULL);
+INSERT INTO `sys_config` VALUES ('a7f7ad6ab8f0435e86300c2273f0b6d1', '用户注册奖励开关', 'user_register_switch', 'true', '用户注册奖励开关', 0, '2018-11-01 16:43:37', NULL);
+INSERT INTO `sys_config` VALUES ('c72ec47557ea46179e8105f23cfc4ba4', '金币比例配置', 'amount_proportion', '100', '人民币和平台金币的比例', 0, '2018-11-01 17:49:19', NULL);
+INSERT INTO `sys_config` VALUES ('e5b423dd5a624e148640acb4459d23e8', '用户注册奖励金额', 'user_register_amount', '6600', '用户注册奖励金额', 0, '2018-11-01 16:45:11', NULL);
 
 -- ----------------------------
 -- Table structure for sys_resource
@@ -188,7 +223,7 @@ CREATE TABLE `sys_user`  (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES ('44bfcab8d4a040868c047a9494807b7d', '아이유', '哈哈', 'gemini', '$2a$10$SImUFd9zncI4HDgNI3v3peHM.72sQkN2c2xQQ.oy5h0OK1H24Q0Vm', '17357103526', 'http://192.168.1.29/group1/M00/00/00/fwAAAVvP4xiAMyCfADigTlftgu0011.gif', 0, '2018-10-17 16:16:12', '2018-10-17 16:21:25');
-INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '小雅', 'Gemini', 'admin', '$2a$10$B7aO5TVsnFmID7pUhJk95.VAXUf1sm79SI6PHSW/WyPbPCxGREOFC', '18779141750', 'http://192.168.1.29/group1/M00/00/00/fwAAAVvP6zmAGrOcABOnzW9uiS8787.gif', 0, '2018-07-02 23:24:42', '2018-10-17 16:02:53');
+INSERT INTO `sys_user` VALUES ('5c7a8200248b4adaa382da7602857b9f', '小雅', 'Gemini', 'admin', '$2a$10$ba8Nv8B40RPiQECrYPotYuB8EVKY3KDQ.45D.8MLP5ozuOc2PoaKW', '18779141750', 'http://192.168.1.29/group1/M00/00/00/fwAAAVvP6zmAGrOcABOnzW9uiS8787.gif', 0, '2018-07-02 23:24:42', '2018-11-01 11:19:37');
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -207,5 +242,62 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES ('3d2c0d89064a4afab13058529f4f32f0', '5c7a8200248b4adaa382da7602857b9f', 'd1a9814e21e94c7684dd0703b0c74fe3', '2018-07-02 23:24:42');
 INSERT INTO `sys_user_role` VALUES ('6a77f9cc03bb4fa085178ce2508c2388', '44bfcab8d4a040868c047a9494807b7d', '2c9d8c5a193a44ffbb962b56696c555e', '2018-10-17 16:21:25');
+
+-- ----------------------------
+-- Table structure for user_account
+-- ----------------------------
+DROP TABLE IF EXISTS `user_account`;
+CREATE TABLE `user_account`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '开发主键',
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户ID',
+  `amount` decimal(10, 0) NULL DEFAULT 0 COMMENT '账户总金额',
+  `available_amount` decimal(10, 0) NULL DEFAULT 0 COMMENT '可用金额',
+  `frozen_amount` decimal(10, 0) NULL DEFAULT 0 COMMENT '冻结金额',
+  `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户账户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for user_info
+-- ----------------------------
+DROP TABLE IF EXISTS `user_info`;
+CREATE TABLE `user_info`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '开发主键',
+  `nick_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `user_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '账户',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '密码',
+  `mobile` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '手机号码',
+  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户头像',
+  `inviter_id` bigint(20) NULL DEFAULT NULL COMMENT '邀请人ID',
+  `status` smallint(6) NULL DEFAULT 0 COMMENT '用户状态：0-正常，1-禁用',
+  `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for withdraw_order
+-- ----------------------------
+DROP TABLE IF EXISTS `withdraw_order`;
+CREATE TABLE `withdraw_order`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '开发主键',
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '用户ID',
+  `order_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '订单号',
+  `amount` decimal(10, 0) NULL DEFAULT 0 COMMENT '订单金额',
+  `operate_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '提现方式ID',
+  `type` smallint(6) NULL DEFAULT NULL COMMENT '提现方式：1-支付宝，2-微信，3-银行卡',
+  `account_no` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '提现账号',
+  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '提现人姓名',
+  `status` smallint(6) NULL DEFAULT 0 COMMENT '提现状态：0-审核中，1-审核通过，2-审核拒绝',
+  `sys_user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人员ID',
+  `sys_user_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核人员姓名',
+  `audit_note` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '审核备注',
+  `audit_time` timestamp(0) NULL DEFAULT NULL COMMENT '审核时间',
+  `if_pay` smallint(6) NULL DEFAULT 0 COMMENT '是否打款：0-未打款，1-已打款',
+  `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '提现订单表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
