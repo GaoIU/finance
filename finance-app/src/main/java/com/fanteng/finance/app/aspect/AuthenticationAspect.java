@@ -1,7 +1,10 @@
 package com.fanteng.finance.app.aspect;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.MapUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,6 +19,7 @@ import com.fanteng.core.JsonResult;
 import com.fanteng.core.RedisClient;
 import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.entity.UserInfo;
+import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
 
 @Aspect
@@ -41,9 +45,10 @@ public class AuthenticationAspect {
 			String clientId = request.getHeader(UserInfo.AUTHENTICATION_HEADER);
 			String value = RSAUtil.matchesByPrivateKey(jsonResult.getData().toString(),
 					SignatureProperties.SERVER_PRIVATE_KEY);
+			Map<?, ?> map = JsonUtil.fromJson(value, Map.class);
 
-			redisClient.setex(clientId, TOKEN_EXPIRE_TIME, value);
-			redisClient.setex(value, TOKEN_EXPIRE_TIME, jsonResult.getData().toString());
+			redisClient.setex(clientId, TOKEN_EXPIRE_TIME, MapUtils.getString(map, "id"));
+			redisClient.setex(MapUtils.getString(map, "id"), TOKEN_EXPIRE_TIME, jsonResult.getData().toString());
 		}
 
 		return jsonResult;

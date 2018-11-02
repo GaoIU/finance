@@ -2,6 +2,7 @@ package com.fanteng.finance.app.user.service.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ import com.fanteng.finance.app.user.service.UserInfoService;
 import com.fanteng.finance.entity.LogUserAccount;
 import com.fanteng.finance.entity.UserAccount;
 import com.fanteng.finance.entity.UserInfo;
+import com.fanteng.util.BeanUtil;
 import com.fanteng.util.EncryptUtil;
+import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
 import com.fanteng.util.StringUtil;
 
@@ -130,7 +133,8 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoDao, UserInfo> 
 					return new JsonResult(HttpStatus.ACCEPTED, "该账号已被禁用，请联系客服人员");
 				}
 
-				String token = RSAUtil.encoderByPublicKey(userInfo.getId(), SignatureProperties.SERVER_PUBLIC_KEY);
+				Map<String, Object> map = BeanUtil.toMapIncludes(userInfo, "id, userName");
+				String token = RSAUtil.encoderByPublicKey(JsonUtil.toJson(map), SignatureProperties.SERVER_PUBLIC_KEY);
 				return new JsonResult(HttpStatus.OK, "登录成功", token);
 			}
 		}

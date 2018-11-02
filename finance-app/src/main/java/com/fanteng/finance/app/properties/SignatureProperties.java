@@ -1,10 +1,7 @@
 package com.fanteng.finance.app.properties;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.fanteng.util.AESUtil;
 import com.fanteng.util.RSAUtil;
-import com.fanteng.util.StringUtil;
 
 public class SignatureProperties {
 
@@ -16,22 +13,6 @@ public class SignatureProperties {
 
 	/** AES密钥 */
 	public static final String AES_KEY = "wwTYh0liKdjlIniHh1DNAQ==";
-
-	/**
-	 * 根据token获取用户ID
-	 * 
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	public static String getUserIdByToken(HttpServletRequest request) throws Exception {
-		String token = request.getHeader("Authorization");
-		if (StringUtil.isBlank(token)) {
-			return null;
-		}
-
-		return RSAUtil.matchesByPrivateKey(token, SERVER_PRIVATE_KEY);
-	}
 
 	private volatile static SignatureProperties signatureProperties;
 
@@ -51,7 +32,7 @@ public class SignatureProperties {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String params = "{}";
+		String params = "{\"amount\": \"5000\", \"type\": \"1\"}";
 		String data = AESUtil.encoder(params, AES_KEY);
 		System.out.println("请求参数：" + data);
 

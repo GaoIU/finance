@@ -17,6 +17,7 @@ import org.apache.commons.collections.MapUtils;
 
 import com.fanteng.core.HttpStatus;
 import com.fanteng.finance.app.properties.SignatureProperties;
+import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.util.AESUtil;
 import com.fanteng.util.HttpBodyUtil;
 import com.fanteng.util.JsonUtil;
@@ -41,7 +42,7 @@ public class SignatureFilter implements Filter {
 			return;
 		}
 
-		if (StringUtil.isClient(userAgent)) {
+		if (CommonUtil.isClient(userAgent)) {
 			String signature = req.getHeader("Signature");
 			if (StringUtil.isBlank(signature)) {
 				error(res);

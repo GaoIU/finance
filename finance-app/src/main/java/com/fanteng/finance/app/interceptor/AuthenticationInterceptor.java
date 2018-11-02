@@ -10,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.RedisClient;
 import com.fanteng.exception.UnauthorizedException;
+import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.UserInfo;
 import com.fanteng.util.StringUtil;
 
@@ -27,7 +28,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			throws Exception {
 		String userAgent = request.getHeader("User-Agent");
 		String clientId = null;
-		if (StringUtil.isClient(userAgent)) {
+		if (CommonUtil.isClient(userAgent)) {
 			clientId = request.getHeader(UserInfo.AUTHENTICATION_HEADER);
 			if (StringUtil.isBlank(clientId)) {
 				throw new UnauthorizedException(HttpStatus.NOT_ACCEPTABLE, "你怕是失了智");
@@ -45,7 +46,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		if (StringUtil.isBlank(token)) {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
 		}
-		if (StringUtil.isClient(userAgent)) {
+		if (CommonUtil.isClient(userAgent)) {
 			String userId = redisClient.get(clientId);
 			if (StringUtil.isBlank(userId)) {
 				throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
