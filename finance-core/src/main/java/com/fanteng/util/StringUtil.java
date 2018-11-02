@@ -3,8 +3,6 @@ package com.fanteng.util;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Blob;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -163,29 +161,6 @@ public class StringUtil extends StringUtils {
 		pw.flush();
 		sw.flush();
 		return sw.toString();
-	}
-
-	private static final String PHONE_REG = "\\b(ip(hone|od)|android|opera m(ob|in)i|windows (phone|ce)|blackberry|s(ymbian|eries60|amsung)|p(laybook|alm|rofile/midp|laystation portable)|nokia|fennec|htc[-_]|mobile|up.browser|[1-4][0-9]{2}x[1-4][0-9]{2})\\b";
-
-	private static final String IPAD_REG = "\\b(ipad|tablet|(Nexus 7)|up.browser|[1-4][0-9]{2}x[1-4][0-9]{2})\\b";
-
-	private static final Pattern PHONE_PAT = Pattern.compile(PHONE_REG, Pattern.CASE_INSENSITIVE);
-
-	private static final Pattern IPAD_PAT = Pattern.compile(IPAD_REG, Pattern.CASE_INSENSITIVE);
-
-	public static boolean isClient(String userAgent) {
-		if (isBlank(userAgent)) {
-			userAgent = "";
-		}
-
-		Matcher matcherPhone = PHONE_PAT.matcher(userAgent);
-		Matcher matcherIpad = IPAD_PAT.matcher(userAgent);
-
-		if (matcherPhone.find() || matcherIpad.find()) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }
