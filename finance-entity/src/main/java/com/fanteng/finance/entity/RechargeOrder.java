@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * The persistent class for the recharge_order database table.
@@ -20,10 +21,28 @@ import javax.persistence.Table;
 public class RechargeOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/** 充值方式：1-支付宝 */
+	public static final short TYPE_ALIPAY = 1;
+
+	/** 充值方式：2-微信 */
+	public static final short TYPE_WECHAT = 2;
+
+	/** 充值方式：3-银行卡 */
+	public static final short TYPE_BANK_CARD = 3;
+
+	/** 充值状态：0-审核中 */
+	public static final short STATUS_REVIEW_WAITING = 0;
+
+	/** 充值状态：1-审核通过 */
+	public static final short STATUS_REVIEW_PASS = 1;
+
+	/** 充值状态：2-审核拒绝 */
+	public static final short STATUS_REVIEW_REFUSE = 2;
+
 	@Id
 	private String id;
 
-	private BigDecimal amount;
+	private BigDecimal amount = BigDecimal.ZERO;
 
 	@Column(name = "audit_note")
 	private String auditNote;
@@ -34,13 +53,10 @@ public class RechargeOrder implements Serializable {
 	@Column(name = "create_time")
 	private Timestamp createTime;
 
-	@Column(name = "operate_id")
-	private String operateId;
-
 	@Column(name = "order_no")
 	private String orderNo;
 
-	private short status;
+	private Short status = STATUS_REVIEW_WAITING;
 
 	@Column(name = "sys_user_id")
 	private String sysUserId;
@@ -48,13 +64,17 @@ public class RechargeOrder implements Serializable {
 	@Column(name = "sys_user_name")
 	private String sysUserName;
 
-	private short type;
+	@NotNull(message = "请选择充值方式")
+	private Short type;
 
 	@Column(name = "update_time")
 	private Timestamp updateTime;
 
 	@Column(name = "user_id")
 	private String userId;
+
+	@Column(name = "user_name")
+	private String userName;
 
 	public RechargeOrder() {
 	}
@@ -99,14 +119,6 @@ public class RechargeOrder implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public String getOperateId() {
-		return this.operateId;
-	}
-
-	public void setOperateId(String operateId) {
-		this.operateId = operateId;
-	}
-
 	public String getOrderNo() {
 		return this.orderNo;
 	}
@@ -115,11 +127,11 @@ public class RechargeOrder implements Serializable {
 		this.orderNo = orderNo;
 	}
 
-	public short getStatus() {
+	public Short getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(short status) {
+	public void setStatus(Short status) {
 		this.status = status;
 	}
 
@@ -139,11 +151,11 @@ public class RechargeOrder implements Serializable {
 		this.sysUserName = sysUserName;
 	}
 
-	public short getType() {
+	public Short getType() {
 		return this.type;
 	}
 
-	public void setType(short type) {
+	public void setType(Short type) {
 		this.type = type;
 	}
 
@@ -161,6 +173,14 @@ public class RechargeOrder implements Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

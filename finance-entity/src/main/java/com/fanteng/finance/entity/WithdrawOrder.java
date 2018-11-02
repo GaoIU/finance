@@ -42,9 +42,6 @@ public class WithdrawOrder implements Serializable {
 
 	private String name;
 
-	@Column(name = "operate_id")
-	private String operateId;
-
 	@Column(name = "order_no")
 	private String orderNo;
 
@@ -129,14 +126,6 @@ public class WithdrawOrder implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getOperateId() {
-		return this.operateId;
-	}
-
-	public void setOperateId(String operateId) {
-		this.operateId = operateId;
 	}
 
 	public String getOrderNo() {
