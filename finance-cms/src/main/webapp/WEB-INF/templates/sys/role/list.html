@@ -146,7 +146,7 @@
 											</td>
 											<td><span :title="item.name">{{ item.name }}</span></td>
 											<td><span :title="item.code">{{ item.code }}</span></td>
-											<td><span :title="item.createTime">{{ item.createTime | datetime }}</span></td>
+											<td><span :title="item.createTime | datetime">{{ item.createTime | datetime }}</span></td>
 											<td v-if="item.status === 0"><span title="正常" style="color: green;">正常</span></td>
 											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
 											<@sc.authorize access="hasAnyAuthority('SYS_ROLE_UPDATE@PUT','SYS_ROLE_USABLE@PUT','SYS_ROLE_DELETE@DELETE')">

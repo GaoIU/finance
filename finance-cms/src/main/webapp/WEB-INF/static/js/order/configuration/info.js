@@ -3,30 +3,10 @@ layui.use(['form', 'layer'], function() {
 	layer = parent.layer === undefined ? layui.layer : top.layer;
 	
 	form.verify({
-		code: function(value, item) {
-			if(value.length > 32) {
-				return "配置编码长度不能大于32位";
+		name: function(value, item) {
+			if(value.length > 16) {
+				return "用户账号长度不能大于16位";
 			}
-			
-			var msg;
-			$.ajax({
-				url: '/sysConfig/checkCode',
-				type: 'POST',
-				data: {
-					"code": value,
-					"sysConfigId": $('.id').val()
-				},
-				dataType: 'JSON',
-				async: false,
-				success: function(res) {
-					if(res.code == 200) {
-						if(res.data) {
-							msg = "该配置编码已被使用";
-						}
-					}
-				}
-			});
-			return msg;
 		}
 	});
 	
@@ -41,7 +21,7 @@ layui.use(['form', 'layer'], function() {
 		}
 		
 		$.ajax({
-			url: '/sysConfig',
+			url: '/operateConfig',
 			type: type,
 			data: JSON.stringify(data.field),
 			dataType: 'JSON',

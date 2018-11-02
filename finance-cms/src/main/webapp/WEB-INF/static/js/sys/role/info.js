@@ -118,16 +118,21 @@ layui.use(['form', 'layer'], function() {
 			async: true,
 			success: function(res) {
 				top.layer.close(index);
-				top.layer.msg(res.msg, {
-					icon: 6,
-					time: 1500
-				});
-				setTimeout(function() {
-					if(res.code == 200) {
+				if(res.code == 200) {
+					top.layer.msg(res.msg, {
+						icon: 6,
+						time: 1500
+					});
+					setTimeout(function() {
 						layer.closeAll("iframe");
 						parent.location.reload();
-					}
-				}, 2000);
+					}, 2000);
+				} else {
+					top.layer.msg(res.msg, {
+						icon: 5,
+						anim: 6
+					});
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				var msg = '操作失败';

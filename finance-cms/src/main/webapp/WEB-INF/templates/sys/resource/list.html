@@ -93,7 +93,7 @@
 								<label class="layui-form-label">类型</label>
 								<div class="layui-input-inline">
 									<select name="type" class="form_item">
-										<option value="">≡请选择状态≡</option>
+										<option value="">≡请选择类型≡</option>
 										<option value="0">菜单</option>
 										<option value="1">按钮</option>
 										<option value="2">功能</option>
@@ -165,7 +165,7 @@
 											<td v-if="item.type === 1"><span title="按钮" style="color: orange;">按钮</span></td>
 											<td v-if="item.type === 2"><span title="功能" style="color: blue;">功能</span></td>
 											<td><span :title="item.description">{{ item.description }}</span></td>
-											<td><span :title="item.createTime">{{ item.createTime | datetime }}</span></td>
+											<td><span :title="item.createTime | datetime">{{ item.createTime | datetime }}</span></td>
 											<td v-if="item.status === 0"><span title="正常" style="color: green;">正常</span></td>
 											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
 											<@sc.authorize access="hasAnyAuthority('SYS_RESOURCE_UPDATE@PUT','SYS_RESOURCE_USABLE@PUT','SYS_RESOURCE_DELETE@DELETE')">

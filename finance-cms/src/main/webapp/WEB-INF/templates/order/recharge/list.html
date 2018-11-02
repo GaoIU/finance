@@ -11,7 +11,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="format-detection" content="telephone=no" />
 
-		<title>后台用户列表</title>
+		<title>充值列表</title>
 
 		<link rel="icon" href="/static/img/icon.png" />
 		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
@@ -29,23 +29,7 @@
             -->
 			<div class="admin_header_fixed">
 				<div class="admin_header clearfix">
-					<div class="title"><i></i>后台用户列表</div>
-					<div class="action">
-						<b></b>
-						<div class="layui-btn-group ">
-							<@sc.authorize access="hasAuthority('SYS_USER_SAVE@POST')">
-							<a class="layui-btn layui-btn-primary layui-btn-sm create" href="javascript:;">
-								<i class="fa fa-plus-circle"></i> 新增
-							</a>
-							</@sc.authorize>
-							
-							<@sc.authorize access="hasAuthority('SYS_USER_DELETE@DELETE')">
-							<a class="layui-btn layui-btn-primary layui-btn-sm delete" href="javascript:;">
-								<i class="fa fa-trash"></i> 批量删除
-							</a>
-							</@sc.authorize>
-						</div>
-					</div>
+					<div class="title"><i></i>充值列表</div>
 				</div>
 			</div>
 
@@ -66,15 +50,9 @@
 					<div id="list_search" class="clearfix hidden">
 						<form id="searchForm" class="layui-form layui-form-pane" novalidate="1">
 							<div class="layui-form-item">
-								<label class="layui-form-label">用户名</label>
+								<label class="layui-form-label">用户账号</label>
 								<div class="layui-input-inline">
 									<input type="text" name="userName" v-model="condition.userName" class="layui-input" />
-								</div>
-							</div>
-							<div class="layui-form-item">
-								<label class="layui-form-label">手机号码</label>
-								<div class="layui-input-inline">
-									<input type="text" name="phone" v-model="condition.phone" class="layui-input" />
 								</div>
 							</div>
 							<div class="layui-form-item">
@@ -90,12 +68,24 @@
 								</div>
 							</div>
 							<div class="layui-form-item">
-								<label class="layui-form-label">状态</label>
+								<label class="layui-form-label">充值方式</label>
+								<div class="layui-input-inline">
+									<select name="type" class="form_item">
+										<option value="">≡请选择方式≡</option>
+										<option value="1">支付宝</option>
+										<option value="2">微信</option>
+										<option value="3">银行卡</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">充值状态</label>
 								<div class="layui-input-inline">
 									<select name="status" class="form_item">
 										<option value="">≡请选择状态≡</option>
-										<option value="0">正常</option>
-										<option value="1">禁用</option>
+										<option value="0">审核中</option>
+										<option value="1">审核通过</option>
+										<option value="2">审核拒绝</option>
 									</select>
 								</div>
 							</div>
@@ -122,17 +112,16 @@
 
 								<thead>
 									<tr>
-										<th>
-											<div @click="allChoose($event)" class="layui-unselect layui-form-checkbox all-choose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
-										</th>
-										<th>用户名</th>
-										<th>昵称</th>
-										<th>头像</th>
-										<th>真实姓名</th>
-										<th>手机号</th>
-										<th>注册时间</th>
-										<th>状态</th>
-										<@sc.authorize access="hasAnyAuthority('SYS_USER_UPDATE@PUT','SYS_USER_USABLE@PUT','SYS_USER_DELETE@DELETE')">
+										<th>用户账户</th>
+										<th>订单号</th>
+										<th>订单金额</th>
+										<th>充值方式</th>
+										<th>充值状态</th>
+										<th>充值时间</th>
+										<th>审核人</th>
+										<th>审核备注</th>
+										<th>审核时间</th>
+										<@sc.authorize access="hasAnyAuthority('OPERATECONFIG_UPDATE@PUT','OPERATECONFIG_USABLE@PUT','OPERATECONFIG_DELETE@DELETE')">
 										<th class="item_action">操作</th>
 										</@sc.authorize>
 									</tr>
@@ -141,36 +130,27 @@
 								<tbody>
 									<template v-if="items.length">
 										<tr v-for="item in items">
-											<td>
-												<input name="chooseIds" :value="item.id" lay-skin="primary" type="checkbox" />
-												<div @click="oneChoose($event)" class="layui-unselect layui-form-checkbox one-choose" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>
-											</td>
 											<td><span :title="item.userName">{{ item.userName }}</span></td>
-											<td><span :title="item.nickName">{{ item.nickName }}</span></td>
-											<td>
-												<div :title="item.avatar" class="layui-table-cell laytable-cell-1-avatar">
-													<img style="display: inline-block; height: 100%;" :src="item.avatar">
-												</div>
-											</td>
-											<td><span :title="item.realName">{{ item.realName }}</span></td>
-											<td><span :title="item.mobile">{{ item.mobile }}</span></td>
+											<td><span :title="item.orderNo">{{ item.orderNo }}</span></td>
+											<td><span :title="item.amount">{{ item.amount }}</span></td>
+											<td v-if="item.type === 1"><span title="支付宝" style="color: blue;">支付宝</span></td>
+											<td v-if="item.type === 2"><span title="微信" style="color: green;">微信</span></td>
+											<td v-if="item.type === 3"><span title="银行卡" style="color: orange;">银行卡</span></td>
+											<td v-if="item.status === 0"><span title="审核中" style="color: blue;">审核中</span></td>
+											<td v-if="item.status === 1"><span title="审核通过" style="color: green;">审核通过</span></td>
+											<td v-if="item.status === 2"><span title="审核拒绝" style="color: red;">审核拒绝</span></td>
 											<td><span :title="item.createTime | datetime">{{ item.createTime | datetime }}</span></td>
-											<td v-if="item.status === 0"><span title="正常" style="color: green;">正常</span></td>
-											<td v-if="item.status === 1"><span title="禁用" style="color: red;">禁用</span></td>
-											<@sc.authorize access="hasAnyAuthority('SYS_USER_UPDATE@PUT','SYS_USER_USABLE@PUT','SYS_USER_DELETE@DELETE')">
+											<td><span :title="item.sysUserName">{{ item.sysUserName }}</span></td>
+											<td><span :title="item.auditNote">{{ item.auditNote }}</span></td>
+											<td><span :title="item.auditTime | datetime">{{ item.auditTime | datetime }}</span></td>
+											<@sc.authorize access="hasAnyAuthority('OPERATECONFIG_UPDATE@PUT','OPERATECONFIG_USABLE@PUT','OPERATECONFIG_DELETE@DELETE')">
 											<td>
 												<div class="layui-table-cell laytable-cell-1-7">
-													<@sc.authorize access="hasAuthority('SYS_USER_UPDATE@PUT')">
-													<a @click="edit(item.id)" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-													</@sc.authorize>
-													
-													<@sc.authorize access="hasAuthority('SYS_USER_USABLE@PUT')">
-													<a v-if="item.status === 0" @click="usable(item.id, 1)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">禁用</a>
-													<a v-else @click="usable(item.id, 0)" class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">启用</a>
-													</@sc.authorize>
-													
-													<@sc.authorize access="hasAuthority('SYS_USER_DELETE@DELETE')">
-													<a @click="del(item.id)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+													<@sc.authorize access="hasAuthority('OPERATECONFIG_USABLE@PUT')">
+													<template v-if="item.status === 0">
+														<a @click="usable(item.id, 1)" class="layui-btn layui-btn-xs" lay-event="usable">审核通过</a>
+														<a @click="usable(item.id, 2)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="usable">拒绝</a>
+													</template>
 													</@sc.authorize>
 												</div>
 											</td>
@@ -179,7 +159,7 @@
 									</template>
 									<template v-else>
 										<tr>
-											<td colspan="9" style="color: rgba(0,0,0,0.5);"><i class="fa fa-spinner"></i> 当前暂无数据...</td>
+											<td colspan="10" style="color: rgba(0,0,0,0.5);"><i class="fa fa-spinner"></i> 当前暂无数据...</td>
 										</tr>
 									</template>
 								</tbody>
@@ -226,7 +206,7 @@
 											<div class="separator"></div>
 										</td>
 										<td>
-											<select v-model="size" style="height: 25px; margin-left: 5px; margin-right: 5px;">
+											<select v-model="size" @change="gotoPage(current, size)" style="height: 25px; margin-left: 5px; margin-right: 5px;">
 												<option v-for="item in pagesizes" :value="item.value">{{ item.name }}</option>
 											</select>
 										</td>
@@ -255,6 +235,6 @@
 	<script type="text/javascript" src="/static/layui/layui.js"></script>
 	<script type="text/javascript" src="/static/js/global.js"></script>
 	<script type="text/javascript" src="/static/js/tableResize.js"></script>
-	<script type="text/javascript" src="/static/js/sys/user/list.js"></script>
+	<script type="text/javascript" src="/static/js/order/recharge/list.js"></script>
 
 </html>

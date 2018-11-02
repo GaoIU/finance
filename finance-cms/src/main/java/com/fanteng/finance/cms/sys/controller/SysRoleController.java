@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -175,7 +177,8 @@ public class SysRoleController {
 		List<Condition> conditions = new ArrayList<Condition>(0);
 		Condition status = new Condition("status", Operation.EQ, SysResource.STATUS_NORMAL);
 		Condition type = new Condition("type", Operation.EQ, SysResource.TYPE_MENU);
-		Condition parentId = new Condition("parentId", Operation.IS_NULL, null);
+		Criterion[] criterions = { Restrictions.eq("parentId", ""), Restrictions.isNull("parentId") };
+		Condition parentId = new Condition("parentId", Operation.OR, criterions);
 		Condition sort = new Condition("sort", Operation.ASC, "sort");
 		Condition createTime = new Condition("createTime", Operation.DESC, "createTime");
 		conditions.add(status);
