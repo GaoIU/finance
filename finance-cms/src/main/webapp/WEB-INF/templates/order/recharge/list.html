@@ -112,7 +112,7 @@
 
 								<thead>
 									<tr>
-										<th>用户账户</th>
+										<th>用户账号</th>
 										<th>订单号</th>
 										<th>订单金额</th>
 										<th>充值方式</th>
@@ -132,7 +132,7 @@
 										<tr v-for="item in items">
 											<td><span :title="item.userName">{{ item.userName }}</span></td>
 											<td><span :title="item.orderNo">{{ item.orderNo }}</span></td>
-											<td><span :title="item.amount">{{ item.amount }}</span></td>
+											<td><span :title="item.amount">{{ item.amount | num }}</span></td>
 											<td v-if="item.type === 1"><span title="支付宝" style="color: blue;">支付宝</span></td>
 											<td v-if="item.type === 2"><span title="微信" style="color: green;">微信</span></td>
 											<td v-if="item.type === 3"><span title="银行卡" style="color: orange;">银行卡</span></td>
@@ -149,7 +149,7 @@
 													<@sc.authorize access="hasAuthority('OPERATECONFIG_USABLE@PUT')">
 													<template v-if="item.status === 0">
 														<a @click="usable(item.id, 1)" class="layui-btn layui-btn-xs" lay-event="usable">审核通过</a>
-														<a @click="usable(item.id, 2)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="usable">拒绝</a>
+														<a @click="usable(item.id, 2)" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="usable">审核拒绝</a>
 													</template>
 													</@sc.authorize>
 												</div>

@@ -17,4 +17,12 @@ public interface RechargeOrderService extends BaseService<RechargeOrder> {
 	 */
 	JsonResult queryList(Map<String, Object> params) throws Exception;
 
+	/**
+	 * 审核订单
+	 * 
+	 * @param rechargeOrder
+	 * @return
+	 */
+	JsonResult audit(RechargeOrder rechargeOrder);
+
 }

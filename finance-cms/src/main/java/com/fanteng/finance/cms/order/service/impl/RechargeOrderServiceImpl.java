@@ -1,5 +1,6 @@
 package com.fanteng.finance.cms.order.service.impl;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fanteng.core.Condition;
 import com.fanteng.core.HttpStatus;
@@ -18,13 +21,23 @@ import com.fanteng.core.Page;
 import com.fanteng.core.base.BaseServiceImpl;
 import com.fanteng.finance.cms.order.dao.RechargeOrderDao;
 import com.fanteng.finance.cms.order.service.RechargeOrderService;
+import com.fanteng.finance.cms.user.service.LogUserAccountService;
+import com.fanteng.finance.cms.user.service.UserAccountService;
+import com.fanteng.finance.entity.LogUserAccount;
 import com.fanteng.finance.entity.RechargeOrder;
+import com.fanteng.finance.entity.UserAccount;
 import com.fanteng.util.DateUtil;
 import com.fanteng.util.StringUtil;
 
 @Service
 public class RechargeOrderServiceImpl extends BaseServiceImpl<RechargeOrderDao, RechargeOrder>
 		implements RechargeOrderService {
+
+	@Autowired
+	private UserAccountService userAccountService;
+
+	@Autowired
+	private LogUserAccountService logUserAccountService;
 
 	/**
 	 * 获取充值列表
@@ -75,6 +88,40 @@ public class RechargeOrderServiceImpl extends BaseServiceImpl<RechargeOrderDao, 
 		data.put("condition", params);
 
 		return new JsonResult(HttpStatus.OK, "操作成功", data);
+	}
+
+	/**
+	 * 审核订单
+	 * 
+	 * @param rechargeOrder
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult audit(RechargeOrder rechargeOrder) {
+		boolean audit = update(rechargeOrder);
+		if (audit) {
+			if (rechargeOrder.getStatus() == RechargeOrder.STATUS_REVIEW_PASS) {
+				UserAccount userAccount = userAccountService.findOne("userId", Operation.EQ, rechargeOrder.getUserId());
+				String userAccountId = userAccount.getId();
+				BigDecimal amount = userAccount.getAmount();
+				BigDecimal availableAmount = userAccount.getAvailableAmount();
+
+				amount = amount.add(rechargeOrder.getAmount());
+				availableAmount = availableAmount.add(rechargeOrder.getAmount());
+				userAccount.setAmount(amount);
+				userAccount.setAvailableAmount(availableAmount);
+				if (userAccountService.update(userAccount)) {
+					LogUserAccount logUserAccount = new LogUserAccount(rechargeOrder.getAmount(),
+							LogUserAccount.OPERATION_TYPE_RECHARGE, userAccountId, rechargeOrder.getUserId());
+					logUserAccountService.save(logUserAccount);
+				}
+			}
+
+			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", audit);
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
 	}
 
 }

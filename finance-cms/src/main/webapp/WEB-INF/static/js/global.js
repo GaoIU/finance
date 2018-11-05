@@ -57,16 +57,43 @@ function basePath() {
 }
 
 Vue.filter('datetime', function (value, formatString) {
+	if(!value) {
+		return "";
+	}
+	
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
     return moment(value).format(formatString);
 });
 
 Vue.filter('date', function (value, formatString) {
+	if(!value) {
+		return "";
+	}
+	
     formatString = formatString || 'YYYY-MM-DD';
     return moment(value).format(formatString);
 });
 
 Vue.filter('time', function (value, formatString) {
+	if(!value) {
+		return "";
+	}
+	
     formatString = formatString || 'HH:mm:ss';
     return moment(value).format(formatString);
+});
+
+Vue.filter('num', function(value) {
+	if(!value) {
+		return 0;
+	}
+	
+	var intPart = Number(value).toFixed(0);
+	var val = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+	if(value.toString().indexOf("\.") != -1) {
+		var items = value.toString().split("\.");
+		val = val.toString() + "." + items[1];
+	}
+	
+	return val;
 });
