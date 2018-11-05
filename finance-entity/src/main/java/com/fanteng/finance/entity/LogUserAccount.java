@@ -23,6 +23,9 @@ public class LogUserAccount implements Serializable {
 	/** 操作类型：0-注册奖励 */
 	public static final short OPERATION_TYPE_REGISTER = 0;
 
+	/** 操作类型：1-充值 */
+	public static final short OPERATION_TYPE_RECHARGE = 1;
+
 	@Id
 	private String id;
 
