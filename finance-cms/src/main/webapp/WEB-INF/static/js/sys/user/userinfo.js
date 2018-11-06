@@ -21,6 +21,7 @@ layui.use([ 'form', 'layer', 'upload' ], function() {
 			layer.closeAll('loading');
 			layer.msg('上传成功', {icon: 6});
 			$('#userFace').attr('src', res.data);
+			$('#userAvatar', parent.document).attr('src', res.data);
 		},
 		error: function(index, upload) {
 			layer.closeAll('loading');

@@ -56,6 +56,26 @@ function basePath() {
 	return window.location.protocol + "//" + window.location.host;
 }
 
+$.fn.extend({
+    serializeObject : function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if(this.name != "file"){//排除文件上传
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [ o[this.name] ];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            }
+        });
+        return o;
+    }
+});
+
 Vue.filter('datetime', function (value, formatString) {
 	if(!value) {
 		return "";

@@ -1,5 +1,6 @@
 package com.fanteng.finance.cms.order.service.impl;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fanteng.core.Condition;
 import com.fanteng.core.HttpStatus;
@@ -20,11 +24,15 @@ import com.fanteng.finance.cms.order.dao.OperateConfigDao;
 import com.fanteng.finance.cms.order.service.OperateConfigService;
 import com.fanteng.finance.entity.OperateConfig;
 import com.fanteng.util.DateUtil;
+import com.fanteng.util.FastDFSUtil;
 import com.fanteng.util.StringUtil;
 
 @Service
 public class OperateConfigServiceImpl extends BaseServiceImpl<OperateConfigDao, OperateConfig>
 		implements OperateConfigService {
+
+	@Value("${sys.default.server.url}")
+	private String sysDefaultServerUrl;
 
 	/**
 	 * 获取充值-提现操作配置列表
@@ -75,6 +83,88 @@ public class OperateConfigServiceImpl extends BaseServiceImpl<OperateConfigDao, 
 		data.put("condition", params);
 
 		return new JsonResult(HttpStatus.OK, "操作成功", data);
+	}
+
+	/**
+	 * 添加充值-提现操作配置
+	 * 
+	 * @param operateConfig
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult register(OperateConfig operateConfig, MultipartFile file) throws Exception {
+		if (!file.isEmpty()) {
+			String path = FastDFSUtil.upload(file);
+			if (StringUtil.isNotBlank(path)) {
+				path = sysDefaultServerUrl + path;
+				operateConfig.setUrl(path);
+			}
+		}
+
+		Serializable id = save(operateConfig);
+		if (id != null) {
+			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", operateConfig.getUrl());
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
+	}
+
+	/**
+	 * 修改充值-提现操作配置
+	 * 
+	 * @param operateConfig
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult edit(OperateConfig operateConfig, MultipartFile file) throws Exception {
+		if (!file.isEmpty()) {
+			OperateConfig oldConfig = get(operateConfig.getId());
+
+			String path = FastDFSUtil.upload(file);
+			if (StringUtil.isNotBlank(path)) {
+				path = sysDefaultServerUrl + path;
+				operateConfig.setUrl(path);
+				if (StringUtil.isNotBlank(oldConfig.getUrl())) {
+					String fileId = oldConfig.getUrl().replaceAll(sysDefaultServerUrl, "");
+					FastDFSUtil.delete(fileId);
+				}
+			}
+		}
+
+		boolean issuccess = updateIgnore(operateConfig);
+		if (issuccess) {
+			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功", operateConfig.getUrl());
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
+	}
+
+	/**
+	 * 批量删除充值-提现操作配置
+	 * 
+	 * @param ids
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public JsonResult del(String[] ids) throws Exception {
+		for (String operateConfigId : ids) {
+			OperateConfig operateConfig = get(operateConfigId);
+			if (StringUtil.isNotBlank(operateConfig.getUrl())) {
+				String fileId = operateConfig.getUrl().replaceAll(sysDefaultServerUrl, "");
+				FastDFSUtil.delete(fileId);
+			}
+			delete(operateConfig);
+		}
+
+		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
 	}
 
 }

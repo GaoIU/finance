@@ -1,6 +1,51 @@
-layui.use(['form', 'layer'], function() {
+layui.use(['form', 'layer', 'upload'], function() {
 	form = layui.form;
 	layer = parent.layer === undefined ? layui.layer : top.layer;
+	upload = layui.upload;
+	
+	var type;
+	if($('.id').val()) {
+		type = 'PUT';
+	} else {
+		type = 'POST';
+	}
+	upload.render({
+		elem: '.userFaceBtn',
+		url: '/operateConfig',
+		method: type,
+		auto: false,
+		bindAction: '#create',
+		accept: 'images',
+		acceptMime: 'image/*',
+		field: 'file',
+		size: 1024,
+		headers: {
+			'contentType': 'multipart/form-data'
+		},
+		choose: function(obj) {
+			var files = obj.pushFile();
+			obj.preview(function(index, file, result) {
+				$('#userFace').attr('src', result);
+			});
+		},
+		before: function(obj) {
+			this.data = $('#operateConfig').serializeObject();
+			layer.load();
+		},
+		done: function(res, index, upload) {
+			layer.closeAll('loading');
+			layer.msg(res.msg, {icon: 6});
+			$('#userFace').attr('src', res.data);
+			setTimeout(function() {
+				layer.closeAll("iframe");
+				parent.location.reload();
+			}, 2000);
+		},
+		error: function(index, upload) {
+			layer.closeAll('loading');
+			layer.msg('上传失败', {icon: 5});
+		}
+	});
 	
 	form.verify({
 		name: function(value, item) {
@@ -8,57 +53,5 @@ layui.use(['form', 'layer'], function() {
 				return "用户账号长度不能大于16位";
 			}
 		}
-	});
-	
-	form.on("submit(create)", function(data) {
-		var index = top.layer.load();
-		
-		var type;
-		if(data.field.id) {
-			type = 'PUT';
-		} else {
-			type = 'POST';
-		}
-		
-		$.ajax({
-			url: '/operateConfig',
-			type: type,
-			data: JSON.stringify(data.field),
-			dataType: 'JSON',
-			contentType: 'application/json;charset=UTF-8',
-			async: true,
-			success: function(res) {
-				top.layer.close(index);
-				if(res.code == 200) {
-					top.layer.msg(res.msg, {
-						icon: 6,
-						time: 1500
-					});
-					setTimeout(function() {
-						layer.closeAll("iframe");
-						parent.location.reload();
-					}, 2000);
-				} else {
-					top.layer.msg(res.msg, {
-						icon: 5,
-						anim: 6
-					});
-				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				var msg = '操作失败';
-				if(jqXHR.status == 405) {
-					msg = '无权访问';
-				}
-				
-				top.layer.close(index);
-				layer.msg(msg, {
-					icon: 5,
-					anim: 6
-				});
-			}
-		});
-		
-		return false;
 	});
 });

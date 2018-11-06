@@ -1,6 +1,5 @@
 package com.fanteng.finance.cms.order.controller;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fanteng.core.JsonResult;
@@ -76,33 +76,27 @@ public class OperateConfigController {
 	/**
 	 * 添加充值-提现操作配置
 	 * 
-	 * @param sysResource
+	 * @param operateConfig
+	 * @param file
 	 * @return
+	 * @throws Exception
 	 */
 	@PostMapping
-	public JsonResult register(@Valid @RequestBody OperateConfig operateConfig) {
-		Serializable id = operateConfigService.save(operateConfig);
-		if (id != null) {
-			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
-		}
-
-		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
+	public JsonResult register(@Valid OperateConfig operateConfig, MultipartFile file) throws Exception {
+		return operateConfigService.register(operateConfig, file);
 	}
 
 	/**
 	 * 修改充值-提现操作配置
 	 * 
-	 * @param sysResource
+	 * @param operateConfig
+	 * @param file
 	 * @return
+	 * @throws Exception
 	 */
 	@PutMapping
-	public JsonResult edit(@Valid @RequestBody OperateConfig operateConfig) {
-		boolean issuccess = operateConfigService.updateIgnore(operateConfig);
-		if (issuccess) {
-			return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
-		}
-
-		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
+	public JsonResult edit(@Valid OperateConfig operateConfig, MultipartFile file) throws Exception {
+		return operateConfigService.edit(operateConfig, file);
 	}
 
 	/**
@@ -110,9 +104,10 @@ public class OperateConfigController {
 	 * 
 	 * @param ids
 	 * @return
+	 * @throws Exception
 	 */
 	@DeleteMapping
-	public JsonResult del(String id) {
+	public JsonResult del(String id) throws Exception {
 		if (StringUtil.isBlank(id)) {
 			throw new ParamErrorException("无效参数");
 		}
@@ -121,11 +116,7 @@ public class OperateConfigController {
 			throw new ParamErrorException("无效参数");
 		}
 
-		for (String operateConfigId : ids) {
-			operateConfigService.delete(operateConfigId);
-		}
-
-		return new JsonResult(com.fanteng.core.HttpStatus.OK, "操作成功");
+		return operateConfigService.del(ids);
 	}
 
 	/**

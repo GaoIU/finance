@@ -9,7 +9,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="format-detection" content="telephone=no">
 
-		<title>添加充值-提现操作配置</title>
+		<title>添加资金操作配置</title>
 
 		<link rel="icon" href="/static/img/icon.png" />
 		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
@@ -18,7 +18,7 @@
 	</head>
 
 	<body class="childrenBody">
-		<form class="layui-form" style="width:80%;">
+		<form id="operateConfig" class="layui-form" style="width:80%;">
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">配置名称</label>
 				<div class="layui-input-block">
@@ -41,6 +41,16 @@
 				</div>
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
+				<label class="layui-form-label">配置图片</label>
+				<div class="layui-input-block">
+					<div class="layui-col-md1 layui-col-xs12 user_right">
+						<div style="margin-top: -20px;">
+							<img class="layui-upload-img userFaceBtn userAvatar" id="userFace" src="${(info.url)!}">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item layui-row layui-col-xs12">
 				<label class="layui-form-label">配置状态</label>
 				<div class="layui-input-block">
 					<input type="radio" name="status" value="0" title="正常" <#if !info?? || info.status == 0>checked="checked"</#if>>
@@ -49,7 +59,7 @@
 			</div>
 			<div class="layui-form-item layui-row layui-col-xs12">
 				<div class="layui-input-block">
-					<button type="button" class="layui-btn" lay-submit="" lay-filter="create">立即提交</button>
+					<button type="button" class="layui-btn" id="create" lay-submit="">立即提交</button>
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>

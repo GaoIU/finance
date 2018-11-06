@@ -75,14 +75,14 @@ layui.use(['form', 'element', 'layer', 'laydate'], function() {
 	
 	$('.create').on('click', function() {
 		layer.open({
-			title: '添加充值-提现操作配置',
+			title: '添加资金操作配置',
 			anim: anim,
 			type: 2,
 			area: ['100%', '100%'],
 			content: '/operateConfig/gotoInfo',
 			success: function(index, layero) {
 				setTimeout(function() {
-					layer.tips('点击此处返回充值-提现操作配置列表', '.layui-layer-setwin .layui-layer-close', {
+					layer.tips('点击此处返回资金操作配置列表', '.layui-layer-setwin .layui-layer-close', {
 						tips: 3
 					});
 				}, 500);
@@ -282,14 +282,14 @@ var queryList = new Vue({
 		edit(id) {
 			var anim = Math.floor(Math.random() * 6 + 1);
 			layer.open({
-				title: '修改充值-提现操作配置',
+				title: '修改资金操作配置',
 				anim: anim,
 				type: 2,
 				area: ['100%', '100%'],
 				content: '/operateConfig/gotoInfo?id=' + id,
 				success: function(index, layero) {
 					setTimeout(function() {
-						layer.tips('点击此处返回充值-提现操作配置列表', '.layui-layer-setwin .layui-layer-close', {
+						layer.tips('点击此处返回资金操作配置列表', '.layui-layer-setwin .layui-layer-close', {
 							tips: 3
 						});
 					}, 500);
