@@ -10,8 +10,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.RedisClient;
 import com.fanteng.exception.UnauthorizedException;
+import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.UserInfo;
+import com.fanteng.util.RSAUtil;
 import com.fanteng.util.StringUtil;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
@@ -43,19 +45,26 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		}
 
 		String token = request.getHeader("Authorization");
+		String userId;
+		try {
+			userId = RSAUtil.matchesByPrivateKey(token, SignatureProperties.SERVER_PRIVATE_KEY);
+		} catch (Exception e) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
+		}
+
 		if (StringUtil.isBlank(token)) {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
 		}
 		if (CommonUtil.isClient(userAgent)) {
-			String userId = redisClient.get(clientId);
+			userId = redisClient.get(clientId);
 			if (StringUtil.isBlank(userId)) {
 				throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
 			}
+		}
 
-			String tokenOfRedis = redisClient.get(userId);
-			if (!StringUtil.equals(token, tokenOfRedis)) {
-				throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已在别处登录，请重新登录");
-			}
+		String tokenOfRedis = redisClient.get(userId);
+		if (!StringUtil.equals(token, tokenOfRedis)) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已在别处登录，请重新登录");
 		}
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);
