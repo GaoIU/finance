@@ -53,6 +53,8 @@ public class OperateConfig implements Serializable {
 	@Column(name = "update_time")
 	private Timestamp updateTime;
 
+	private String url;
+
 	@NotNull(message = "配置值不能为空")
 	private Short value;
 
@@ -105,6 +107,14 @@ public class OperateConfig implements Serializable {
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public Short getValue() {
