@@ -1,6 +1,5 @@
 package com.fanteng.finance.cms.statistics.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
-import com.fanteng.core.RedisClient;
 import com.fanteng.finance.cms.order.service.RechargeOrderService;
-import com.fanteng.finance.cms.properties.RedisCommonKeyProperties;
 import com.fanteng.finance.cms.statistics.service.StatisticsService;
 import com.fanteng.finance.entity.RechargeOrder;
 import com.fanteng.util.DateUtil;
@@ -27,9 +24,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Autowired
 	private RechargeOrderService rechargeOrderService;
 
-	@Autowired
-	private RedisClient redisClient;
-
 	/**
 	 * 充值统计
 	 * 
@@ -38,7 +32,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 	 */
 	@Override
 	public JsonResult recharge(Map<String, Object> params) {
-		Double ratio = Double.valueOf(redisClient.get(RedisCommonKeyProperties.AMOUNT_PROPORTION));
 		Short type = MapUtils.getShort(params, "type");
 		String beginTime = MapUtils.getString(params, "beginTime");
 		String endTime = MapUtils.getString(params, "endTime");
@@ -63,10 +56,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 			sb.append(" AND ro.create_time <= :endTime");
 			map.put("endTime", endTime);
 		}
-		Map<String, Object> item = rechargeOrderService.queryOneToMap(sb.toString(), map);
-		item.forEach((k, v) -> {
-			item.put(k, ((BigDecimal) v).divide(BigDecimal.valueOf(ratio)));
-		});
 
 		List<Map<String, Object>> list = new ArrayList<>(0);
 		String sumSql = "SELECT SUM(amount) amount FROM recharge_order WHERE `status` = :status AND DATE(create_time) = :date";
@@ -78,12 +67,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 			condition.put("date", date);
 			Long amount = MapUtils.getLong(rechargeOrderService.queryOneToMap(sumSql, condition), "amount");
 			amount = amount == null ? 0 : amount;
-			record.put(date, amount / ratio);
+			record.put(date, amount);
 			list.add(record);
 		}
 
 		Map<String, Object> data = new HashMap<>(0);
-		data.put("item", item);
+		data.put("item", rechargeOrderService.queryOneToMap(sb.toString(), map));
 		data.put("list", list);
 
 		return new JsonResult(HttpStatus.OK, "操作成功", data);
