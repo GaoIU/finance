@@ -1,6 +1,7 @@
 package com.fanteng.finance.app.order.controller;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fanteng.core.JsonResult;
+import com.fanteng.core.RedisClient;
 import com.fanteng.finance.app.order.service.RechargeOrderService;
+import com.fanteng.finance.app.properties.RedisCommonKeyProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.RechargeOrder;
 
@@ -22,6 +25,9 @@ public class RechargeOrderController {
 
 	@Autowired
 	private RechargeOrderService rechargeOrderService;
+
+	@Autowired
+	private RedisClient redisClient;
 
 	/**
 	 * 生成充值订单
@@ -33,6 +39,11 @@ public class RechargeOrderController {
 	@PostMapping
 	public JsonResult createRechargeOrder(HttpServletRequest request, @Valid @RequestBody RechargeOrder rechargeOrder)
 			throws Exception {
+		Double ratio = Double.valueOf(redisClient.get(RedisCommonKeyProperties.AMOUNT_PROPORTION));
+		BigDecimal amount = rechargeOrder.getAmount();
+		amount = amount.divide(BigDecimal.valueOf(ratio));
+
+		rechargeOrder.setAmount(amount);
 		rechargeOrder.setOrderNo(CommonUtil.createOrderNo());
 		rechargeOrder.setUserId(CommonUtil.getUserIdByToken(request));
 		rechargeOrder.setUserName(CommonUtil.getUserNameByToken(request));
