@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.persistence.Id;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -33,7 +34,7 @@ import com.fanteng.util.BeanUtil;
 import com.fanteng.util.ReflectionKit;
 import com.fanteng.util.StringUtil;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "deprecation" })
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@Autowired
@@ -667,6 +668,28 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
+	public T queryOne(String sql, Map<String, Object> param) {
+		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		param.forEach((k, v) -> {
+			nativeQuery.setParameter(k, v);
+		});
+		nativeQuery.addEntity(clazz);
+
+		return (T) nativeQuery.uniqueResult();
+	}
+
+	@Override
+	public Map<String, Object> queryOneToMap(String sql, Map<String, Object> param) {
+		NativeQuery<?> nativeQuery = getSession().createNativeQuery(sql);
+		param.forEach((k, v) -> {
+			nativeQuery.setParameter(k, v);
+		});
+		nativeQuery.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+		return (Map<String, Object>) nativeQuery.getSingleResult();
+	}
+
+	@Override
 	public List<T> findOnes(String propertyName, Operation operation, Object value) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
 		Condition condition = new Condition(propertyName, operation, value);
@@ -715,7 +738,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
-		nativeQuery.addEntity(Map.class);
+		nativeQuery.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 
 		List<Map<String, Object>> list = (List<Map<String, Object>>) nativeQuery.getResultList();
 		return list;
@@ -807,9 +830,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		param.forEach((k, v) -> {
 			nativeQuery.setParameter(k, v);
 		});
-		nativeQuery.addEntity(Map.class);
 		nativeQuery.setFirstResult((current - 1) * size);
 		nativeQuery.setMaxResults(size);
+		nativeQuery.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 
 		List<Map<String, Object>> list = (List<Map<String, Object>>) nativeQuery.getResultList();
 
@@ -824,6 +847,31 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 		Page page = new Page(current, size, totle, list);
 		return page;
+	}
+
+	@Override
+	public Object getSum(String propertyName) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		criteria.setProjection(Projections.sum(propertyName));
+		return criteria.getExecutableCriteria(getSession()).uniqueResult();
+	}
+
+	@Override
+	public Object getSum(String propertyName, Condition condition) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		addCondition(criteria, condition);
+		criteria.setProjection(Projections.sum(propertyName));
+		return criteria.getExecutableCriteria(getSession()).uniqueResult();
+	}
+
+	@Override
+	public Object getSum(String propertyName, List<Condition> conditions) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(clazz);
+		for (Condition condition : conditions) {
+			addCondition(criteria, condition);
+		}
+		criteria.setProjection(Projections.sum(propertyName));
+		return criteria.getExecutableCriteria(getSession()).uniqueResult();
 	}
 
 }

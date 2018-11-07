@@ -58,6 +58,10 @@ public interface BaseService<T> {
 	T findOne(List<Condition> conditions);
 
 	T findOne(List<Condition> conditions, String properties);
+	
+	T queryOne(String sql, Map<String, Object> param);
+
+	Map<String, Object> queryOneToMap(String sql, Map<String, Object> param);
 
 	List<T> findOnes(String propertyName, Operation operation, Object value);
 
@@ -72,5 +76,11 @@ public interface BaseService<T> {
 	Page queryPage(String sql, Integer current, Integer size, Map<String, Object> param, Class<T> entityClass);
 
 	Page queryPageToMap(String sql, Integer current, Integer size, Map<String, Object> param);
+	
+	Object getSum(String propertyName);
+
+	Object getSum(String propertyName, Condition condition);
+
+	Object getSum(String propertyName, List<Condition> conditions);
 
 }

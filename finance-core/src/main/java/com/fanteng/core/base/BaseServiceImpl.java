@@ -147,6 +147,16 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	}
 
 	@Override
+	public T queryOne(String sql, Map<String, Object> param) {
+		return baseDao.queryOne(sql, param);
+	}
+
+	@Override
+	public Map<String, Object> queryOneToMap(String sql, Map<String, Object> param) {
+		return baseDao.queryOneToMap(sql, param);
+	}
+
+	@Override
 	public List<T> findOnes(String propertyName, Operation operation, Object value) {
 		return baseDao.findOnes(propertyName, operation, value);
 	}
@@ -179,6 +189,21 @@ public class BaseServiceImpl<M extends BaseDao<T>, T> implements BaseService<T> 
 	@Override
 	public Page queryPageToMap(String sql, Integer current, Integer size, Map<String, Object> param) {
 		return baseDao.queryPageToMap(sql, current, size, param);
+	}
+
+	@Override
+	public Object getSum(String propertyName) {
+		return baseDao.getSum(propertyName);
+	}
+
+	@Override
+	public Object getSum(String propertyName, Condition condition) {
+		return baseDao.getSum(propertyName, condition);
+	}
+
+	@Override
+	public Object getSum(String propertyName, List<Condition> conditions) {
+		return baseDao.getSum(propertyName, conditions);
 	}
 
 }

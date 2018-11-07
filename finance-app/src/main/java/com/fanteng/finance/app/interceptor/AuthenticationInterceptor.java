@@ -1,8 +1,11 @@
 package com.fanteng.finance.app.interceptor;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,6 +16,7 @@ import com.fanteng.exception.UnauthorizedException;
 import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.UserInfo;
+import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
 import com.fanteng.util.StringUtil;
 
@@ -47,7 +51,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		String token = request.getHeader("Authorization");
 		String userId;
 		try {
-			userId = RSAUtil.matchesByPrivateKey(token, SignatureProperties.SERVER_PRIVATE_KEY);
+			String json = RSAUtil.matchesByPrivateKey(token, SignatureProperties.SERVER_PRIVATE_KEY);
+			Map<?, ?> map = JsonUtil.fromJson(json, Map.class);
+			userId = MapUtils.getString(map, "id");
 		} catch (Exception e) {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
 		}
