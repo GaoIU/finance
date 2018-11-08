@@ -13,21 +13,33 @@ layui.use(['element', 'tab'], function() {
 	});
 	
 	$('#gloMenu').on('click', '.navT', function() {
-		var parent = $(this).closest('li');
-		var index = parent.index();
+		var parent = $(this).parent();
 		if(parent.find('.navC').find('li').length) {
 			if(parent.hasClass('open')) {
 				$(this).find('.fa-angle-down').addClass('fa-angle-right');
 				$(this).find('.fa-angle-down').removeClass('fa-angle-down');
+				if ($(this).attr('lay-chren')) {
+					$(this).find('span').css('color', '#393D49');
+				}
+				$(this).next().find('.fa-angle-down').addClass('fa-angle-right');
+				$(this).next().find('.fa-angle-down').removeClass('fa-angle-down');
 				parent.find('.navC').stop(true).slideUp(300, function() {
-					parent.removeClass('open')
+					parent.removeClass('open');
 				});
 			} else {
 				$(this).find('.fa-angle-right').addClass('fa-angle-down');
 				$(this).find('.fa-angle-right').removeClass('fa-angle-right');
-				var openLi = $('#gloMenu').find('li.open');
+				parent.siblings().find('.fa-angle-down').addClass('fa-angle-right');
+				parent.siblings().find('.fa-angle-down').removeClass('fa-angle-down');
+				parent.siblings().find('span').css('color', '#393D49');
+				if ($(this).attr('lay-chren') || $(this).next().find('.navT')) {
+					$(this).find('span').css('color', '#5EABE1');
+				}
+				var openLi = $(this).parent().siblings();
 				openLi.removeClass('open').find('.navC').stop(true).slideUp(300);
-				parent.addClass('open').find('.navC').stop(true).slideDown(300);
+				$(this).next().find('.navT').closest('li').removeClass('open').find('.navC').stop(true).slideUp(300);
+				$(this).next().find('.navT').find('span').css('color', '#393D49');
+				parent.addClass('open').find('.navC').eq(0).stop(true).slideDown(300);
 			}
 
 		}
@@ -218,7 +230,7 @@ function getMenu(data, menu) {
 			url = obj.url;
 		}
 		if(obj.childList.length) {
-			menu += "<span style='display: block;'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite><i data-icon='" + obj.icon + "' class='fa fa-angle-right animated' style='float: right; margin-top: 10px;'></i></span>";
+			menu += "<span style='display: block;'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite><i data-icon='" + obj.icon + "' class='fa fa-angle-right animated' style='float: right; margin-top: 11px;'></i></span>";
 			menu += "<span style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></span>";
 		} else {
 			menu += "<a data-href='" + url + "' style='display: block;' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
@@ -255,7 +267,28 @@ function menuChild(childList, menu) {
 			menu += "<a data-href='" + url + "' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i class='" + obj.icon + "' style='margin-left: 0; margin-right: 0;'></i></a>";
 			menu += "</li>";
 		} else {
-			menu = getMenu(obj.childList, menu);
+			menu += "<li class='layui-nav-item '>";
+			menu += "<div class='navT' lay-chren='true'>";
+			
+			var url = "javascript:;";
+			if(obj.url != null) {
+				url = obj.url;
+			}
+			if(obj.childList.length) {
+				menu += "<span style='display: block;'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite><i data-icon='" + obj.icon + "' class='fa fa-angle-right animated' style='float: right; margin-top: 11px;'></i></span>";
+				menu += "<span style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></span>";
+			} else {
+				menu += "<a data-href='" + url + "' style='display: block;' kit-target data-id='" + obj.id + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+				menu += "<a data-href='" + url + "' style='display: none;' class='tooltip' data-tip-text='" + obj.name + "' data-tip-bg='#66AFE2' data-title='" + obj.name + "' data-icon='" + obj.icon + "'><i data-icon='" + obj.icon + "' class='" + obj.icon + " animated' style='color: rgb({rand(50,200)},{rand(50,200)},{rand(50,200)});'></i><cite>" + obj.name + "</cite></a>";
+			}
+			
+			menu += "</div>";
+			menu += "<div class='navC'>";
+			menu += "<ul class='list'>";
+			menu = menuChild(obj.childList, menu);
+			menu += "</ul>";
+			menu += "</div>";
+			menu += "</li>";
 		}
 	});
 	
