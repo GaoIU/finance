@@ -13,32 +13,23 @@ layui.use(['element', 'tab'], function() {
 	});
 	
 	$('#gloMenu').on('click', '.navT', function() {
-		var parent = $(this).parent();
+		var parent = $(this).closest('li');
 		if(parent.find('.navC').find('li').length) {
 			if(parent.hasClass('open')) {
-				$(this).find('.fa-angle-down').addClass('fa-angle-right');
-				$(this).find('.fa-angle-down').removeClass('fa-angle-down');
-				if ($(this).attr('lay-chren')) {
-					$(this).find('span').css('color', '#393D49');
-				}
-				$(this).next().find('.fa-angle-down').addClass('fa-angle-right');
-				$(this).next().find('.fa-angle-down').removeClass('fa-angle-down');
+				parent.find('.fa-angle-down').addClass('fa-angle-right');
+				parent.find('.fa-angle-down').removeClass('fa-angle-down');
+				parent.find('li').removeClass('open');
 				parent.find('.navC').stop(true).slideUp(300, function() {
-					parent.removeClass('open');
+					parent.removeClass('open')
 				});
 			} else {
 				$(this).find('.fa-angle-right').addClass('fa-angle-down');
 				$(this).find('.fa-angle-right').removeClass('fa-angle-right');
 				parent.siblings().find('.fa-angle-down').addClass('fa-angle-right');
 				parent.siblings().find('.fa-angle-down').removeClass('fa-angle-down');
-				parent.siblings().find('span').css('color', '#393D49');
-				if ($(this).attr('lay-chren') || $(this).next().find('.navT')) {
-					$(this).find('span').css('color', '#5EABE1');
-				}
-				var openLi = $(this).parent().siblings();
+				var openLi = parent.siblings();
+				openLi.find('li').removeClass('open');
 				openLi.removeClass('open').find('.navC').stop(true).slideUp(300);
-				$(this).next().find('.navT').closest('li').removeClass('open').find('.navC').stop(true).slideUp(300);
-				$(this).next().find('.navT').find('span').css('color', '#393D49');
 				parent.addClass('open').find('.navC').eq(0).stop(true).slideDown(300);
 			}
 
@@ -268,7 +259,7 @@ function menuChild(childList, menu) {
 			menu += "</li>";
 		} else {
 			menu += "<li class='layui-nav-item '>";
-			menu += "<div class='navT' lay-chren='true'>";
+			menu += "<div class='navT'>";
 			
 			var url = "javascript:;";
 			if(obj.url != null) {
