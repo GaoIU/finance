@@ -20,6 +20,7 @@ import com.fanteng.core.RedisClient;
 import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.UserInfo;
+import com.fanteng.util.BeanUtil;
 import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
 
@@ -45,18 +46,17 @@ public class AuthenticationAspect {
 			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 			HttpServletRequest request = sra.getRequest();
 
-			String value = RSAUtil.matchesByPrivateKey(jsonResult.getData().toString(),
-					SignatureProperties.SERVER_PRIVATE_KEY);
-			Map<?, ?> map = JsonUtil.fromJson(value, Map.class);
+			UserInfo userInfo = (UserInfo) jsonResult.getData();
+			Map<String, Object> map = BeanUtil.toMapIncludes(userInfo, "id, userName, status");
+			String token = RSAUtil.encoderByPublicKey(JsonUtil.toJson(map), SignatureProperties.SERVER_PUBLIC_KEY);
 
 			String userAgent = request.getHeader("User-Agent");
 			if (CommonUtil.isClient(userAgent)) {
 				String clientId = request.getHeader(UserInfo.AUTHENTICATION_HEADER);
 				redisClient.setex(clientId, APP_TOKEN_EXPIRE_TIME, MapUtils.getString(map, "id"));
-				redisClient.setex(MapUtils.getString(map, "id"), APP_TOKEN_EXPIRE_TIME,
-						jsonResult.getData().toString());
+				redisClient.setex(MapUtils.getString(map, "id"), APP_TOKEN_EXPIRE_TIME, token);
 			} else {
-				redisClient.setex(MapUtils.getString(map, "id"), PC_TOKEN_EXPIRE_TIME, jsonResult.getData().toString());
+				redisClient.setex(MapUtils.getString(map, "id"), PC_TOKEN_EXPIRE_TIME, token);
 			}
 
 		}

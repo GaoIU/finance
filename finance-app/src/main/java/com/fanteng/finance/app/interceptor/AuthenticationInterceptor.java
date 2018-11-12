@@ -50,9 +50,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
 		String token = request.getHeader("Authorization");
 		String userId;
+		Map<?, ?> map;
 		try {
 			String json = RSAUtil.matchesByPrivateKey(token, SignatureProperties.SERVER_PRIVATE_KEY);
-			Map<?, ?> map = JsonUtil.fromJson(json, Map.class);
+			map = JsonUtil.fromJson(json, Map.class);
 			userId = MapUtils.getString(map, "id");
 		} catch (Exception e) {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
@@ -71,6 +72,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		String tokenOfRedis = redisClient.get(userId);
 		if (!StringUtil.equals(token, tokenOfRedis)) {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已在别处登录，请重新登录");
+		}
+
+		if (MapUtils.getShort(map, "status") == UserInfo.STATUS_DISABLE) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已被禁用，请联系客服人员");
 		}
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);
