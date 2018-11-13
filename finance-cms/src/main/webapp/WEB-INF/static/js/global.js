@@ -108,7 +108,7 @@ Vue.filter('num', function(value) {
 		return 0;
 	}
 	
-	var intPart = Number(value).toFixed(0);
+	var intPart = parseInt(Number(value));
 	var val = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
 	if(value.toString().indexOf("\.") != -1) {
 		var items = value.toString().split("\.");

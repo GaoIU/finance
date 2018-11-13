@@ -130,6 +130,44 @@ var listSearch = new Vue({
 	methods: {
 		search() {
 			queryList.find();
+		},
+		exportxls() {
+			var URL = "/rechargeOrder?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
+			$.get(URL, function(res) {
+				var json = res.data;
+				if (json.page.list.length) {
+					var searchForm = $('#searchForm').serializeObject();
+					searchForm['current'] = pageShow.current;
+					searchForm['size'] = pageShow.size;
+					searchForm['fileName'] = "用户充值订单";
+					searchForm['keys'] = "userName, orderNo, amount, type, status, createTime, sysUserName, auditNote, auditTime";
+					searchForm['columNames'] = "用户账号, 订单号, 订单金额, 充值方式, 充值状态, 充值时间, 审核人, 审核备注, 审核时间";
+					searchForm['replace'] = "type:1-支付宝, 2-微信, 3-银行卡; status:0-审核中, 1-审核通过, 2-审核拒绝";
+					
+					listSearch.download('/rechargeOrder/export', searchForm);
+				} else {
+					layer.msg('导出数据不能为空', {
+						icon: 5,
+						anim: 6
+					});
+				}
+			});
+		},
+		download(url, data) {
+			var tempForm = document.createElement("form");
+			tempForm.id = 'download';
+			tempForm.method = 'POST';
+			tempForm.action = url;
+			tempForm.target = '下载';
+			tempForm.innerHTML = "";
+			for(var i in data) {
+				tempForm.innerHTML += "<input type='hidden' name='" + i + "' value='" + data[i] + "' />";
+			}
+			
+			document.body.appendChild(tempForm);
+			tempForm.dispatchEvent(new Event("onsubmit"));
+			tempForm.submit();
+			document.body.removeChild(tempForm);
 		}
 	}
 });

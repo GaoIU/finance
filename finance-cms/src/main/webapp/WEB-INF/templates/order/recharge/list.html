@@ -89,9 +89,12 @@
 									</select>
 								</div>
 							</div>
-							<div class="search_action">
+							<div class="search_action" style="width: auto;">
 								<button type="button" class="layui-btn" @click="search">搜索</button>
 								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+								<@sc.authorize access="hasAuthority('RECHARGE_ORDER_EXPORT@POST')">
+								<button type="button" class="layui-btn layui-btn-danger" @click="exportxls">导出</button>
+								</@sc.authorize>
 							</div>
 						</form>
 					</div>

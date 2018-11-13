@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ import com.fanteng.finance.entity.LogUserAccount;
 import com.fanteng.finance.entity.RechargeOrder;
 import com.fanteng.finance.entity.UserAccount;
 import com.fanteng.util.DateUtil;
+import com.fanteng.util.ExcelUtil;
 import com.fanteng.util.StringUtil;
 
 @Service
@@ -122,6 +125,58 @@ public class RechargeOrderServiceImpl extends BaseServiceImpl<RechargeOrderDao, 
 		}
 
 		return new JsonResult(com.fanteng.core.HttpStatus.ACCEPTED, "操作失败");
+	}
+
+	/**
+	 * 导出Excel
+	 * 
+	 * @param response
+	 * @param params
+	 * @throws Exception
+	 */
+	@Override
+	public void export(HttpServletResponse response, Map<String, Object> params) throws Exception {
+		String fileName = MapUtils.getString(params, "fileName");
+		String keys = MapUtils.getString(params, "keys");
+		String columNames = MapUtils.getString(params, "columNames");
+		String replace = MapUtils.getString(params, "replace");
+
+		Integer current = MapUtils.getInteger(params, "current");
+		Integer size = MapUtils.getInteger(params, "size");
+		String userName = MapUtils.getString(params, "userName");
+		Short status = MapUtils.getShort(params, "status");
+		Short type = MapUtils.getShort(params, "type");
+		String beginTime = MapUtils.getString(params, "beginTime");
+		String endTime = MapUtils.getString(params, "endTime");
+		List<Condition> conditions = new ArrayList<Condition>(0);
+		Condition createTimeDesc = new Condition("createTime", Operation.DESC, "createTime");
+		conditions.add(createTimeDesc);
+
+		if (StringUtil.isNotBlank(userName)) {
+			Condition condition = new Condition("userName", Operation.LIKE_ANY, userName);
+			conditions.add(condition);
+		}
+		if (status != null) {
+			Condition condition = new Condition("status", Operation.EQ, status);
+			conditions.add(condition);
+		}
+		if (type != null) {
+			Condition condition = new Condition("type", Operation.EQ, type);
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(beginTime)) {
+			Date begin = DateUtil.toDate(beginTime, "yyyy-MM-dd");
+			Condition condition = new Condition("createTime", Operation.GE, new Timestamp(begin.getTime()));
+			conditions.add(condition);
+		}
+		if (StringUtil.isNotBlank(endTime)) {
+			Date end = DateUtil.toDate(endTime, "yyyy-MM-dd");
+			Condition condition = new Condition("createTime", Operation.LE, new Timestamp(end.getTime()));
+			conditions.add(condition);
+		}
+
+		List<?> list = findPage(current, size, conditions).getList();
+		ExcelUtil.export(response, fileName, list, keys, columNames, replace);
 	}
 
 }

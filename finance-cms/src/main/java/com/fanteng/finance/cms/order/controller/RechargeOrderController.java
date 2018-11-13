@@ -4,12 +4,14 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,6 +83,12 @@ public class RechargeOrderController {
 		rechargeOrder.setAuditTime(new Timestamp(new Date().getTime()));
 
 		return rechargeOrderService.audit(rechargeOrder);
+	}
+
+	@PostMapping("/export")
+	public void export(HttpServletResponse response, @RequestParam Map<String, Object> params) throws Exception {
+		params.put("size", Integer.MAX_VALUE);
+		rechargeOrderService.export(response, params);
 	}
 
 }
