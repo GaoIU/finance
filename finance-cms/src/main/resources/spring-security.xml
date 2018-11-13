@@ -27,7 +27,7 @@
 		<constructor-arg name="loginFormUrl" value="/" />
 	</bean>
 	
-	<security:http use-expressions="true" auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
+	<security:http use-expressions="true" auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint" disable-url-rewriting="true">
 		<security:intercept-url pattern="/" method="GET" requires-channel="any" access="permitAll" />
 		
 		<security:intercept-url pattern="/signIn" method="POST" requires-channel="any" access="permitAll" />
