@@ -195,6 +195,15 @@ function change_skin() {
 	$('.tooltip').attr('data-tip-bg', color);
 	$('.current').css('background-color', color);
 	$('#gloBox').removeClass().addClass('layui-fluid').addClass(skin);
+	if(!$('#gloBox').hasClass('menu_close')) {
+		$('.navT').find('span').each(function() {
+			if($(this).hasClass('tooltip')) {
+				$(this).css('display', 'none');
+			} else {
+				$(this).css('display', 'block');
+			}
+		});
+	}
 }
 
 var gloMenu = new Vue({
