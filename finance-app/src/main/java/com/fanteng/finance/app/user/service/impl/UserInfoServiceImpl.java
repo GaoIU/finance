@@ -71,9 +71,9 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoDao, UserInfo> 
 			UserAccount userAccount = new UserAccount();
 			userAccount.setUserId(userId.toString());
 
-			String userRegisterSwitch = redisClient.get(RedisCommonKeyProperties.USER_REGISTER_SWITCH);
+			String userRegisterSwitch = redisClient.get(RedisCommonKeyProperties.SYS_USER_REGISTER_SWITCH);
 			if (StringUtil.isNotBlank(userRegisterSwitch) && Boolean.valueOf(userRegisterSwitch)) {
-				String registerAmount = redisClient.get(RedisCommonKeyProperties.USER_REGISTER_AMOUNT);
+				String registerAmount = redisClient.get(RedisCommonKeyProperties.SYS_USER_REGISTER_AMOUNT);
 				Double userRegisterAmount = StringUtil.isBlank(registerAmount) ? 0.00 : Double.valueOf(registerAmount);
 				userAccount.setAmount(BigDecimal.valueOf(userRegisterAmount));
 				userAccount.setAvailableAmount(BigDecimal.valueOf(userRegisterAmount));

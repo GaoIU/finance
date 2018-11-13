@@ -39,7 +39,7 @@ public class RechargeOrderController {
 	@PostMapping
 	public JsonResult createRechargeOrder(HttpServletRequest request, @Valid @RequestBody RechargeOrder rechargeOrder)
 			throws Exception {
-		Double ratio = Double.valueOf(redisClient.get(RedisCommonKeyProperties.AMOUNT_PROPORTION));
+		Double ratio = Double.valueOf(redisClient.get(RedisCommonKeyProperties.SYS_AMOUNT_PROPORTION));
 		BigDecimal amount = rechargeOrder.getAmount();
 		amount = amount.divide(BigDecimal.valueOf(ratio));
 
