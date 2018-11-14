@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 06/11/2018 16:39:33
+ Date: 14/11/2018 18:16:35
 */
 
 SET NAMES utf8mb4;
@@ -30,6 +30,21 @@ CREATE TABLE `log_user_account`  (
   `create_time` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户账户记录表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of log_user_account
+-- ----------------------------
+INSERT INTO `log_user_account` VALUES ('2c9b90dad28847328c8190c7768bbd97', '040da02135754dc6b5e921c51c10d2b7', '1c59359207424ad7aab2b63c7b64d511', 1, 330000.00, '2018-11-07 10:59:17');
+INSERT INTO `log_user_account` VALUES ('2da93c2fa6fe45e9911c78a4780eacdc', '85fec9646da14126b589ce01bae3ec28', '0028884e83db4a74b55287cdefa2ea6c', 1, 100000.00, '2018-11-07 10:56:48');
+INSERT INTO `log_user_account` VALUES ('3955dcdc7d094a429a03637517bd0a30', '040da02135754dc6b5e921c51c10d2b7', '1c59359207424ad7aab2b63c7b64d511', 1, 300000.00, '2018-11-07 10:59:22');
+INSERT INTO `log_user_account` VALUES ('5117f40963da428f9b8276bfea5b3f4e', '040da02135754dc6b5e921c51c10d2b7', '1c59359207424ad7aab2b63c7b64d511', 0, 6600.00, '2018-11-07 10:57:40');
+INSERT INTO `log_user_account` VALUES ('63025793848e41b982ac1143f996d823', '040da02135754dc6b5e921c51c10d2b7', '1c59359207424ad7aab2b63c7b64d511', 1, 3300000.00, '2018-11-07 10:58:52');
+INSERT INTO `log_user_account` VALUES ('7bbc488c070b4fcd8178855b10570b3b', '85fec9646da14126b589ce01bae3ec28', '0028884e83db4a74b55287cdefa2ea6c', 1, 500000.00, '2018-11-07 10:56:42');
+INSERT INTO `log_user_account` VALUES ('ac5749527d5346ac9045bc1f425bd380', '85fec9646da14126b589ce01bae3ec28', '0028884e83db4a74b55287cdefa2ea6c', 0, 6600.00, '2018-11-07 10:54:41');
+INSERT INTO `log_user_account` VALUES ('ae9b9e3697614fd384114d812f7eb66d', 'e34a07f2533746d4aa716a465e330588', '5800a1ddf7734495b63bb2cf873394e9', 1, 500000.00, '2018-11-07 10:53:47');
+INSERT INTO `log_user_account` VALUES ('c862e2fc9b3a469db1ce4b13f04bfe35', '85fec9646da14126b589ce01bae3ec28', '0028884e83db4a74b55287cdefa2ea6c', 1, 10000.00, '2018-11-07 11:15:49');
+INSERT INTO `log_user_account` VALUES ('ce5ee1ab9a744def8dd4ed8b735dc81a', 'e34a07f2533746d4aa716a465e330588', '5800a1ddf7734495b63bb2cf873394e9', 1, 1000000.00, '2018-11-07 10:51:26');
+INSERT INTO `log_user_account` VALUES ('f36789acf3e041fdb51fae5b7a9e88d0', 'e34a07f2533746d4aa716a465e330588', '5800a1ddf7734495b63bb2cf873394e9', 0, 6600.00, '2018-11-06 17:53:31');
 
 -- ----------------------------
 -- Table structure for operate_config
@@ -79,6 +94,20 @@ CREATE TABLE `recharge_order`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '充值订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of recharge_order
+-- ----------------------------
+INSERT INTO `recharge_order` VALUES ('0d432f277d1f46cf9290968a629f8a12', '040da02135754dc6b5e921c51c10d2b7', '15024424787', '2018110710582208110891446', 330000.00, 3, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核通过', '2018-11-07 10:59:17', '2018-11-01 10:58:23', '2018-11-07 10:59:17');
+INSERT INTO `recharge_order` VALUES ('23626cf69c044119b07a79a9dc4db207', '040da02135754dc6b5e921c51c10d2b7', '15024424787', '2018110710581153545398982', 300000.00, 3, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核通过', '2018-11-07 10:59:22', '2018-11-02 10:58:12', '2018-11-07 10:59:22');
+INSERT INTO `recharge_order` VALUES ('5571df82ec4541ed8d7b49eb30ab8a1d', '85fec9646da14126b589ce01bae3ec28', '17357103526', '2018110711153885052889187', 10000.00, 2, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核通过', '2018-11-07 11:15:49', '2018-11-07 11:15:38', '2018-11-07 11:15:49');
+INSERT INTO `recharge_order` VALUES ('832b70a3145040f8bce3f440001df90e', 'e34a07f2533746d4aa716a465e330588', '18779141750', '2018110710481643246854231', 1000000.00, 1, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核通过', '2018-11-07 10:51:26', '2018-11-02 10:48:17', '2018-11-07 10:51:26');
+INSERT INTO `recharge_order` VALUES ('8941706952e3455dae1359efe3dc04ee', '85fec9646da14126b589ce01bae3ec28', '17357103526', '2018110710551149644269578', 500000.00, 2, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核通过', '2018-11-07 10:56:42', '2018-11-03 10:55:12', '2018-11-07 10:56:42');
+INSERT INTO `recharge_order` VALUES ('c248a29dadcb4295a606228812a72481', 'e34a07f2533746d4aa716a465e330588', '18779141750', '2018110710492563038973406', 50000.00, 1, 2, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核拒绝', '2018-11-07 10:52:10', '2018-11-03 10:49:25', '2018-11-07 10:52:10');
+INSERT INTO `recharge_order` VALUES ('c3ac9837830641cfbd39428ee1b1ab73', '040da02135754dc6b5e921c51c10d2b7', '15024424787', '2018110710582981135007802', 3300000.00, 3, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '哈哈哈', '2018-11-07 10:58:52', '2018-11-06 10:58:29', '2018-11-07 10:58:52');
+INSERT INTO `recharge_order` VALUES ('ce01e08dca9f41dba057a8f51a3f53ec', '85fec9646da14126b589ce01bae3ec28', '17357103526', '2018110710560077341364816', 100000.00, 2, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '审核通过', '2018-11-07 10:56:48', '2018-11-04 10:56:01', '2018-11-07 10:56:48');
+INSERT INTO `recharge_order` VALUES ('e37dce194d89403e93c1ee412e017c04', 'e34a07f2533746d4aa716a465e330588', '18779141750', '2018110710532227616063787', 500000.00, 1, 1, '5c7a8200248b4adaa382da7602857b9f', 'admin', '已确认收款', '2018-11-07 10:53:47', '2018-11-05 10:53:22', '2018-11-07 10:53:47');
+INSERT INTO `recharge_order` VALUES ('eec5e9b654d7488fa2d7a8f7f99e0456', '85fec9646da14126b589ce01bae3ec28', '17357103526', '2018110710563402233879195', 10000.00, 2, 2, '5c7a8200248b4adaa382da7602857b9f', 'admin', '错误订单，未收款', '2018-11-07 10:57:03', '2018-11-07 10:56:34', '2018-11-07 10:57:03');
+
+-- ----------------------------
 -- Table structure for schedule_job
 -- ----------------------------
 DROP TABLE IF EXISTS `schedule_job`;
@@ -121,9 +150,9 @@ CREATE TABLE `sys_config`  (
 -- ----------------------------
 -- Records of sys_config
 -- ----------------------------
-INSERT INTO `sys_config` VALUES ('a7f7ad6ab8f0435e86300c2273f0b6d1', '用户注册奖励开关', 'user_register_switch', 'true', '用户注册奖励开关', 0, '2018-11-01 16:43:37', NULL);
-INSERT INTO `sys_config` VALUES ('c72ec47557ea46179e8105f23cfc4ba4', '金币比例配置', 'amount_proportion', '100', '人民币和平台金币的比例', 0, '2018-11-01 17:49:19', NULL);
-INSERT INTO `sys_config` VALUES ('e5b423dd5a624e148640acb4459d23e8', '用户注册奖励金额', 'user_register_amount', '6600', '用户注册奖励金额', 0, '2018-11-01 16:45:11', NULL);
+INSERT INTO `sys_config` VALUES ('a7f7ad6ab8f0435e86300c2273f0b6d1', '用户注册奖励开关', 'sys_user_register_switch', 'true', '用户注册奖励开关', 0, '2018-11-01 16:43:37', NULL);
+INSERT INTO `sys_config` VALUES ('c72ec47557ea46179e8105f23cfc4ba4', '金币比例配置', 'sys_amount_proportion', '100', '人民币和平台金币的比例', 0, '2018-11-01 17:49:19', NULL);
+INSERT INTO `sys_config` VALUES ('e5b423dd5a624e148640acb4459d23e8', '用户注册奖励金额', 'sys_user_register_amount', '6600', '用户注册奖励金额', 0, '2018-11-01 16:45:11', NULL);
 
 -- ----------------------------
 -- Table structure for sys_resource
@@ -173,6 +202,7 @@ INSERT INTO `sys_resource` VALUES ('8207de92362f42d5985e7e7e2f595146', '资金�
 INSERT INTO `sys_resource` VALUES ('82100d63a2d84d889c44a5d68cb03480', '后台用户删除', 'SYS_USER_DELETE', '/sysUser', 'DELETE', 1, 3, 'fa fa-remove', 'bde09fdf52e24ef1850575b5b9afd292', '后台用户删除权限', 0, '2018-10-17 15:59:53', NULL);
 INSERT INTO `sys_resource` VALUES ('8cdc836f375144d0834693cb2f641abd', '后台系统配置修改', 'SYS_CONFIG_UPDATE', '/sysConfig', 'PUT', 1, 2, 'fa fa-edit', '7f375cff304a499296eeecd58ed1abb8', '后台系统配置修改权限', 0, '2018-10-29 10:06:46', NULL);
 INSERT INTO `sys_resource` VALUES ('952854adceb046378f0c682dd9d0fc90', '验证后台角色代码', 'SYS_ROLE_CODE', '/sysRole/checkCode', 'POST', 2, 2, 'fa fa-anchor', 'eb95e80d781146589f3d420f5aa71136', '验证后台角色代码是否唯一', 0, '2018-10-09 17:39:31', NULL);
+INSERT INTO `sys_resource` VALUES ('955d1a92f0e84af4b05083d0a2c4f8bb', '充值统计', 'RECHARGE_STATISTICS', '/statistics/gotoRecharge', 'GET', 0, 0, 'fa fa-universal-access', 'f608205576b742db9d5ed7370f4e5bbd', '充值统计页面', 0, '2018-11-07 11:10:52', '2018-11-07 17:22:37');
 INSERT INTO `sys_resource` VALUES ('a86045834b024551b419ef9c5ba508bf', '后台角色权限', 'SYS_ROLE_PERMISSION', '/sysRole/getPermission', 'POST', 2, 3, 'fa fa-bolt', 'eb95e80d781146589f3d420f5aa71136', '后台角色权限展示', 0, '2018-10-09 18:17:06', NULL);
 INSERT INTO `sys_resource` VALUES ('ac380a322c994f2abd3db8f57cf94b4a', '资金操作配置新增/修改页面', 'OPERATECONFIG_GOTOINFO', '/operateConfig/gotoInfo', 'GET', 2, 5, 'fa fa-info-circle', '70d04e8d022949a4bb740cc3f9fd99a9', '资金操作配置新增/修改页面', 0, '2018-11-05 16:47:36', NULL);
 INSERT INTO `sys_resource` VALUES ('b34f49a564ed4999801c694562db30ae', '后台用户新增或修改页面', 'SYS_USER_INFO', '/sysUser/gotoInfo', 'GET', 2, 1, 'fa fa-info-circle', 'bde09fdf52e24ef1850575b5b9afd292', '跳转至后台用户新增或修改页面', 0, '2018-10-17 11:38:18', NULL);
@@ -184,6 +214,7 @@ INSERT INTO `sys_resource` VALUES ('cac138901c3d4f22a515876840ce517b', '后台�
 INSERT INTO `sys_resource` VALUES ('d4bcfb18749f44549db6f938685805d4', '后台资源新增或修改页面', 'SYS_RESOURCE_INFO', '/sysResource/gotoInfo', 'GET', 2, 5, 'fa fa-info-circle', '172e6d5275534507aeed3b294880b622', '跳转至后台资源新增或修改页面', 0, '2018-10-09 15:17:37', '2018-10-09 16:42:54');
 INSERT INTO `sys_resource` VALUES ('d72db9034bc044ad81acd6cef2e63be1', '后台角色列表', 'SYS_ROLE_LIST', '/sysRole', 'GET', 1, 0, 'fa fa-key', 'eb95e80d781146589f3d420f5aa71136', '后台角色页面', 0, '2018-09-04 21:47:02', '2018-10-10 10:02:12');
 INSERT INTO `sys_resource` VALUES ('dc092418c0b142ee945fbb443a23e741', '后台角色删除', 'SYS_ROLE_DELETE', '/sysRole', 'DELETE', 1, 3, 'fa fa-remove', 'eb95e80d781146589f3d420f5aa71136', '后台角色删除权限', 0, '2018-10-16 15:50:11', NULL);
+INSERT INTO `sys_resource` VALUES ('dcf0484dcdd24de19b0e0828d13b2a32', '充值统计查看', 'STATISTICS_RECHARGE', '/statistics/recharge', 'GET', 1, 0, 'fa fa-search', '955d1a92f0e84af4b05083d0a2c4f8bb', '充值统计查看权限', 0, '2018-11-07 17:23:33', NULL);
 INSERT INTO `sys_resource` VALUES ('defbea561d9b472f82ae7b7254eb4e3a', '资金操作配置新增', 'OPERATECONFIG_SAVE', '/operateConfig', 'POST', 1, 1, 'fa fa-plus-circle', '70d04e8d022949a4bb740cc3f9fd99a9', '资金操作配置新增权限', 0, '2018-11-05 16:32:51', '2018-11-05 16:40:28');
 INSERT INTO `sys_resource` VALUES ('e6215cecf00a45ef8e331734386ca1eb', '后台资源启用/禁用', 'SYS_RESOURCE_USABLE', '/sysResource/usable', 'PUT', 1, 4, 'fa fa-ban', '172e6d5275534507aeed3b294880b622', '后台资源启用/禁用权限', 0, '2018-10-17 15:35:35', NULL);
 INSERT INTO `sys_resource` VALUES ('eb95e80d781146589f3d420f5aa71136', '后台角色管理', 'SYS_ROLE', '/sysRole/gotoList', 'GET', 0, 1, 'fa fa-id-badge', 'eebaad47f58547f2b541f89b59dff980', '后台角色管理，由开发人员维护', 0, '2018-07-22 12:17:32', '2018-10-31 10:49:23');
@@ -191,6 +222,7 @@ INSERT INTO `sys_resource` VALUES ('eebaad47f58547f2b541f89b59dff980', '系统�
 INSERT INTO `sys_resource` VALUES ('ef044654ebca4d58a466e8e701bea5e3', '定时任务管理', 'QUARTZ_JOB', '/quartz', 'GET', 0, 4, 'fa fa-history', 'eebaad47f58547f2b541f89b59dff980', '定时任务管理页面', 0, '2018-10-18 17:35:01', '2018-10-31 10:40:12');
 INSERT INTO `sys_resource` VALUES ('f2d9c680bc8e40078ccb1379a2618c03', '资金操作配置列表', 'OPERATECONFIG_LIST', '/operateConfig', 'GET', 1, 0, 'fa fa-search', '70d04e8d022949a4bb740cc3f9fd99a9', '资金操作配置查看权限', 0, '2018-11-05 16:30:13', '2018-11-05 16:39:58');
 INSERT INTO `sys_resource` VALUES ('f41c9cb3a8e041a7b596ebf08882cdf4', '验证后台资源代码', 'SYS_RESOURCE_CODE', '/sysResource/checkCode', 'POST', 2, 6, 'fa fa-anchor', '172e6d5275534507aeed3b294880b622', '验证后台资源代码是否唯一', 0, '2018-10-09 15:20:02', '2018-10-09 17:36:27');
+INSERT INTO `sys_resource` VALUES ('f608205576b742db9d5ed7370f4e5bbd', '统计分析', 'STATISTICAL_ANALYSIS', '', 'GET', 0, 2, 'fa fa-bar-chart', '', '统计分析模块', 0, '2018-11-07 11:07:42', NULL);
 INSERT INTO `sys_resource` VALUES ('f8f3a2edce38488483b02df2c15adf74', '资金操作配置修改', 'OPERATECONFIG_UPDATE', '/operateConfig', 'PUT', 1, 2, 'fa fa-edit', '70d04e8d022949a4bb740cc3f9fd99a9', '资金操作配置修改权限', 0, '2018-11-05 16:39:25', NULL);
 INSERT INTO `sys_resource` VALUES ('fb621735b4484c529fa1112136f9ac39', '财务管理', 'FINANCE_MANAGE', '', 'GET', 0, 1, 'fa fa-rmb', '', '财务管理模块', 0, '2018-11-05 16:20:23', NULL);
 INSERT INTO `sys_resource` VALUES ('fce787f79ca649769a7f0aafeb5ea165', '后台资源列表', 'SYS_RESOURCE_LIST', '/sysResource', 'GET', 1, 0, 'fa fa-file-text', '172e6d5275534507aeed3b294880b622', '后台资源页面', 0, '2018-09-04 21:45:05', '2018-10-10 10:01:47');
@@ -212,7 +244,7 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('2c9d8c5a193a44ffbb962b56696c555e', '后台资源管理查看', 'SYS_RESOURCE_VIEW', 0, '2018-10-16 16:31:08', '2018-11-06 15:44:20');
+INSERT INTO `sys_role` VALUES ('2c9d8c5a193a44ffbb962b56696c555e', '后台资源管理查看', 'SYS_RESOURCE_VIEW', 0, '2018-10-16 16:31:08', '2018-11-12 15:07:16');
 INSERT INTO `sys_role` VALUES ('d1a9814e21e94c7684dd0703b0c74fe3', '超级管理员', 'ADMINISTRATOR', 0, '2018-07-02 23:22:45', NULL);
 
 -- ----------------------------
@@ -230,29 +262,32 @@ CREATE TABLE `sys_role_resource`  (
 -- ----------------------------
 -- Records of sys_role_resource
 -- ----------------------------
-INSERT INTO `sys_role_resource` VALUES ('0c19f2c071dd4d77b8f7b25a2aba7146', '2c9d8c5a193a44ffbb962b56696c555e', 'eb95e80d781146589f3d420f5aa71136', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('145f1dece8864c0e85871dcdc7c536af', '2c9d8c5a193a44ffbb962b56696c555e', 'b34f49a564ed4999801c694562db30ae', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('2a11b8cf33204f7c9ad9901883132067', '2c9d8c5a193a44ffbb962b56696c555e', '0f491c03b75d47b3818d6f0f28f8bc8a', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('2bcf1c4aa0804bc587c9a8411abbd662', '2c9d8c5a193a44ffbb962b56696c555e', 'f8f3a2edce38488483b02df2c15adf74', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('2dd63a0946e24e5c96af8e3215147e22', '2c9d8c5a193a44ffbb962b56696c555e', '0d710818c76744d4b9b9e9c22e5ee229', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('45757fc5d2c746ebbe8b46075c36d9a8', '2c9d8c5a193a44ffbb962b56696c555e', '41f8141bf91248ef81965b8789446960', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('47768fa6cb8946c1bb7cc09f4ca1d58b', '2c9d8c5a193a44ffbb962b56696c555e', 'fb621735b4484c529fa1112136f9ac39', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('4d6363214ac7425abcb09bce56988b28', '2c9d8c5a193a44ffbb962b56696c555e', 'c4c150b45e914ce1abab1a3c3b22935d', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('5952253f3e514a1cb887ca564dca7a32', '2c9d8c5a193a44ffbb962b56696c555e', '952854adceb046378f0c682dd9d0fc90', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('5c32b5b869a64e13a39e423f67244b8c', '2c9d8c5a193a44ffbb962b56696c555e', '70d04e8d022949a4bb740cc3f9fd99a9', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('654a0497ed4240dd981b2a009032eb17', '2c9d8c5a193a44ffbb962b56696c555e', '043ed750ed734b378d00cec669081f3d', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('805388a8302a4d8ea46080a86b2a5372', '2c9d8c5a193a44ffbb962b56696c555e', '436df2ba5ece4964978dc9d81bf3e0f5', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('86643ee5c1ce46159b6426435c34c7af', '2c9d8c5a193a44ffbb962b56696c555e', '7f375cff304a499296eeecd58ed1abb8', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('87375085dfce402ebb31f65ee1503368', '2c9d8c5a193a44ffbb962b56696c555e', 'ac380a322c994f2abd3db8f57cf94b4a', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('8e3ab04143084ca5b9134e4c69efb724', '2c9d8c5a193a44ffbb962b56696c555e', 'd72db9034bc044ad81acd6cef2e63be1', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('9ee51390e82e40799f83243640e6be16', '2c9d8c5a193a44ffbb962b56696c555e', 'defbea561d9b472f82ae7b7254eb4e3a', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('b1c39da2791c4f3a9488cf595c1df033', '2c9d8c5a193a44ffbb962b56696c555e', '04c09eb50db44a0091c173a7a5d08e4e', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('b2322b726b0f434582628efafadbe103', '2c9d8c5a193a44ffbb962b56696c555e', '8207de92362f42d5985e7e7e2f595146', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('ba541e1bd5304e81bbef31f4af17dd53', '2c9d8c5a193a44ffbb962b56696c555e', 'bde09fdf52e24ef1850575b5b9afd292', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('c7a4c8d7077a423e97c6ce5ca060e847', '2c9d8c5a193a44ffbb962b56696c555e', '3a06bae96acb4be1b7cc78063c0fa8d7', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('cc2f870fbd42498881b08491c10f3609', '2c9d8c5a193a44ffbb962b56696c555e', 'f2d9c680bc8e40078ccb1379a2618c03', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('fa59c69f6f18413d92bfd0ec1c14fd30', '2c9d8c5a193a44ffbb962b56696c555e', 'eebaad47f58547f2b541f89b59dff980', '2018-11-06 15:44:20');
-INSERT INTO `sys_role_resource` VALUES ('fd8c7d7a901b44ddbe70df7b6bfdd0cc', '2c9d8c5a193a44ffbb962b56696c555e', 'a86045834b024551b419ef9c5ba508bf', '2018-11-06 15:44:20');
+INSERT INTO `sys_role_resource` VALUES ('0179a92e59b14be1a00ea0fb72003329', '2c9d8c5a193a44ffbb962b56696c555e', 'f8f3a2edce38488483b02df2c15adf74', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('1ac930e46cda4d95ad6d39bcc468b2c3', '2c9d8c5a193a44ffbb962b56696c555e', '955d1a92f0e84af4b05083d0a2c4f8bb', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('2a26fce833fe4853b00a8a70010632d7', '2c9d8c5a193a44ffbb962b56696c555e', 'fb621735b4484c529fa1112136f9ac39', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('3bbe016098b14f17b20076674c34be29', '2c9d8c5a193a44ffbb962b56696c555e', '0d710818c76744d4b9b9e9c22e5ee229', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('3ca7256fe0a24e089ff63b5b8315efc1', '2c9d8c5a193a44ffbb962b56696c555e', '436df2ba5ece4964978dc9d81bf3e0f5', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('3de33779b0e646b89a56303a961e884b', '2c9d8c5a193a44ffbb962b56696c555e', 'a86045834b024551b419ef9c5ba508bf', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('3fad9fa4455f432eb14197ccc3165c55', '2c9d8c5a193a44ffbb962b56696c555e', '70d04e8d022949a4bb740cc3f9fd99a9', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('76a0155f0e174d9a88b3fab88e086b63', '2c9d8c5a193a44ffbb962b56696c555e', 'eebaad47f58547f2b541f89b59dff980', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('7d7e45a367ec430da598629b651b556c', '2c9d8c5a193a44ffbb962b56696c555e', 'bde09fdf52e24ef1850575b5b9afd292', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('934f3dceeeeb418ea60ba6ad18a230c2', '2c9d8c5a193a44ffbb962b56696c555e', '8207de92362f42d5985e7e7e2f595146', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('97adc7add85a4554b0ccef683636ce0b', '2c9d8c5a193a44ffbb962b56696c555e', 'c4c150b45e914ce1abab1a3c3b22935d', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('97d57e0297e24ae9bc0cae59a92443d1', '2c9d8c5a193a44ffbb962b56696c555e', '0f491c03b75d47b3818d6f0f28f8bc8a', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('9a8b90e251664ac3b4aa274878ec61fc', '2c9d8c5a193a44ffbb962b56696c555e', 'b34f49a564ed4999801c694562db30ae', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('9ef98186c3ab43a0861871e4587db9ac', '2c9d8c5a193a44ffbb962b56696c555e', '952854adceb046378f0c682dd9d0fc90', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('a79f4e596e83464d817bb619f6dda4d6', '2c9d8c5a193a44ffbb962b56696c555e', 'f608205576b742db9d5ed7370f4e5bbd', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('ae012546a3714c6187dd61f51a88d9ca', '2c9d8c5a193a44ffbb962b56696c555e', '7f375cff304a499296eeecd58ed1abb8', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('b13d8c35bc7d4e1281ec19e0fac4d2c1', '2c9d8c5a193a44ffbb962b56696c555e', 'f2d9c680bc8e40078ccb1379a2618c03', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('c2844ff387d64e5b897dd814ea1889bb', '2c9d8c5a193a44ffbb962b56696c555e', '41f8141bf91248ef81965b8789446960', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('cb36ab1378e34a4f8fa72cb7aebc89cd', '2c9d8c5a193a44ffbb962b56696c555e', '043ed750ed734b378d00cec669081f3d', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('cc8ca9c7f10a43ea9ca1e7e49d94529b', '2c9d8c5a193a44ffbb962b56696c555e', 'defbea561d9b472f82ae7b7254eb4e3a', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('d1264c9f05554d639d499e261aaa1b1f', '2c9d8c5a193a44ffbb962b56696c555e', '3a06bae96acb4be1b7cc78063c0fa8d7', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('e2a8ff5bb4cd4d988ba135ad07d2a4e6', '2c9d8c5a193a44ffbb962b56696c555e', 'dcf0484dcdd24de19b0e0828d13b2a32', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('e6aab868bd1b4b4a960c7ca3268b69a5', '2c9d8c5a193a44ffbb962b56696c555e', '04c09eb50db44a0091c173a7a5d08e4e', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('e9a11f5423504974be957b88c9252c83', '2c9d8c5a193a44ffbb962b56696c555e', 'eb95e80d781146589f3d420f5aa71136', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('ea8e3102b144471c92b3d89a68f78503', '2c9d8c5a193a44ffbb962b56696c555e', 'd72db9034bc044ad81acd6cef2e63be1', '2018-11-12 15:07:16');
+INSERT INTO `sys_role_resource` VALUES ('f29d082b3faf40fdb4c68d25fdcdce76', '2c9d8c5a193a44ffbb962b56696c555e', 'ac380a322c994f2abd3db8f57cf94b4a', '2018-11-12 15:07:16');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -312,6 +347,13 @@ CREATE TABLE `user_account`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户账户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of user_account
+-- ----------------------------
+INSERT INTO `user_account` VALUES ('0028884e83db4a74b55287cdefa2ea6c', '85fec9646da14126b589ce01bae3ec28', 616600.00, 616600.00, 0.00, '2018-11-07 10:54:41', '2018-11-07 11:15:49');
+INSERT INTO `user_account` VALUES ('1c59359207424ad7aab2b63c7b64d511', '040da02135754dc6b5e921c51c10d2b7', 3936600.00, 3936600.00, 0.00, '2018-11-07 10:57:40', '2018-11-07 10:59:22');
+INSERT INTO `user_account` VALUES ('5800a1ddf7734495b63bb2cf873394e9', 'e34a07f2533746d4aa716a465e330588', 1506600.00, 1506600.00, 0.00, '2018-11-06 17:53:30', '2018-11-07 10:53:47');
+
+-- ----------------------------
 -- Table structure for user_info
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
@@ -328,6 +370,13 @@ CREATE TABLE `user_info`  (
   `update_time` timestamp(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_info
+-- ----------------------------
+INSERT INTO `user_info` VALUES ('040da02135754dc6b5e921c51c10d2b7', 'TN4xaziO', '15024424787', '$2a$10$1HkmMsEjGXEf/m9yK3Eev.GQDOL.7G0kfDwVLXt1UOGVJoxU3Oo96', '15024424787', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539682975555&di=6c56c48fb1da3db0d3ca42d75230f96d&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180709%2F0d689e50c9f04cf6ab0631303aef5900.gif', NULL, 0, '2018-11-07 10:57:40', NULL);
+INSERT INTO `user_info` VALUES ('85fec9646da14126b589ce01bae3ec28', 'BMVZhGUR', '17357103526', '$2a$10$o65QlFZsiz5FD5DTVrRRmONgGWEtWvbYcrnbvR9IMkIKxxc9Etwzq', '17357103526', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539682975555&di=6c56c48fb1da3db0d3ca42d75230f96d&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180709%2F0d689e50c9f04cf6ab0631303aef5900.gif', NULL, 0, '2018-11-07 10:54:41', NULL);
+INSERT INTO `user_info` VALUES ('e34a07f2533746d4aa716a465e330588', 'oMbbHgX0', '18779141750', '$2a$10$kcserXPxD.SmoCv/oz.sdeYMP9TSRVe79fz56mukMTFagvwHjD32C', '18779141750', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539682975555&di=6c56c48fb1da3db0d3ca42d75230f96d&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180709%2F0d689e50c9f04cf6ab0631303aef5900.gif', NULL, 0, '2018-11-06 17:53:30', NULL);
 
 -- ----------------------------
 -- Table structure for withdraw_order
