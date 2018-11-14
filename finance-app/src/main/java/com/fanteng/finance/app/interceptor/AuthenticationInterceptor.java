@@ -49,6 +49,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		}
 
 		String token = request.getHeader("Authorization");
+		if (StringUtil.isBlank(token)) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
+		}
+
 		String userId;
 		Map<?, ?> map;
 		try {
@@ -59,9 +63,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
 		}
 
-		if (StringUtil.isBlank(token)) {
-			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
-		}
 		if (CommonUtil.isClient(userAgent)) {
 			userId = redisClient.get(clientId);
 			if (StringUtil.isBlank(userId)) {
@@ -70,12 +71,24 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		}
 
 		String tokenOfRedis = redisClient.get(userId);
-		if (!StringUtil.equals(token, tokenOfRedis)) {
-			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已在别处登录，请重新登录");
+		if (StringUtil.isBlank(tokenOfRedis)) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "我已经不记得你是谁了，请重新登录");
 		}
 
-		if (MapUtils.getShort(map, "status") == UserInfo.STATUS_DISABLE) {
+		Map<?, ?> mapOfRedis;
+		try {
+			String jsonOfRedis = RSAUtil.matchesByPrivateKey(tokenOfRedis, SignatureProperties.SERVER_PRIVATE_KEY);
+			mapOfRedis = JsonUtil.fromJson(jsonOfRedis, Map.class);
+		} catch (Exception e) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "来者何人，报上名来");
+		}
+
+		if (MapUtils.getShort(mapOfRedis, "status") == UserInfo.STATUS_DISABLE) {
 			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已被禁用，请联系客服人员");
+		}
+
+		if (!StringUtil.equals(token, tokenOfRedis)) {
+			throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "该账号已在别处登录，请重新登录");
 		}
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);
