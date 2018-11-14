@@ -1,4 +1,4 @@
-package com.fanteng.finance.cms.sys.controller;
+package com.fanteng.finance.cms.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;

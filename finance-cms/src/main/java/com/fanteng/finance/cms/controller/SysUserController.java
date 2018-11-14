@@ -1,4 +1,4 @@
-package com.fanteng.finance.cms.sys.controller;
+package com.fanteng.finance.cms.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,9 +40,6 @@ public class SysUserController {
 
 	@Autowired
 	private SysRoleService sysRoleService;
-
-	@Value("${sys.user.default.session.key}")
-	private String defaultSessionKey;
 
 	/**
 	 * 跳转至后台用户列表页面
