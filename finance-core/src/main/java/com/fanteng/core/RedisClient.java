@@ -585,4 +585,20 @@ public class RedisClient {
 		return pexpireAt;
 	}
 
+	public Long ttl(byte[] key) {
+		Long ttl = null;
+		try (ShardedJedis jedis = shardedJedisPool.getResource()) {
+			ttl = jedis.ttl(key);
+		}
+		return ttl;
+	}
+
+	public Long ttl(String key) {
+		Long ttl = null;
+		try (ShardedJedis jedis = shardedJedisPool.getResource()) {
+			ttl = jedis.ttl(key);
+		}
+		return ttl;
+	}
+
 }
