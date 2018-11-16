@@ -43,6 +43,9 @@ public class LogUserAccount implements Serializable {
 	@Column(name = "user_id")
 	private String userId;
 
+	@Column(name = "user_name")
+	private String userName;
+
 	public LogUserAccount() {
 	}
 
@@ -94,12 +97,21 @@ public class LogUserAccount implements Serializable {
 		this.userId = userId;
 	}
 
-	public LogUserAccount(BigDecimal amount, short operationType, String userAccountId, String userId) {
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public LogUserAccount(BigDecimal amount, short operationType, String userAccountId, String userId, String userName) {
 		super();
 		this.amount = amount;
 		this.operationType = operationType;
 		this.userAccountId = userAccountId;
 		this.userId = userId;
+		this.userName = userName;
 	}
 
 }

@@ -41,7 +41,7 @@ public class UserInfo implements Serializable {
 	private Timestamp createTime;
 
 	@Column(name = "inviter_id")
-	private BigInteger inviterId;
+	private BigInteger inviterId = BigInteger.ZERO;
 
 	@Pattern(regexp = "0?(13|14|15|17|18|19)[0-9]{9}", message = "手机号码不合法")
 	private String mobile;
