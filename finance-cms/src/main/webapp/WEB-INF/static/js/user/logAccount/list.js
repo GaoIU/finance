@@ -122,14 +122,14 @@ var listSearch = new Vue({
 var queryList = new Vue({
 	el: '#queryList',
 	data: {
-		items: {}
+		items: []
 	},
 	created: function() {
 		this.find();
 	},
 	methods: {
 		find() {
-			var URL = "/userInfo/queryLogUserAccount?" + $('#searchForm').serialize();
+			var URL = "/userInfo/queryLogUserAccount?current=" + pageShow.current + "&size=" + pageShow.size + "&" + $('#searchForm').serialize();
 			$.get(URL, function(res) {
 				var json = res.data;
 				pageShow.setPage(json.page);
