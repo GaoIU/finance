@@ -82,7 +82,8 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoDao, UserInfo> 
 			Serializable userAccountId = userAccountService.save(userAccount);
 			if (userAccountId != null) {
 				LogUserAccount logUserAccount = new LogUserAccount(userAccount.getAmount(),
-						LogUserAccount.OPERATION_TYPE_REGISTER, userAccountId.toString(), userId.toString());
+						LogUserAccount.OPERATION_TYPE_REGISTER, userAccountId.toString(), userId.toString(),
+						userInfo.getUserName());
 				logUserAccountService.save(logUserAccount);
 
 				return new JsonResult(HttpStatus.OK, "注册成功");

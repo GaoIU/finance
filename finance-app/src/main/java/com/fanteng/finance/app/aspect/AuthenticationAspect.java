@@ -17,12 +17,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.JsonResult;
 import com.fanteng.core.RedisClient;
-import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.UserInfo;
 import com.fanteng.util.BeanUtil;
 import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
+import com.fanteng.util.SignatureProperties;
 
 @Aspect
 @Component

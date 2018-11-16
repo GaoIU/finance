@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.util.DateUtil;
 import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
+import com.fanteng.util.SignatureProperties;
 import com.fanteng.util.StringUtil;
 
 public class CommonUtil {

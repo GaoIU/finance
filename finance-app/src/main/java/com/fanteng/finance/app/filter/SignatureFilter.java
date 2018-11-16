@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.collections.MapUtils;
 
 import com.fanteng.core.HttpStatus;
-import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.util.AESUtil;
 import com.fanteng.util.HttpBodyUtil;
 import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
+import com.fanteng.util.SignatureProperties;
 import com.fanteng.util.StringUtil;
 
 public class SignatureFilter implements Filter {

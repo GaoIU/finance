@@ -13,11 +13,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.fanteng.core.HttpStatus;
 import com.fanteng.core.RedisClient;
 import com.fanteng.exception.UnauthorizedException;
-import com.fanteng.finance.app.properties.SignatureProperties;
 import com.fanteng.finance.app.util.CommonUtil;
 import com.fanteng.finance.entity.UserInfo;
 import com.fanteng.util.JsonUtil;
 import com.fanteng.util.RSAUtil;
+import com.fanteng.util.SignatureProperties;
 import com.fanteng.util.StringUtil;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
