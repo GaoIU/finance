@@ -1,6 +1,7 @@
 package com.fanteng.util;
 
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -122,11 +123,11 @@ public class ExcelUtil {
 					obj = new String("");
 				}
 
-				if (obj instanceof Double) {
-					DecimalFormat df = new DecimalFormat("0.00");
+				if (obj instanceof Double || obj instanceof BigDecimal) {
+					DecimalFormat df = new DecimalFormat("#.##");
 					obj = df.format(obj);
 				}
-				
+
 				if (obj instanceof Timestamp) {
 					obj = obj.toString().replace(".0", "");
 				}
