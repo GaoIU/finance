@@ -48,8 +48,7 @@ public class HomeController {
 	 */
 	@GetMapping("/")
 	public ModelAndView home() {
-		ModelAndView mav = new ModelAndView("/sys/login");
-		return mav;
+		return new ModelAndView("/sys/login");
 	}
 
 	/**
@@ -59,8 +58,7 @@ public class HomeController {
 	 */
 	@GetMapping("/index")
 	public ModelAndView index() {
-		ModelAndView mav = new ModelAndView("/sys/index");
-		return mav;
+		return new ModelAndView("/sys/index");
 	}
 
 	/**

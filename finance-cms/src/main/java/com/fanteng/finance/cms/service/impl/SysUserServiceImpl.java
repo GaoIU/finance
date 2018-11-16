@@ -145,6 +145,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 		String beginTime = MapUtils.getString(params, "beginTime");
 		String endTime = MapUtils.getString(params, "endTime");
 		List<Condition> conditions = new ArrayList<>(0);
+		Condition createTimeDesc = new Condition("createTime", Operation.DESC, "createTime");
+		conditions.add(createTimeDesc);
 
 		if (StringUtil.isNotBlank(userName)) {
 			Condition condition = new Condition("userName", Operation.LIKE_ANY, userName);
@@ -164,7 +166,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUser> imp
 			conditions.add(condition);
 		}
 		if (StringUtil.isNotBlank(endTime)) {
-			Date end = DateUtil.toDate(endTime, "yyyy-MM-dd");
+			Date end = DateUtil.toDate(endTime + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
 			Condition condition = new Condition("createTime", Operation.LE, new Timestamp(end.getTime()));
 			conditions.add(condition);
 		}

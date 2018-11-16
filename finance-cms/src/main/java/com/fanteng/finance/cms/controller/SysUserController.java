@@ -106,7 +106,7 @@ public class SysUserController {
 	}
 
 	/**
-	 * 删除后台角色
+	 * 删除后台用户
 	 * 
 	 * @param id
 	 * @return

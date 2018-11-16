@@ -118,8 +118,7 @@ public class SysResourceController {
 	 */
 	@GetMapping("/gotoList")
 	public ModelAndView gotoList() {
-		ModelAndView mav = new ModelAndView("/sys/resource/list");
-		return mav;
+		return new ModelAndView("/sys/resource/list");
 	}
 
 	/**

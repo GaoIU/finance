@@ -43,8 +43,7 @@ public class RechargeOrderController {
 	 */
 	@GetMapping("/gotoList")
 	public ModelAndView gotoList() {
-		ModelAndView mav = new ModelAndView("/order/recharge/list");
-		return mav;
+		return new ModelAndView("/order/recharge/list");
 	}
 
 	/**

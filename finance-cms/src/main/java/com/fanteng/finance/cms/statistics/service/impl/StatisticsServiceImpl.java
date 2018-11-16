@@ -49,11 +49,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 			map.put("type", type);
 		}
 		if (StringUtil.isNotBlank(beginTime)) {
-			sb.append(" AND ro.create_time >= :beginTime");
+			sb.append(" AND DATE(ro.create_time) >= :beginTime");
 			map.put("beginTime", beginTime);
 		}
 		if (StringUtil.isNotBlank(endTime)) {
-			sb.append(" AND ro.create_time <= :endTime");
+			sb.append(" AND DATE(ro.create_time) <= :endTime");
 			map.put("endTime", endTime);
 		}
 

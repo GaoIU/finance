@@ -26,8 +26,7 @@ public class StatisticsController {
 	 */
 	@GetMapping("/gotoRecharge")
 	public ModelAndView gotoRecharge() {
-		ModelAndView mav = new ModelAndView("/statistics/recharge/list");
-		return mav;
+		return new ModelAndView("/statistics/recharge/list");
 	}
 
 	/**

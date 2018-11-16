@@ -112,8 +112,7 @@ public class SysRoleController {
 	 */
 	@GetMapping("/gotoList")
 	public ModelAndView gotoList() {
-		ModelAndView mav = new ModelAndView("/sys/role/list");
-		return mav;
+		return new ModelAndView("/sys/role/list");
 	}
 
 	/**

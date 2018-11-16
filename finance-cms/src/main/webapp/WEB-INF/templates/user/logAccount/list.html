@@ -1,0 +1,214 @@
+<#assign sc=JspTaglibs["/WEB-INF/static/tag/security.tld"] />
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>用户账户明细</title>
+
+		<link rel="icon" href="/static/img/icon.png" />
+		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="/static/css/animate.css" media="all" />
+		<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
+		<link rel="stylesheet" href="/static/css/global.css" media="all" />
+	</head>
+
+	<body>
+		<div class="admin_main">
+			<!--
+            	作者：756034419@qq.com
+            	时间：2018-08-19
+            	描述：操作栏
+            -->
+			<div class="admin_header_fixed">
+				<div class="admin_header clearfix">
+					<div class="title"><i></i>用户账户明细</div>
+				</div>
+			</div>
+
+			<!--
+            	作者：756034419@qq.com
+            	时间：2018-08-19
+            	描述：展示部分
+            -->
+			<div class="admin_base">
+				<!--
+                	作者：756034419@qq.com
+                	时间：2018-08-19
+                	描述：搜索部分
+                -->
+				<div class="admin_module clearfix admin_module_search">
+					<i class="line"></i>
+					<a class="javascript" id="list_search_toggle" rel='list_search_switch'>展开搜索</a>
+					<div id="list_search" class="clearfix hidden">
+						<form id="searchForm" class="layui-form layui-form-pane" novalidate="1">
+							<div class="layui-form-item">
+								<label class="layui-form-label">用户账号</label>
+								<div class="layui-input-inline">
+									<input type="text" name="userName" class="layui-input" />
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">开始日期</label>
+								<div class="layui-input-inline">
+									<input type="text" name="beginTime" class="layui-input datepicker" />
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">结束日期</label>
+								<div class="layui-input-inline">
+									<input type="text" name="endTime" class="layui-input datepicker" />
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">类型</label>
+								<div class="layui-input-inline">
+									<select name="operationType" class="form_item">
+										<option value="">≡请选择类型≡</option>
+										<option value="0">注册奖励</option>
+										<option value="1">充值</option>
+										<option value="2">充值奖励</option>
+										<option value="3">提现</option>
+										<option value="4">转入BTC房间</option>
+										<option value="5">转出BTC房间</option>
+										<option value="6">转入A股房间</option>
+										<option value="7">转出A股房间</option>
+										<option value="8">收取BTC过夜费</option>
+										<option value="9">收取A股过夜费</option>
+									</select>
+								</div>
+							</div>
+							<div class="search_action" style="width: auto;">
+								<button type="button" class="layui-btn" @click="search">搜索</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!--
+                	作者：756034419@qq.com
+                	时间：2018-08-19
+                	描述：列表部分
+                -->
+				<div class="box_list">
+					<div class="box_content">
+						<form id="list_form" class="layui-form" novalidate="1">
+							<table id="queryList" class="layui-table list" lay-filter="list">
+								<thead>
+									<tr>
+										<th>用户账号</th>
+										<th>发生金额</th>
+										<th>类型</th>
+										<th>发生时间</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<template v-if="items.length">
+										<tr v-for="item in items">
+											<td><span :title="item.userName">{{ item.userName }}</span></td>
+											<td><span :title="item.amount | num">{{ item.amount | num }}</span></td>
+											<td>
+												<span v-if="item.operationType === 0" title="注册奖励">注册奖励</span>
+												<span v-if="item.operationType === 1" title="充值">充值</span>
+												<span v-if="item.operationType === 2" title="充值奖励">充值奖励</span>
+												<span v-if="item.operationType === 3" title="提现">提现</span>
+												<span v-if="item.operationType === 4" title="转入BTC房间">转入BTC房间</span>
+												<span v-if="item.operationType === 5" title="转出BTC房间">转出BTC房间</span>
+												<span v-if="item.operationType === 6" title="转入A股房间">转入A股房间</span>
+												<span v-if="item.operationType === 7" title="转出A股房间">转出A股房间</span>
+												<span v-if="item.operationType === 8" title="收取BTC过夜费">收取BTC过夜费</span>
+												<span v-if="item.operationType === 9" title="收取A股过夜费">收取A股过夜费</span>
+											</td>
+											<td><span :title="item.createTime | datetime">{{ item.createTime | datetime }}</span></td>
+										</tr>
+									</template>
+									<template v-else>
+										<tr>
+											<td colspan="10" style="color: rgba(0,0,0,0.5);"><i class="fa fa-spinner"></i> 当前暂无数据...</td>
+										</tr>
+									</template>
+								</tbody>
+							</table>
+						</form>
+					</div>
+
+					<!--
+                    	作者：756034419@qq.com
+                    	时间：2018-08-19
+                    	描述：分页部分
+                    -->
+					<div class="page-box">
+						<div id="pageShow">
+							<div class="nice_pageination clearfix">
+								<table cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td>
+											<a v-if="current === 1" class="prev-first-page nice-link disabled-link layui-disabled" href="javascript:void(0);"><span><i></i></span></a>
+											<a v-else @click="gotoPage(1, size)" href="javascript:void(0);" class="prev-first-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<a v-if="current === 1" href="javascript:void(0);" class="prev-page nice-link disabled-link layui-disabled"><span><i></i></span></a>
+											<a v-else @click="gotoPage(current - 1, size)" href="javascript:void(0);" class="prev-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<div class="separator mr"></div>
+										</td>
+										<td><span>第</span></td>
+										<td><input id="goPage" size="2" :value="current" :max="pagenumber" />页</td>
+										<td>共{{ pagenumber }}页</td>
+										<td>
+											<div class="separator ml"></div>
+										</td>
+										<td>
+											<a v-if="current === pagenumber" href="javascript:void(0);" class="next-page nice-link disabled-link layui-disabled"><span><i></i></span></a>
+											<a v-else @click="gotoPage(current + 1, size)" href="javascript:void(0);" class="next-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<a v-if="current === pagenumber" href="javascript:void(0);" class="next-last-page nice-link disabled-link layui-disabled"><span><i></i></span></a>
+											<a v-else @click="gotoPage(pagenumber, size)" href="javascript:void(0);" class="next-last-page nice-link disabled-link" style="cursor: pointer;"><span><i></i></span></a>
+										</td>
+										<td>
+											<div class="separator"></div>
+										</td>
+										<td>
+											<select v-model="size" @change="gotoPage(current, size)" style="height: 25px; margin-left: 5px; margin-right: 5px;">
+												<option v-for="item in pagesizes" :value="item.value">{{ item.name }}</option>
+											</select>
+										</td>
+										<td>
+											<div class="separator"></div>
+										</td>
+										<td>
+											<a href="javascript:void(0);" @click="pageRefresh" class="page-refresh nice-link tooltip" data-tip-text="刷新" data-tip-type="1"><span><i></i></span></a>
+										</td>
+									</tr>
+								</table>
+								<div class="pageination-info" style="margin-right: 100px;">共{{ total }}条记录</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="admin_bottom"></div>
+		</div>
+	</body>
+
+	<script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/vue.min.js"></script>
+	<script type="text/javascript" src="/static/js/moment.min.js"></script>
+	<script type="text/javascript" src="/static/layui/layui.js"></script>
+	<script type="text/javascript" src="/static/js/global.js"></script>
+	<script type="text/javascript" src="/static/js/tableResize.js"></script>
+	<script type="text/javascript" src="/static/js/user/logAccount/list.js"></script>
+
+</html>

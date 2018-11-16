@@ -37,8 +37,7 @@ public class SysConfigController {
 	 */
 	@GetMapping("/gotoList")
 	public ModelAndView gotoList() {
-		ModelAndView mav = new ModelAndView("/sys/config/list");
-		return mav;
+		return new ModelAndView("/sys/config/list");
 	}
 
 	/**

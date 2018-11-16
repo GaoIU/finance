@@ -80,7 +80,7 @@ public class RechargeOrderServiceImpl extends BaseServiceImpl<RechargeOrderDao, 
 			conditions.add(condition);
 		}
 		if (StringUtil.isNotBlank(endTime)) {
-			Date end = DateUtil.toDate(endTime, "yyyy-MM-dd");
+			Date end = DateUtil.toDate(endTime + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
 			Condition condition = new Condition("createTime", Operation.LE, new Timestamp(end.getTime()));
 			conditions.add(condition);
 		}
@@ -116,7 +116,8 @@ public class RechargeOrderServiceImpl extends BaseServiceImpl<RechargeOrderDao, 
 				userAccount.setAvailableAmount(availableAmount);
 				if (userAccountService.update(userAccount)) {
 					LogUserAccount logUserAccount = new LogUserAccount(rechargeOrder.getAmount(),
-							LogUserAccount.OPERATION_TYPE_RECHARGE, userAccountId, rechargeOrder.getUserId());
+							LogUserAccount.OPERATION_TYPE_RECHARGE, userAccountId, rechargeOrder.getUserId(),
+							rechargeOrder.getUserName());
 					logUserAccountService.save(logUserAccount);
 				}
 			}

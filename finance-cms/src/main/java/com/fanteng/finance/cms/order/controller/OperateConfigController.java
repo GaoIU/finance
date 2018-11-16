@@ -38,8 +38,7 @@ public class OperateConfigController {
 	 */
 	@GetMapping("/gotoList")
 	public ModelAndView gotoList() {
-		ModelAndView mav = new ModelAndView("/order/configuration/list");
-		return mav;
+		return new ModelAndView("/order/configuration/list");
 	}
 
 	/**

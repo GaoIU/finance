@@ -314,7 +314,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceDao, SysR
 			conditions.add(condition);
 		}
 		if (StringUtil.isNotBlank(endTime)) {
-			Date end = DateUtil.toDate(endTime, "yyyy-MM-dd");
+			Date end = DateUtil.toDate(endTime + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
 			Condition condition = new Condition("createTime", Operation.LE, new Timestamp(end.getTime()));
 			conditions.add(condition);
 		}
